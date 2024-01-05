@@ -173,19 +173,31 @@ table DropshotTile {
   tile_state: TileState;
 }
 
+enum GameStateType: byte {
+  /// Game has not been created yet
+  Inactive = 0,
+  /// 3-2-1 countdown
+  Countdown = 1,
+  /// After countdown, but before ball has been hit
+  Kickoff = 2,
+  /// Ball has been hit
+  Active = 3,
+  /// A goal was scored. Waiting for replay.
+  GoalScored = 4,
+  /// Watching replay
+  Replay = 5,
+  /// Game paused
+  Paused = 6,
+  /// Match has ended
+  Ended = 7,
+}
+
 table GameInfo {
   seconds_elapsed:float;
   game_time_remaining:float;
   is_overtime:bool;
   is_unlimited_time:bool;
-  /// True when cars are allowed to move, and during the pause menu. False during replays.
-  is_round_active:bool;
-  /// True when the clock is paused due to kickoff, but false during kickoff countdown. In other words, it is true
-  /// while cars can move during kickoff. Note that if both players sit still, game clock start and this will become false.
-  is_kickoff_pause:bool;
-  /// Turns true after final replay, the moment the 'winner' screen appears. Remains true during next match
-  /// countdown. Turns false again the moment the 'choose team' screen appears.
-  is_match_ended:bool;
+  game_state_type:GameStateType;
   world_gravity_z:float;
   /// Game speed multiplier, 1.0 is regular game speed.
   game_speed:float;
