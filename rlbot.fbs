@@ -1,4 +1,3 @@
-
 namespace rlbot.flat;
 
 table ControllerState {
@@ -27,12 +26,12 @@ table ControllerState {
   handbrake:bool;
 
   /// true if you want to press the 'use item' button, used in rumble etc.
-  useItem:bool;
+  use_item:bool;
 }
 
 table PlayerInput {
-  playerIndex:int;
-  controllerState:ControllerState;
+  player_index:int;
+  controller_state:ControllerState;
 }
 
 root_type PlayerInput;
@@ -80,10 +79,10 @@ union CollisionShape { BoxShape, SphereShape, CylinderShape }
 
 table Touch {
   /// The name of the player involved with the touch.
-  playerName:string;
+  player_name:string;
 
   /// Seconds that had elapsed in the game when the touch occurred.
-  gameSeconds:float;
+  game_seconds:float;
 
   /// The point of contact for the touch.
   location:Vector3;
@@ -95,13 +94,13 @@ table Touch {
   team:int;
 
   /// The index of the player involved with the touch.
-  playerIndex:int;
+  player_index:int;
 }
 
 table ScoreInfo {
   score:int;
   goals:int;
-  ownGoals:int;
+  own_goals:int;
   assists:int;
   saves:int;
   shots:int;
@@ -112,48 +111,48 @@ table Physics {
   location:Vector3;
   rotation:Rotator;
   velocity:Vector3;
-  angularVelocity:Vector3;
+  angular_velocity:Vector3;
 }
 
 table PlayerInfo {
   physics:Physics;
-  scoreInfo:ScoreInfo;
-  isDemolished:bool;
+  score_info:ScoreInfo;
+  is_demolished:bool;
   /// True if your wheels are on the ground, the wall, or the ceiling. False if you're midair or turtling.
-  hasWheelContact:bool;
-  isSupersonic:bool;
-  isBot:bool;
+  has_wheel_contact:bool;
+  is_supersonic:bool;
+  is_bot:bool;
   /// True if the player has jumped. Falling off the ceiling / driving off the goal post does not count.
   jumped:bool;
   ///  True if player has double jumped. False does not mean you have a jump remaining, because the
   ///  aerial timer can run out, and that doesn't affect this flag.
-  doubleJumped:bool;
+  double_jumped:bool;
   name:string;
   team:int;
   boost:int;
   hitbox:BoxShape;
-  hitboxOffset:Vector3;
+  hitbox_offset:Vector3;
   /// In the case where the requested player index is not available, spawnId will help
   /// the framework figure out what index was actually assigned to this player instead.
-  spawnId: int;
+  spawn_id: int;
 }
 
 table DropShotBallInfo {
-  absorbedForce:float;
-  damageIndex:int;
-  forceAccumRecent:float;
+  absorbed_force:float;
+  damage_index:int;
+  force_accum_recent:float;
 }
 
 table BallInfo {
   physics:Physics;
-  latestTouch:Touch;
-  dropShotInfo:DropShotBallInfo;
+  latest_touch:Touch;
+  drop_shot_info:DropShotBallInfo;
   shape:CollisionShape;
 }
 
 table BoostPadState {
   /// True if the boost can be picked up
-  isActive:bool;
+  is_active:bool;
 
   /// The number of seconds since the boost has been picked up, or 0.0 if the boost is active.
   timer:float;
@@ -171,43 +170,55 @@ enum TileState: byte {
 
 table DropshotTile {
   /// The amount of damage the tile has sustained.
-  tileState: TileState;
+  tile_state: TileState;
+}
+
+enum GameStateType: byte {
+  /// Game has not been created yet
+  Inactive = 0,
+  /// 3-2-1 countdown
+  Countdown = 1,
+  /// After countdown, but before ball has been hit
+  Kickoff = 2,
+  /// Ball has been hit
+  Active = 3,
+  /// A goal was scored. Waiting for replay.
+  GoalScored = 4,
+  /// Watching replay
+  Replay = 5,
+  /// Game paused
+  Paused = 6,
+  /// Match has ended
+  Ended = 7,
 }
 
 table GameInfo {
-  secondsElapsed:float;
-  gameTimeRemaining:float;
-  isOvertime:bool;
-  isUnlimitedTime:bool;
-  /// True when cars are allowed to move, and during the pause menu. False during replays.
-  isRoundActive:bool;
-  /// True when the clock is paused due to kickoff, but false during kickoff countdown. In other words, it is true
-  /// while cars can move during kickoff. Note that if both players sit still, game clock start and this will become false.
-  isKickoffPause:bool;
-  /// Turns true after final replay, the moment the 'winner' screen appears. Remains true during next match
-  /// countdown. Turns false again the moment the 'choose team' screen appears.
-  isMatchEnded:bool;
-  worldGravityZ:float;
+  seconds_elapsed:float;
+  game_time_remaining:float;
+  is_overtime:bool;
+  is_unlimited_time:bool;
+  game_state_type:GameStateType;
+  world_gravity_z:float;
   /// Game speed multiplier, 1.0 is regular game speed.
-  gameSpeed:float;
+  game_speed:float;
   /// Tracks the number of physics frames the game has computed.
   /// May increase by more than one across consecutive packets.
   /// Data type will roll over after 207 days at 120Hz.
-  frameNum: int;
+  frame_num: int;
 }
 
 table TeamInfo {
-  teamIndex:int;
+  team_index:int;
   /// number of goals scored.
   score:int;
 }
 
 table GameTickPacket {
   players:[PlayerInfo];
-  boostPadStates:[BoostPadState];
+  boost_pad_states:[BoostPadState];
   ball:BallInfo;
-  gameInfo:GameInfo;
-  tileInformation:[DropshotTile];
+  game_info:GameInfo;
+  tile_information:[DropshotTile];
   teams:[TeamInfo];
 }
 
@@ -221,7 +232,7 @@ table RigidBodyState {
   location:Vector3;
   rotation:Quaternion;
   velocity:Vector3;
-  angularVelocity:Vector3;
+  angular_velocity:Vector3;
 }
 
 /// Rigid body state for a player / car in the game. Includes the latest
@@ -245,7 +256,7 @@ table RigidBodyTick {
 // This section deals with arena information, e.g. where the goals and boost locations are.
 
 table GoalInfo {
-  teamNum:int;
+  team_num:int;
   location:Vector3;
   direction:Vector3;
   width:float;
@@ -254,11 +265,11 @@ table GoalInfo {
 
 table BoostPad {
   location:Vector3;
-  isFullBoost:bool;
+  is_full_boost:bool;
 }
 
 table FieldInfo {
-  boostPads:[BoostPad]; // These will be sorted according to (y * 100 + x), and BoostInfo will be provided in the same order.
+  boost_pads:[BoostPad]; // These will be sorted according to (y * 100 + x), and BoostInfo will be provided in the same order.
   goals:[GoalInfo];
 }
 
@@ -292,7 +303,7 @@ table DesiredPhysics {
   location:Vector3Partial;
   rotation:RotatorPartial;
   velocity:Vector3Partial;
-  angularVelocity:Vector3Partial;
+  angular_velocity:Vector3Partial;
 }
 
 table DesiredBallState {
@@ -301,21 +312,21 @@ table DesiredBallState {
 
 table DesiredCarState {
   physics:DesiredPhysics;
-  boostAmount:Float;
+  boost_amount:Float;
   jumped:Bool;
-  doubleJumped:Bool;
+  double_jumped:Bool;
 }
 
 table DesiredBoostState {
-  respawnTime:Float;
+  respawn_time:Float;
 }
 
 
 table DesiredGameInfoState {
-  worldGravityZ:Float;
-  gameSpeed:Float;
+  world_gravity_z:Float;
+  game_speed:Float;
   paused:Bool;
-  endMatch:Bool;
+  end_match:Bool;
 }
 
 /// A console command which we will try to execute inside Rocket League.
@@ -325,11 +336,11 @@ table ConsoleCommand {
 }
 
 table DesiredGameState {
-  ballState:DesiredBallState;
-  carStates:[DesiredCarState];
-  boostStates:[DesiredBoostState];
-  gameInfoState:DesiredGameInfoState;
-  consoleCommands:[ConsoleCommand];
+  ball_state:DesiredBallState;
+  car_states:[DesiredCarState];
+  boost_states:[DesiredBoostState];
+  game_info_state:DesiredGameInfoState;
+  console_commands:[ConsoleCommand];
 }
 
 root_type DesiredGameState;
@@ -353,23 +364,23 @@ table Color {
 }
 
 table RenderMessage {
-  renderType: RenderType = 1;
+  render_type: RenderType = 1;
   color: Color;
   /// For 2d renders this only grabs x and y
   start: Vector3;
   /// For 2d renders this only grabs x and y
   end:   Vector3;
   /// Scales the x size of the text/rectangle, is used for rectangles assuming an initial value of 1
-  scaleX: int = 1;
+  scale_x: int = 1;
   /// Scales the y size of the text/rectangle, is used for rectangles assuming an initial value of 1
-  scaleY: int = 1;
+  scale_y: int = 1;
   text: string;
   /// Rectangles can be filled or just outlines.
-  isFilled: bool;
+  is_filled: bool;
 }
 
 table RenderGroup {
-  renderMessages:[RenderMessage];
+  render_messages:[RenderMessage];
   /// The id of the render group
   id: int;
 }
@@ -464,17 +475,13 @@ enum QuickChatSelection : byte {
 }
 
 table QuickChat {
-  quickChatSelection:      QuickChatSelection;
-
+  quick_chat_selection:      QuickChatSelection;
   /// The index of the player that sent the quick chat
-  playerIndex:    int;
-
+  player_index:    int;
   /// True if the chat is team only false if everyone can see it.
-  teamOnly:      bool;
-
-  messageIndex: int;
-
-  timeStamp: float;
+  team_only:      bool;
+  message_index: int;
+  time_stamp: float;
 }
 
 root_type QuickChat;
@@ -484,8 +491,8 @@ table TinyPlayer {
   location: Vector3;
   rotation: Rotator;
   velocity: Vector3;
-  hasWheelContact: bool;
-  isSupersonic: bool;
+  has_wheel_contact: bool;
+  is_supersonic: bool;
   team: int;
   boost: int;
 }
@@ -505,7 +512,7 @@ table TinyPacket {
 table PredictionSlice {
   /// The moment in game time that this prediction corresponds to.
   /// This corresponds to 'secondsElapsed' in the GameInfo table.
-  gameSeconds: float;
+  game_seconds: float;
 
   /// The predicted location and motion of the object.
   physics: Physics;
@@ -526,7 +533,7 @@ table HumanPlayer {}
 
 /// A psyonix bot, e.g. All Star bot
 table PsyonixBotPlayer {
-  botSkill: float;
+  bot_skill: float;
 }
 
 /// A player that Rocket League treats as human, e.g. has a dedicated camera and can do training mode,
@@ -538,38 +545,38 @@ union PlayerClass { RLBotPlayer, HumanPlayer, PsyonixBotPlayer, PartyMemberBotPl
 /// The car type, color, and other aspects of the player's appearance.
 /// See https://github.com/RLBot/RLBot/wiki/Bot-Customization
 table PlayerLoadout {
-  teamColorId: int;
-  customColorId: int;
-  carId: int;
-  decalId: int;
-  wheelsId: int;
-  boostId: int;
-  antennaId: int;
-  hatId: int;
-  paintFinishId: int;
-  customFinishId: int;
-  engineAudioId: int;
-  trailsId: int;
-  goalExplosionId: int;
-  loadoutPaint: LoadoutPaint;
+  team_color_id: int;
+  custom_color_id: int;
+  car_id: int;
+  decal_id: int;
+  wheels_id: int;
+  boost_id: int;
+  antenna_id: int;
+  hat_id: int;
+  paint_finish_id: int;
+  custom_finish_id: int;
+  engine_audio_id: int;
+  trails_id: int;
+  goal_explosion_id: int;
+  loadout_paint: LoadoutPaint;
   /// Sets the primary color of the car to the swatch that most closely matches the provided
   /// RGB color value. If set, this overrides teamColorId.
-  primaryColorLookup:Color;
+  primary_color_lookup:Color;
   /// Sets the secondary color of the car to the swatch that most closely matches the provided
   /// RGB color value. If set, this overrides customColorId.
-  secondaryColorLookup:Color;
+  secondary_color_lookup:Color;
 }
 
 /// Specification for 'painted' items. See https://github.com/RLBot/RLBot/wiki/Bot-Customization
 table LoadoutPaint {
-  carPaintId: int;
-  decalPaintId: int;
-  wheelsPaintId: int;
-  boostPaintId: int;
-  antennaPaintId: int;
-  hatPaintId: int;
-  trailsPaintId: int;
-  goalExplosionPaintId: int;
+  car_paint_id: int;
+  decal_paint_id: int;
+  wheels_paint_id: int;
+  boost_paint_id: int;
+  antenna_paint_id: int;
+  hat_paint_id: int;
+  trails_paint_id: int;
+  goal_explosion_paint_id: int;
 }
 
 table PlayerConfiguration {
@@ -581,7 +588,7 @@ table PlayerConfiguration {
   loadout: PlayerLoadout;
   /// In the case where the requested player index is not available, spawnId will help
   /// the framework figure out what index was actually assigned to this player instead.
-  spawnId: int;
+  spawn_id: int;
 }
 
 enum GameMode : byte {
@@ -774,22 +781,22 @@ enum RespawnTimeOption : byte {
 }
 
 table MutatorSettings {
-  matchLength: MatchLength;
-  maxScore: MaxScore;
-  overtimeOption: OvertimeOption;
-  seriesLengthOption: SeriesLengthOption;
-  gameSpeedOption: GameSpeedOption;
-  ballMaxSpeedOption: BallMaxSpeedOption;
-  ballTypeOption: BallTypeOption;
-  ballWeightOption: BallWeightOption;
-  ballSizeOption: BallSizeOption;
-  ballBouncinessOption: BallBouncinessOption;
-  boostOption: BoostOption;
-  rumbleOption: RumbleOption;
-  boostStrengthOption: BoostStrengthOption;
-  gravityOption: GravityOption;
-  demolishOption: DemolishOption;
-  respawnTimeOption: RespawnTimeOption;
+  match_length: MatchLength;
+  max_score: MaxScore;
+  overtime_option: OvertimeOption;
+  series_length_option: SeriesLengthOption;
+  game_speed_option: GameSpeedOption;
+  ball_max_speed_option: BallMaxSpeedOption;
+  ball_type_option: BallTypeOption;
+  ball_weight_option: BallWeightOption;
+  ball_size_option: BallSizeOption;
+  ball_bounciness_option: BallBouncinessOption;
+  boost_option: BoostOption;
+  rumble_option: RumbleOption;
+  boost_strength_option: BoostStrengthOption;
+  gravity_option: GravityOption;
+  demolish_option: DemolishOption;
+  respawn_time_option: RespawnTimeOption;
 }
 
 enum ExistingMatchBehavior : byte {
@@ -805,23 +812,23 @@ enum ExistingMatchBehavior : byte {
 }
 
 table MatchSettings {
-  playerConfigurations: [PlayerConfiguration];
-  gameMode: GameMode;
-  gameMap: GameMap;
-  skipReplays: bool;
-  instantStart: bool;
-  mutatorSettings: MutatorSettings;
-  existingMatchBehavior: ExistingMatchBehavior;
-  enableLockstep: bool;
-  enableRendering: bool;
-  enableStateSetting: bool;
-  autoSaveReplay: bool;
+  player_configurations: [PlayerConfiguration];
+  game_mode: GameMode;
+  game_map: GameMap;
+  skip_replays: bool;
+  instant_start: bool;
+  mutator_settings: MutatorSettings;
+  existing_match_behavior: ExistingMatchBehavior;
+  enable_lockstep: bool;
+  enable_rendering: bool;
+  enable_state_setting: bool;
+  auto_save_replay: bool;
   /// The name of a upk file, like UtopiaStadium_P, which should be loaded.
   /// If specified, this overrides gameMap. On Steam version of Rocket League,
   /// this can be used to load custom map files, but on Epic version it only
   /// works on the Psyonix maps. Still useful because maintaining the gameMap
   /// enum as new Psyonix maps are added is annoying.
-  gameMapUpk: string;
+  game_map_upk: string;
 }
 
 table QuickChatMessages {
@@ -833,11 +840,11 @@ table QuickChatMessages {
 /// overlay, or any other utility that connects to the RLBot process.
 table ReadyMessage {
   // If this is set, RLBot will send BallPrediction data back to the client when available.
-  wantsBallPredictions: bool;
+  wants_ball_predictions: bool;
   // If this is set, RLBot will send QuickChatMessages to the client when available.
-  wantsQuickChat: bool;
+  wants_quick_chat: bool;
   // If this is set, RLBot will send MessagePacket data back to the client when available.
-  wantsGameMessages: bool;
+  wants_game_messages: bool;
 }
 
 /// Notification that a player triggers some in-game event, such as:
@@ -854,41 +861,40 @@ table ReadyMessage {
 table PlayerStatEvent
 {
 	/// index of the player associated with the event
-    playerIndex:int;
+  player_index:int;
 
 	/// Event type
-	statType:string;
+	stat_type:string;
 }
 
 /// Notification when the local player is spectating another player.
 table PlayerSpectate
 {
 	/// index of the player that is being spectated. Will be -1 if not spectating anyone.
-	playerIndex:int;
+	player_index:int;
 }
 
 /// Rocket League is notifying us that some player has moved their controller. This is an *output*
 table PlayerInputChange
 {
-	playerIndex: int;
-	controllerState: ControllerState;
-
-    // These are provided by Rocket League, and I'm passing them through. Theoretically they could be
-    // inferred by jump + pitch + roll, but nice to have clarity.
-	dodgeForward:float;
-	dodgeRight:float;
+	player_index: int;
+	controller_state: ControllerState;
+  // These are provided by Rocket League, and I'm passing them through. Theoretically they could be
+  // inferred by jump + pitch + roll, but nice to have clarity.
+	dodge_forward:float;
+	dodge_right:float;
 }
 
 union GameMessage
 {
-    PlayerStatEvent,
-    PlayerSpectate,
+  PlayerStatEvent,
+  PlayerSpectate,
 	PlayerInputChange
 }
 
 table GameMessageWrapper
 {
-	Message:GameMessage;
+	message:GameMessage;
 }
 
 /// We have some very small messages that are only a few bytes but potentially sent at high frequency.
@@ -897,7 +903,7 @@ table MessagePacket
 {
 	messages:[GameMessageWrapper];
 	// Corresponds with secondsElapsed in GameInfo
-    gameSeconds: float;
-    // Corresponds with the frameNum attribute in GameInfo
-    frameNum: int;
+  game_seconds: float;
+  // Corresponds with the frameNum attribute in GameInfo
+  frame_num: int;
 }
