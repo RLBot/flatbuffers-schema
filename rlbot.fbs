@@ -149,16 +149,9 @@ table PlayerInfo {
   spawn_id: int;
 }
 
-table DropShotBallInfo {
-  absorbed_force:float;
-  damage_index:int;
-  force_accum_recent:float;
-}
-
 table BallInfo {
   physics:Physics (required);
   latest_touch:Touch (required);
-  drop_shot_info:DropShotBallInfo;
   shape:CollisionShape (required);
 }
 
@@ -168,21 +161,6 @@ table BoostPadState {
 
   /// The number of seconds since the boost has been picked up, or 0.0 if the boost is active.
   timer:float;
-}
-
-enum TileState: byte {
-  Unknown = 0,
-  /// The default state of the tiles.
-  Filled = 1,
-  /// The state when a tile has been damaged.
-  Damaged = 2,
-  /// The state of a tile when it is open and a goal can be scored.
-  Open = 3
-}
-
-table DropshotTile {
-  /// The amount of damage the tile has sustained.
-  tile_state: TileState;
 }
 
 enum GameStateType: byte {
@@ -230,7 +208,6 @@ table GameTickPacket {
   boost_pad_states:[BoostPadState];
   ball:BallInfo (required);
   game_info:GameInfo (required);
-  tile_information:[DropshotTile];
   teams:[TeamInfo];
 }
 
@@ -296,14 +273,11 @@ table DesiredBallState {
 table DesiredCarState {
   physics:DesiredPhysics;
   boost_amount:Float;
-  jumped:Bool;
-  double_jumped:Bool;
 }
 
 table DesiredBoostState {
   respawn_time:Float;
 }
-
 
 table DesiredGameInfoState {
   world_gravity_z:Float;
@@ -750,7 +724,6 @@ table MatchSettings {
   instant_start: bool;
   mutator_settings: MutatorSettings;
   existing_match_behavior: ExistingMatchBehavior;
-  enable_lockstep: bool;
   enable_rendering: bool;
   enable_state_setting: bool;
   auto_save_replay: bool;
