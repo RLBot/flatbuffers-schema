@@ -383,11 +383,15 @@ table String3D {
   position: Vector3 (required);
 }
 
-union RenderMessage {
+union RenderType {
   Line3D,
   PolyLine3D,
   String2D,
   String3D,
+}
+
+table RenderMessage {
+  variety: RenderType;
 }
 
 table RenderGroup {
