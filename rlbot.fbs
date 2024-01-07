@@ -328,15 +328,16 @@ table DesiredGameState {
 
 root_type DesiredGameState;
 
-enum RenderType : byte {
-  DrawLine2D = 1,
-  DrawLine3D = 2,
-  DrawLine2D_3D = 3,
-  DrawRect2D = 4,
-  DrawRect3D = 5,
-  DrawString2D = 6,
-  DrawString3D = 7,
-  DrawCenteredRect3D = 8
+enum TextHAlign: byte {
+  Left = 0,
+  Center = 1,
+  Right = 2,
+}
+
+enum TextVAlign: byte {
+  Top = 0,
+  Center = 1,
+  Bottom = 2,
 }
 
 table Color {
@@ -346,20 +347,47 @@ table Color {
   b: ubyte = 0;
 }
 
-table RenderMessage {
-  render_type: RenderType = 1;
-  color: Color (required);
-  /// For 2d renders this only grabs x and y
+table Line3D {
+  color: Color;
   start: Vector3 (required);
-  /// For 2d renders this only grabs x and y
-  end:   Vector3 (required);
-  /// Scales the x size of the text/rectangle, is used for rectangles assuming an initial value of 1
-  scale_x: int = 1;
-  /// Scales the y size of the text/rectangle, is used for rectangles assuming an initial value of 1
-  scale_y: int = 1;
+  end: Vector3 (required);
+}
+
+table PolyLine3D {
+  color: Color (required);
+  points: [Vector3];
+}
+
+table String2D {
+  foreground: Color (required);
+  background: Color (required);
+  scale: int;
   text: string;
-  /// Rectangles can be filled or just outlines.
-  is_filled: bool;
+  h_align: TextHAlign;
+  v_align: TextVAlign;
+  /// 0 = Left
+  /// 1 = Right
+  x: float;
+  /// 0 = Top
+  /// 1 = Bottom
+  y: float;
+}
+
+table String3D {
+  foreground: Color (required);
+  background: Color (required);
+  scale: int;
+  text: string;
+  h_align: TextHAlign;
+  v_align: TextVAlign;
+  position: Vector3 (required);
+}
+
+union RenderMessage {
+  Line3D,
+  PolyLine3D,
+  String2D,
+  String3D,
 }
 
 table RenderGroup {
@@ -370,6 +398,9 @@ table RenderGroup {
 
 root_type RenderGroup;
 
+table RemoveRenderGroup {
+  id: int;
+}
 
 enum QuickChatSelection : byte {
   Information_IGotIt = 0,
