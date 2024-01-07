@@ -31,7 +31,7 @@ table ControllerState {
 
 table PlayerInput {
   player_index:int;
-  controller_state:ControllerState;
+  controller_state:ControllerState (required);
 }
 
 root_type PlayerInput;
@@ -85,10 +85,10 @@ table Touch {
   game_seconds:float;
 
   /// The point of contact for the touch.
-  location:Vector3;
+  location:Vector3 (required);
 
   /// The direction of the touch.
-  normal:Vector3;
+  normal:Vector3 (required);
 
   /// The Team which the touch belongs to, 0 for blue 1 for orange.
   team:int;
@@ -108,30 +108,42 @@ table ScoreInfo {
 }
 
 table Physics {
-  location:Vector3;
-  rotation:Rotator;
-  velocity:Vector3;
-  angular_velocity:Vector3;
+  location:Vector3 (required);
+  rotation:Rotator (required);
+  velocity:Vector3 (required);
+  angular_velocity:Vector3 (required);
+}
+
+enum AirState: byte {
+  /// All wheels are on the ground
+  OnGround,
+  /// When the bot is jumping,
+  /// then InAir right after
+  Jumping,
+  /// When the bot is double jumping,
+  /// then InAir right after
+  DoubleJumping,
+  /// When the bot is dodging,
+  /// then InAir right after
+  Dodging,
+  InAir,
 }
 
 table PlayerInfo {
-  physics:Physics;
-  score_info:ScoreInfo;
-  is_demolished:bool;
-  /// True if your wheels are on the ground, the wall, or the ceiling. False if you're midair or turtling.
-  has_wheel_contact:bool;
+  physics:Physics (required);
+  score_info:ScoreInfo (required);
+  air_state:AirState;
+  // How long until the bot cannot dodge anymore, -1 while on ground or when airborne for too long after jumping
+  dodge_timeout:float;
+  // How long until the bot is not demolished anymore, -1 if not demolished
+  demolished_timeout:float;
   is_supersonic:bool;
   is_bot:bool;
-  /// True if the player has jumped. Falling off the ceiling / driving off the goal post does not count.
-  jumped:bool;
-  ///  True if player has double jumped. False does not mean you have a jump remaining, because the
-  ///  aerial timer can run out, and that doesn't affect this flag.
-  double_jumped:bool;
   name:string;
   team:int;
   boost:int;
-  hitbox:BoxShape;
-  hitbox_offset:Vector3;
+  hitbox:BoxShape (required);
+  hitbox_offset:Vector3 (required);
   /// In the case where the requested player index is not available, spawnId will help
   /// the framework figure out what index was actually assigned to this player instead.
   spawn_id: int;
@@ -144,10 +156,10 @@ table DropShotBallInfo {
 }
 
 table BallInfo {
-  physics:Physics;
-  latest_touch:Touch;
+  physics:Physics (required);
+  latest_touch:Touch (required);
   drop_shot_info:DropShotBallInfo;
-  shape:CollisionShape;
+  shape:CollisionShape (required);
 }
 
 table BoostPadState {
@@ -216,55 +228,26 @@ table TeamInfo {
 table GameTickPacket {
   players:[PlayerInfo];
   boost_pad_states:[BoostPadState];
-  ball:BallInfo;
-  game_info:GameInfo;
+  ball:BallInfo (required);
+  game_info:GameInfo (required);
   tile_information:[DropshotTile];
   teams:[TeamInfo];
 }
 
 root_type GameTickPacket;
 
-/// The state of a rigid body in Rocket League's physics engine.
-/// This gets updated in time with the physics tick, not the rendering framerate.
-/// The frame field will be incremented every time the physics engine ticks.
-table RigidBodyState {
-  frame:int;
-  location:Vector3;
-  rotation:Quaternion;
-  velocity:Vector3;
-  angular_velocity:Vector3;
-}
-
-/// Rigid body state for a player / car in the game. Includes the latest
-/// controller input, which is otherwise difficult to correlate with consequences.
-table PlayerRigidBodyState {
-  state:RigidBodyState;
-  input:ControllerState;
-}
-
-/// Rigid body state for the ball.
-table BallRigidBodyState {
-  state:RigidBodyState;
-}
-
-/// Contains all rigid body state information.
-table RigidBodyTick {
-  ball:BallRigidBodyState;
-  players:[PlayerRigidBodyState];
-}
-
 // This section deals with arena information, e.g. where the goals and boost locations are.
 
 table GoalInfo {
   team_num:int;
-  location:Vector3;
-  direction:Vector3;
+  location:Vector3 (required);
+  direction:Vector3 (required);
   width:float;
   height:float;
 }
 
 table BoostPad {
-  location:Vector3;
+  location:Vector3 (required);
   is_full_boost:bool;
 }
 
@@ -365,11 +348,11 @@ table Color {
 
 table RenderMessage {
   render_type: RenderType = 1;
-  color: Color;
+  color: Color (required);
   /// For 2d renders this only grabs x and y
-  start: Vector3;
+  start: Vector3 (required);
   /// For 2d renders this only grabs x and y
-  end:   Vector3;
+  end:   Vector3 (required);
   /// Scales the x size of the text/rectangle, is used for rectangles assuming an initial value of 1
   scale_x: int = 1;
   /// Scales the y size of the text/rectangle, is used for rectangles assuming an initial value of 1
@@ -475,39 +458,16 @@ enum QuickChatSelection : byte {
 }
 
 table QuickChat {
-  quick_chat_selection:      QuickChatSelection;
+  quick_chat_selection: QuickChatSelection;
   /// The index of the player that sent the quick chat
-  player_index:    int;
+  player_index: int;
   /// True if the chat is team only false if everyone can see it.
-  team_only:      bool;
+  team_only: bool;
   message_index: int;
   time_stamp: float;
 }
 
 root_type QuickChat;
-
-/// A minimal version of player data, useful when bandwidth needs to be conserved.
-table TinyPlayer {
-  location: Vector3;
-  rotation: Rotator;
-  velocity: Vector3;
-  has_wheel_contact: bool;
-  is_supersonic: bool;
-  team: int;
-  boost: int;
-}
-
-/// A minimal version of the ball, useful when bandwidth needs to be conserved.
-table TinyBall {
-  location: Vector3;
-  velocity: Vector3;
-}
-
-/// A minimal version of the game tick packet, useful when bandwidth needs to be conserved.
-table TinyPacket {
-  players: [TinyPlayer];
-  ball: TinyBall;
-}
 
 table PredictionSlice {
   /// The moment in game time that this prediction corresponds to.
@@ -515,7 +475,7 @@ table PredictionSlice {
   game_seconds: float;
 
   /// The predicted location and motion of the object.
-  physics: Physics;
+  physics: Physics (required);
 }
 
 table BallPrediction {
@@ -582,7 +542,7 @@ table LoadoutPaint {
 table PlayerConfiguration {
   // Cannot be named 'class' because that breaks Java.
   // Cannot be named 'playerClass' because that breaks C#.
-  variety: PlayerClass;
+  variety: PlayerClass (required);
   name: string;
   team: int;
   loadout: PlayerLoadout;
@@ -599,69 +559,6 @@ enum GameMode : byte {
   Rumble,
   Heatseeker,
   Gridiron
-}
-
-enum GameMap : byte {
-  DFHStadium,
-  Mannfield,
-  ChampionsField,
-  UrbanCentral,
-  BeckwithPark,
-  UtopiaColiseum,
-  Wasteland,
-  NeoTokyo,
-  AquaDome,
-  StarbaseArc,
-  Farmstead,
-  SaltyShores,
-  DFHStadium_Stormy,
-  DFHStadium_Day,
-  Mannfield_Stormy,
-  Mannfield_Night,
-  ChampionsField_Day,
-  BeckwithPark_Stormy,
-  BeckwithPark_Midnight,
-  UrbanCentral_Night,
-  UrbanCentral_Dawn,
-  UtopiaColiseum_Dusk,
-  DFHStadium_Snowy,
-  Mannfield_Snowy,
-  UtopiaColiseum_Snowy,
-  Badlands,
-  Badlands_Night,
-  TokyoUnderpass,
-  Arctagon,
-  Pillars,
-  Cosmic,
-  DoubleGoal,
-  Octagon,
-  Underpass,
-  UtopiaRetro,
-  Hoops_DunkHouse,
-  DropShot_Core707,
-  ThrowbackStadium,
-  ForbiddenTemple,
-  RivalsArena,
-  Farmstead_Night,
-  SaltyShores_Night,
-  NeonFields,
-  DFHStadium_Circuit,
-  DeadeyeCanyon,
-  StarbaseArc_Aftermath,
-  Wasteland_Night,
-  BeckwithPark_GothamNight,
-  ForbiddenTemple_Day,
-  UrbanCentral_Haunted,
-  ChampionsField_NFL,
-  ThrowbackStadium_Snowy,
-  Basin,
-  Corridor,
-  Loophole,
-  Galleon,
-  GalleonRetro,
-  Hourglass,
-  Barricade,
-  Colossus,
 }
 
 enum MatchLength : byte {
@@ -814,7 +711,6 @@ enum ExistingMatchBehavior : byte {
 table MatchSettings {
   player_configurations: [PlayerConfiguration];
   game_mode: GameMode;
-  game_map: GameMap;
   skip_replays: bool;
   instant_start: bool;
   mutator_settings: MutatorSettings;
@@ -824,10 +720,8 @@ table MatchSettings {
   enable_state_setting: bool;
   auto_save_replay: bool;
   /// The name of a upk file, like UtopiaStadium_P, which should be loaded.
-  /// If specified, this overrides gameMap. On Steam version of Rocket League,
-  /// this can be used to load custom map files, but on Epic version it only
-  /// works on the Psyonix maps. Still useful because maintaining the gameMap
-  /// enum as new Psyonix maps are added is annoying.
+  /// On Steam version of Rocket League this can be used to load custom map files,
+  /// but on Epic version it only works on the Psyonix maps.
   game_map_upk: string;
 }
 
@@ -878,7 +772,7 @@ table PlayerSpectate
 table PlayerInputChange
 {
 	player_index: int;
-	controller_state: ControllerState;
+	controller_state: ControllerState (required);
   // These are provided by Rocket League, and I'm passing them through. Theoretically they could be
   // inferred by jump + pitch + roll, but nice to have clarity.
 	dodge_forward:float;
