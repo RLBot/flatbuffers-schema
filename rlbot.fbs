@@ -335,7 +335,7 @@ table PolyLine3D {
 table String2D {
   foreground: Color (required);
   background: Color (required);
-  scale: int;
+  scale: float;
   text: string;
   h_align: TextHAlign;
   v_align: TextVAlign;
@@ -350,7 +350,7 @@ table String2D {
 table String3D {
   foreground: Color (required);
   background: Color (required);
-  scale: int;
+  scale: float;
   text: string;
   h_align: TextHAlign;
   v_align: TextVAlign;
