@@ -554,10 +554,18 @@ table PlayerConfiguration {
   variety: PlayerClass (required);
   name: string;
   team: int;
+  location: string; //path to working dir of bot
+  run_command: string; //command to run in the working dir to start the bot
   loadout: PlayerLoadout;
   /// In the case where the requested player index is not available, spawnId will help
   /// the framework figure out what index was actually assigned to this player instead.
   spawn_id: int;
+}
+
+enum Launcher : byte {
+  Steam,
+  Epic,
+  Custom
 }
 
 enum GameMode : byte {
@@ -718,6 +726,8 @@ enum ExistingMatchBehavior : byte {
 }
 
 table MatchSettings {
+  launcher: Launcher;
+  auto_start_bots: bool;
   player_configurations: [PlayerConfiguration];
   game_mode: GameMode;
   skip_replays: bool;
