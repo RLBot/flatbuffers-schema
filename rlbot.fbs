@@ -292,6 +292,11 @@ table ConsoleCommand {
   command:string;
 }
 
+//Pass a rlbot.toml file to be parsed and started
+table StartCommand {
+	config_path:string;
+}
+
 table DesiredGameState {
   ball_state:DesiredBallState;
   car_states:[DesiredCarState];
