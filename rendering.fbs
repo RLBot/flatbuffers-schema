@@ -1,0 +1,79 @@
+namespace rlbot.flat.rendering;
+
+enum TextHAlign: ubyte {
+  Left = 0,
+  Center = 1,
+  Right = 2,
+}
+
+enum TextVAlign: ubyte {
+  Top = 0,
+  Center = 1,
+  Bottom = 2,
+}
+
+table Color {
+  a:ubyte = 0;
+  r:ubyte = 0;
+  g:ubyte = 0;
+  b:ubyte = 0;
+}
+
+table Line3D {
+  color:Color (required);
+  start:Vector3 (required);
+  end:Vector3 (required);
+}
+
+table PolyLine3D {
+  color:Color (required);
+  points:[Vector3] (required);
+}
+
+table String2D {
+  foreground:Color (required);
+  background:Color (required);
+  scale:float;
+  text:string (required);
+  h_align:TextHAlign;
+  v_align:TextVAlign;
+  /// 0 = Left
+  /// 1 = Right
+  x: float;
+  /// 0 = Top
+  /// 1 = Bottom
+  y: float;
+}
+
+table String3D {
+  foreground:Color (required);
+  background:Color (required);
+  scale:float;
+  text:string (required);
+  h_align:TextHAlign;
+  v_align:TextVAlign;
+  position:Vector3 (required);
+}
+
+union RenderType {
+  Line3D,
+  PolyLine3D,
+  String2D,
+  String3D,
+}
+
+table RenderMessage {
+  variety:RenderType (required);
+}
+
+table RenderGroup {
+  render_messages:[RenderMessage] (required);
+  /// The id of the render group
+  id:int;
+}
+
+root_type RenderGroup;
+
+table RemoveRenderGroup {
+  id:int;
+}
