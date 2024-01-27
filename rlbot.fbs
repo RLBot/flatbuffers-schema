@@ -1,30 +1,39 @@
+include "event.fbs";
+include "gamestate.fbs";
+include "matchstart.fbs";
+include "rendering.fbs";
+
 namespace rlbot.flat;
+
+/// Sent when connecting to RLBot to indicate what type of messages are desired.
+/// This could be sent by a bot, or a bot manager governing several bots, an
+/// overlay, or any other utility that connects to the RLBot process.
+table ReadyMessage {
+  // If this is set, RLBot will send BallPrediction data back to the client when available.
+  wants_ball_predictions:bool;
+  // If this is set, RLBot will send QuickChatMessages to the client when available.
+  wants_quick_chat:bool;
+  // If this is set, RLBot will send MessagePacket data back to the client when available.
+  wants_game_messages:bool;
+}
 
 table ControllerState {
   /// -1 for full reverse, 1 for full forward
   throttle:float;
-
   /// -1 for full left, 1 for full right
   steer:float;
-
   /// -1 for nose down, 1 for nose up
   pitch:float;
-
   /// -1 for full left, 1 for full right
   yaw:float;
-
   /// -1 for roll left, 1 for roll right
   roll:float;
-
   /// true if you want to press the jump button
   jump:bool;
-
   /// true if you want to press the boost button
   boost:bool;
-
   /// true if you want to press the handbrake button
   handbrake:bool;
-
   /// true if you want to press the 'use item' button, used in rumble etc.
   use_item:bool;
 }
@@ -50,16 +59,6 @@ struct Rotator {
   roll:float;
 }
 
-/// Expresses the rotation state of an object.
-/// Learn about quaternions here: https://en.wikipedia.org/wiki/Quaternions_and_spatial_rotation
-/// You can tinker with them here to build an intuition: https://quaternions.online/
-struct Quaternion {
-  x:float;
-  y:float;
-  z:float;
-  w:float;
-}
-
 table BoxShape {
   length:float;
   width:float;
@@ -71,7 +70,7 @@ table SphereShape {
 }
 
 table CylinderShape {
-  diameter: float;
+  diameter:float;
   height:float;
 }
 
@@ -79,20 +78,15 @@ union CollisionShape { BoxShape, SphereShape, CylinderShape }
 
 table Touch {
   /// The name of the player involved with the touch.
-  player_name:string;
-
+  player_name:string (required);
   /// Seconds that had elapsed in the game when the touch occurred.
   game_seconds:float;
-
   /// The point of contact for the touch.
   location:Vector3 (required);
-
   /// The direction of the touch.
   normal:Vector3 (required);
-
   /// The Team which the touch belongs to, 0 for blue 1 for orange.
   team:int;
-
   /// The index of the player involved with the touch.
   player_index:int;
 }
@@ -114,7 +108,7 @@ table Physics {
   angular_velocity:Vector3 (required);
 }
 
-enum AirState: byte {
+enum AirState: ubyte {
   /// All wheels are on the ground
   OnGround,
   /// When the bot is jumping,
@@ -132,6 +126,8 @@ enum AirState: byte {
 table PlayerInfo {
   physics:Physics (required);
   score_info:ScoreInfo (required);
+  hitbox:BoxShape (required);
+  hitbox_offset:Vector3 (required);
   air_state:AirState;
   // How long until the bot cannot dodge anymore, -1 while on ground or when airborne for too long after jumping
   dodge_timeout:float;
@@ -139,11 +135,9 @@ table PlayerInfo {
   demolished_timeout:float;
   is_supersonic:bool;
   is_bot:bool;
-  name:string;
+  name:string (required);
   team:int;
   boost:int;
-  hitbox:BoxShape (required);
-  hitbox_offset:Vector3 (required);
   /// In the case where the requested player index is not available, spawnId will help
   /// the framework figure out what index was actually assigned to this player instead.
   spawn_id: int;
@@ -158,12 +152,11 @@ table BallInfo {
 table BoostPadState {
   /// True if the boost can be picked up
   is_active:bool;
-
   /// The number of seconds since the boost has been picked up, or 0.0 if the boost is active.
   timer:float;
 }
 
-enum GameStateType: byte {
+enum GameStateType: ubyte {
   /// Game has not been created yet
   Inactive = 0,
   /// 3-2-1 countdown
@@ -204,11 +197,11 @@ table TeamInfo {
 }
 
 table GameTickPacket {
-  players:[PlayerInfo];
-  boost_pad_states:[BoostPadState];
+  players:[PlayerInfo] (required);
+  boost_pad_states:[BoostPadState] (required);
   ball:BallInfo (required);
   game_info:GameInfo (required);
-  teams:[TeamInfo];
+  teams:[TeamInfo] (required);
 }
 
 root_type GameTickPacket;
@@ -229,598 +222,24 @@ table BoostPad {
 }
 
 table FieldInfo {
-  boost_pads:[BoostPad]; // These will be sorted according to (y * 100 + x), and BoostInfo will be provided in the same order.
-  goals:[GoalInfo];
+  /// BoostInfo will be provided in the same order.
+  boost_pads:[BoostPad] (required);
+  goals:[GoalInfo] (required);
 }
 
 root_type FieldInfo;
 
-// This section deals with desired game state, useful for teleporting cars around, etc.
-
-struct Float {
-  val:float;
-}
-
-struct Bool {
-  val:bool;
-}
-
-// Values are in "unreal units"
-table Vector3Partial {
-  x:Float;
-  y:Float;
-  z:Float;
-}
-
-// Values are in radians
-table RotatorPartial {
-  pitch:Float;
-  yaw:Float;
-  roll:Float;
-}
-
-table DesiredPhysics {
-  location:Vector3Partial;
-  rotation:RotatorPartial;
-  velocity:Vector3Partial;
-  angular_velocity:Vector3Partial;
-}
-
-table DesiredBallState {
-  physics:DesiredPhysics;
-}
-
-table DesiredCarState {
-  physics:DesiredPhysics;
-  boost_amount:Float;
-}
-
-table DesiredBoostState {
-  respawn_time:Float;
-}
-
-table DesiredGameInfoState {
-  world_gravity_z:Float;
-  game_speed:Float;
-  paused:Bool;
-  end_match:Bool;
-}
-
-/// A console command which we will try to execute inside Rocket League.
-/// See https://github.com/RLBot/RLBot/wiki/Console-Commands for a list of known commands.
-table ConsoleCommand {
-  command:string;
-}
-
-//Pass a rlbot.toml file to be parsed and started
-table StartCommand {
-	config_path:string;
-}
-
-table DesiredGameState {
-  ball_state:DesiredBallState;
-  car_states:[DesiredCarState];
-  boost_states:[DesiredBoostState];
-  game_info_state:DesiredGameInfoState;
-  console_commands:[ConsoleCommand];
-}
-
-root_type DesiredGameState;
-
-enum TextHAlign: byte {
-  Left = 0,
-  Center = 1,
-  Right = 2,
-}
-
-enum TextVAlign: byte {
-  Top = 0,
-  Center = 1,
-  Bottom = 2,
-}
-
-table Color {
-  a: ubyte = 0;
-  r: ubyte = 0;
-  g: ubyte = 0;
-  b: ubyte = 0;
-}
-
-table Line3D {
-  color: Color;
-  start: Vector3 (required);
-  end: Vector3 (required);
-}
-
-table PolyLine3D {
-  color: Color (required);
-  points: [Vector3];
-}
-
-table String2D {
-  foreground: Color (required);
-  background: Color (required);
-  scale: float;
-  text: string;
-  h_align: TextHAlign;
-  v_align: TextVAlign;
-  /// 0 = Left
-  /// 1 = Right
-  x: float;
-  /// 0 = Top
-  /// 1 = Bottom
-  y: float;
-}
-
-table String3D {
-  foreground: Color (required);
-  background: Color (required);
-  scale: float;
-  text: string;
-  h_align: TextHAlign;
-  v_align: TextVAlign;
-  position: Vector3 (required);
-}
-
-union RenderType {
-  Line3D,
-  PolyLine3D,
-  String2D,
-  String3D,
-}
-
-table RenderMessage {
-  variety: RenderType;
-}
-
-table RenderGroup {
-  render_messages:[RenderMessage];
-  /// The id of the render group
-  id: int;
-}
-
-root_type RenderGroup;
-
-table RemoveRenderGroup {
-  id: int;
-}
-
-enum QuickChatSelection : byte {
-  Information_IGotIt = 0,
-  Information_NeedBoost = 1,
-  Information_TakeTheShot = 2,
-  Information_Defending = 3,
-  Information_GoForIt = 4,
-  Information_Centering = 5,
-  Information_AllYours = 6,
-  Information_InPosition = 7,
-  Information_Incoming = 8,
-  Compliments_NiceShot = 9,
-  Compliments_GreatPass = 10,
-  Compliments_Thanks = 11,
-  Compliments_WhatASave = 12,
-  Compliments_NiceOne = 13,
-  Compliments_WhatAPlay = 14,
-  Compliments_GreatClear = 15,
-  Compliments_NiceBlock = 16,
-  Reactions_OMG = 17,
-  Reactions_Noooo = 18,
-  Reactions_Wow = 19,
-  Reactions_CloseOne = 20,
-  Reactions_NoWay = 21,
-  Reactions_HolyCow = 22,
-  Reactions_Whew = 23,
-  Reactions_Siiiick = 24,
-  Reactions_Calculated = 25,
-  Reactions_Savage = 26,
-  Reactions_Okay = 27,
-  Apologies_Cursing = 28,
-  Apologies_NoProblem = 29,
-  Apologies_Whoops = 30,
-  Apologies_Sorry = 31,
-  Apologies_MyBad = 32,
-  Apologies_Oops = 33,
-  Apologies_MyFault = 34,
-  PostGame_Gg = 35,
-  PostGame_WellPlayed = 36,
-  PostGame_ThatWasFun = 37,
-  PostGame_Rematch = 38,
-  PostGame_OneMoreGame = 39,
-  PostGame_WhatAGame = 40,
-  PostGame_NiceMoves = 41,
-  PostGame_EverybodyDance = 42,
-  /// Custom text chats made by bot makers
-  MaxPysonixQuickChatPresets = 43,
-  /// Waste of CPU cycles
-  Custom_Toxic_WasteCPU = 44,
-  /// Git gud*
-  Custom_Toxic_GitGut = 45,
-  /// De-Allocate Yourself
-  Custom_Toxic_DeAlloc = 46,
-  /// 404: Your skill not found
-  Custom_Toxic_404NoSkill = 47,
-  /// Get a virus
-  Custom_Toxic_CatchVirus = 48,
-  /// Passing!
-  Custom_Useful_Passing = 49,
-  /// Faking!
-  Custom_Useful_Faking = 50,
-  /// Demoing!
-  Custom_Useful_Demoing = 51,
-  /// BOOPING
-  Custom_Useful_Bumping = 52,
-  /// The chances of that was 47525 to 1*
-  Custom_Compliments_TinyChances = 53,
-  /// Who upped your skill level?
-  Custom_Compliments_SkillLevel = 54,
-  /// Your programmer should be proud
-  Custom_Compliments_proud = 55,
-  /// You're the GC of Bots
-  Custom_Compliments_GC = 56,
-  /// Are you [Insert Pro]Bot? *
-  Custom_Compliments_Pro = 57,
-  /// Lag
-  Custom_Excuses_Lag = 58,
-  /// Ghost inputs
-  Custom_Excuses_GhostInputs = 59,
-  /// RIGGED
-  Custom_Excuses_Rigged = 60,
-  /// Mafia plays!
-  Custom_Toxic_MafiaPlays = 61,
-  /// Yeet!
-  Custom_Exclamation_Yeet = 62,
-}
-
-table QuickChat {
-  quick_chat_selection: QuickChatSelection;
-  /// The index of the player that sent the quick chat
-  player_index: int;
-  /// True if the chat is team only false if everyone can see it.
-  team_only: bool;
-  message_index: int;
-  time_stamp: float;
-}
-
-root_type QuickChat;
-
 table PredictionSlice {
   /// The moment in game time that this prediction corresponds to.
   /// This corresponds to 'secondsElapsed' in the GameInfo table.
-  game_seconds: float;
-
+  game_seconds:float;
   /// The predicted location and motion of the object.
-  physics: Physics (required);
+  physics:Physics (required);
 }
 
 table BallPrediction {
   /// A list of places the ball will be at specific times in the future.
   /// It is guaranteed to sorted so that time increases with each slice.
   /// It is NOT guaranteed to have a consistent amount of time between slices.
-  slices: [PredictionSlice];
-}
-
-/// A bot controlled by the RLBot framework
-table RLBotPlayer {}
-
-/// A normal human player
-table HumanPlayer {}
-
-/// A psyonix bot, e.g. All Star bot
-table PsyonixBotPlayer {
-  bot_skill: float;
-}
-
-/// A player that Rocket League treats as human, e.g. has a dedicated camera and can do training mode,
-/// but is actually controlled by a bot.
-table PartyMemberBotPlayer {}
-
-union PlayerClass { RLBotPlayer, HumanPlayer, PsyonixBotPlayer, PartyMemberBotPlayer }
-
-/// The car type, color, and other aspects of the player's appearance.
-/// See https://github.com/RLBot/RLBot/wiki/Bot-Customization
-table PlayerLoadout {
-  team_color_id: int;
-  custom_color_id: int;
-  car_id: int;
-  decal_id: int;
-  wheels_id: int;
-  boost_id: int;
-  antenna_id: int;
-  hat_id: int;
-  paint_finish_id: int;
-  custom_finish_id: int;
-  engine_audio_id: int;
-  trails_id: int;
-  goal_explosion_id: int;
-  loadout_paint: LoadoutPaint;
-  /// Sets the primary color of the car to the swatch that most closely matches the provided
-  /// RGB color value. If set, this overrides teamColorId.
-  primary_color_lookup:Color;
-  /// Sets the secondary color of the car to the swatch that most closely matches the provided
-  /// RGB color value. If set, this overrides customColorId.
-  secondary_color_lookup:Color;
-}
-
-/// Specification for 'painted' items. See https://github.com/RLBot/RLBot/wiki/Bot-Customization
-table LoadoutPaint {
-  car_paint_id: int;
-  decal_paint_id: int;
-  wheels_paint_id: int;
-  boost_paint_id: int;
-  antenna_paint_id: int;
-  hat_paint_id: int;
-  trails_paint_id: int;
-  goal_explosion_paint_id: int;
-}
-
-table PlayerConfiguration {
-  // Cannot be named 'class' because that breaks Java.
-  // Cannot be named 'playerClass' because that breaks C#.
-  variety: PlayerClass (required);
-  name: string;
-  team: int;
-  location: string; //path to working dir of bot
-  run_command: string; //command to run in the working dir to start the bot
-  loadout: PlayerLoadout;
-  /// In the case where the requested player index is not available, spawnId will help
-  /// the framework figure out what index was actually assigned to this player instead.
-  spawn_id: int;
-}
-
-enum Launcher : byte {
-  Steam,
-  Epic,
-  Custom
-}
-
-enum GameMode : byte {
-  Soccer,
-  Hoops,
-  Dropshot,
-  Hockey,
-  Rumble,
-  Heatseeker,
-  Gridiron
-}
-
-enum MatchLength : byte {
-  Five_Minutes,
-  Ten_Minutes,
-  Twenty_Minutes,
-  Unlimited
-}
-
-enum MaxScore : byte {
-  Unlimited,
-  One_Goal,
-  Three_Goals,
-  Five_Goals
-}
-
-enum OvertimeOption : byte {
-  Unlimited,
-  Five_Max_First_Score,
-  Five_Max_Random_Team
-}
-
-enum SeriesLengthOption : byte {
-  Unlimited,
-  Three_Games,
-  Five_Games,
-  Seven_Games
-}
-
-enum GameSpeedOption : byte {
-  Default,
-  Slo_Mo,
-  Time_Warp
-}
-
-enum BallMaxSpeedOption : byte {
-  Default,
-  Slow,
-  Fast,
-  Super_Fast
-}
-
-enum BallTypeOption : byte {
-  Default,
-  Cube,
-  Puck,
-  Basketball
-}
-
-enum BallWeightOption : byte {
-  Default,
-  Light,
-  Heavy,
-  Super_Light
-}
-
-enum BallSizeOption : byte {
-  Default,
-  Small,
-  Large,
-  Gigantic
-}
-
-enum BallBouncinessOption : byte {
-  Default,
-  Low,
-  High,
-  Super_High
-}
-
-enum BoostOption : byte {
-  Normal_Boost,
-  Unlimited_Boost,
-  Slow_Recharge,
-  Rapid_Recharge,
-  No_Boost
-}
-
-enum RumbleOption : byte {
-  No_Rumble, // Cannot be named None because that breaks Python.
-  Default,
-  Slow,
-  Civilized,
-  Destruction_Derby,
-  Spring_Loaded,
-  Spikes_Only,
-  Spike_Rush
-}
-
-enum BoostStrengthOption : byte {
-  One,
-  OneAndAHalf,
-  Two,
-  Ten
-}
-
-enum GravityOption : byte {
-  Default,
-  Low,
-  High,
-  Super_High
-}
-
-enum DemolishOption : byte {
-  Default,
-  Disabled,
-  Friendly_Fire,
-  On_Contact,
-  On_Contact_FF
-}
-
-enum RespawnTimeOption : byte {
-  Three_Seconds,
-  Two_Seconds,
-  One_Seconds,
-  Disable_Goal_Reset
-}
-
-table MutatorSettings {
-  match_length: MatchLength;
-  max_score: MaxScore;
-  overtime_option: OvertimeOption;
-  series_length_option: SeriesLengthOption;
-  game_speed_option: GameSpeedOption;
-  ball_max_speed_option: BallMaxSpeedOption;
-  ball_type_option: BallTypeOption;
-  ball_weight_option: BallWeightOption;
-  ball_size_option: BallSizeOption;
-  ball_bounciness_option: BallBouncinessOption;
-  boost_option: BoostOption;
-  rumble_option: RumbleOption;
-  boost_strength_option: BoostStrengthOption;
-  gravity_option: GravityOption;
-  demolish_option: DemolishOption;
-  respawn_time_option: RespawnTimeOption;
-}
-
-enum ExistingMatchBehavior : byte {
-  /// Restart the match if any match settings differ. This is the default because old RLBot always worked this way.
-  Restart_If_Different,
-
-  /// Always restart the match, even if config is identical
-  Restart,
-
-  /// Never restart an existing match, just try to remove or spawn cars to match the configuration.
-  /// If we are not in the middle of a match, a match will be started. Handy for LAN matches.
-  Continue_And_Spawn,
-}
-
-table MatchSettings {
-  launcher: Launcher;
-  auto_start_bots: bool;
-  player_configurations: [PlayerConfiguration];
-  game_mode: GameMode;
-  skip_replays: bool;
-  instant_start: bool;
-  mutator_settings: MutatorSettings;
-  existing_match_behavior: ExistingMatchBehavior;
-  enable_rendering: bool;
-  enable_state_setting: bool;
-  auto_save_replay: bool;
-  /// The name of a upk file, like UtopiaStadium_P, which should be loaded.
-  /// On Steam version of Rocket League this can be used to load custom map files,
-  /// but on Epic version it only works on the Psyonix maps.
-  game_map_upk: string;
-}
-
-table QuickChatMessages {
-  messages: [QuickChat];
-}
-
-/// Sent when connecting to RLBot to indicate what type of messages are desired.
-/// This could be sent by a bot, or a bot manager governing several bots, an
-/// overlay, or any other utility that connects to the RLBot process.
-table ReadyMessage {
-  // If this is set, RLBot will send BallPrediction data back to the client when available.
-  wants_ball_predictions: bool;
-  // If this is set, RLBot will send QuickChatMessages to the client when available.
-  wants_quick_chat: bool;
-  // If this is set, RLBot will send MessagePacket data back to the client when available.
-  wants_game_messages: bool;
-}
-
-/// Notification that a player triggers some in-game event, such as:
-///		Win, Loss, TimePlayed;
-///		Shot, Assist, Center, Clear, PoolShot;
-///		Goal, AerialGoal, BicycleGoal, BulletGoal, BackwardsGoal, LongGoal, OvertimeGoal, TurtleGoal;
-///		AerialHit, BicycleHit, BulletHit, JuggleHit, FirstTouch, BallHit;
-///		Save, EpicSave, FreezeSave;
-///		HatTrick, Savior, Playmaker, MVP;
-///		FastestGoal, SlowestGoal, FurthestGoal, OwnGoal;
-///		MostBallTouches, FewestBallTouches, MostBoostPickups, FewestBoostPickups, BoostPickups;
-///		CarTouches, Demolition, Demolish;
-///		LowFive, HighFive;
-table PlayerStatEvent
-{
-	/// index of the player associated with the event
-  player_index:int;
-
-	/// Event type
-	stat_type:string;
-}
-
-/// Notification when the local player is spectating another player.
-table PlayerSpectate
-{
-	/// index of the player that is being spectated. Will be -1 if not spectating anyone.
-	player_index:int;
-}
-
-/// Rocket League is notifying us that some player has moved their controller. This is an *output*
-table PlayerInputChange
-{
-	player_index: int;
-	controller_state: ControllerState (required);
-  // These are provided by Rocket League, and I'm passing them through. Theoretically they could be
-  // inferred by jump + pitch + roll, but nice to have clarity.
-	dodge_forward:float;
-	dodge_right:float;
-}
-
-union GameMessage
-{
-  PlayerStatEvent,
-  PlayerSpectate,
-	PlayerInputChange
-}
-
-table GameMessageWrapper
-{
-	message:GameMessage;
-}
-
-/// We have some very small messages that are only a few bytes but potentially sent at high frequency.
-/// Bundle them into a packet to reduce the overhead of sending data over TCP.
-table MessagePacket
-{
-	messages:[GameMessageWrapper];
-	// Corresponds with secondsElapsed in GameInfo
-  game_seconds: float;
-  // Corresponds with the frameNum attribute in GameInfo
-  frame_num: int;
+  slices:[PredictionSlice] (required);
 }

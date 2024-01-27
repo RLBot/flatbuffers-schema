@@ -1,0 +1,253 @@
+namespace rlbot.flat.matchstart;
+
+/// A bot controlled by the RLBot framework
+table RLBotPlayer {}
+
+/// A normal human player
+table HumanPlayer {}
+
+/// A psyonix bot, e.g. All Star bot
+table PsyonixBotPlayer {
+  bot_skill:float;
+}
+
+/// A player that Rocket League treats as human, e.g. has a dedicated camera and can do training mode,
+/// but is actually controlled by a bot.
+table PartyMemberBotPlayer {}
+
+union PlayerClass { RLBotPlayer, HumanPlayer, PsyonixBotPlayer, PartyMemberBotPlayer }
+
+/// The car type, color, and other aspects of the player's appearance.
+/// See https://wiki.rlbot.org/botmaking/bot-customization/
+table PlayerLoadout {
+  team_color_id:int;
+  custom_color_id:int;
+  car_id:int;
+  decal_id:int;
+  wheels_id:int;
+  boost_id:int;
+  antenna_id:int;
+  hat_id:int;
+  paint_finish_id:int;
+  custom_finish_id:int;
+  engine_audio_id:int;
+  trails_id:int;
+  goal_explosion_id:int;
+  loadout_paint:LoadoutPaint;
+  /// Sets the primary color of the car to the swatch that most closely matches the provided
+  /// RGB color value. If set, this overrides teamColorId.
+  primary_color_lookup:Color;
+  /// Sets the secondary color of the car to the swatch that most closely matches the provided
+  /// RGB color value. If set, this overrides customColorId.
+  secondary_color_lookup:Color;
+}
+
+/// Specification for 'painted' items. See https://wiki.rlbot.org/botmaking/bot-customization/
+table LoadoutPaint {
+  car_paint_id:int;
+  decal_paint_id:int;
+  wheels_paint_id:int;
+  boost_paint_id:int;
+  antenna_paint_id:int;
+  hat_paint_id:int;
+  trails_paint_id:int;
+  goal_explosion_paint_id:int;
+}
+
+table PlayerConfiguration {
+  // Cannot be named 'class' because that breaks Java.
+  // Cannot be named 'playerClass' because that breaks C#.
+  variety:PlayerClass (required);
+  name:string (required);
+  team:int;
+  loadout:PlayerLoadout;
+  /// In the case where the requested player index is not available, spawnId will help
+  /// the framework figure out what index was actually assigned to this player instead.
+  spawn_id:int;
+}
+
+enum GameMode : ubyte {
+  Soccer,
+  Hoops,
+  Dropshot,
+  Hockey,
+  Rumble,
+  Heatseeker,
+  Gridiron
+}
+
+enum MatchLength : ubyte {
+  Five_Minutes,
+  Ten_Minutes,
+  Twenty_Minutes,
+  Unlimited
+}
+
+enum MaxScore : ubyte {
+  Unlimited,
+  One_Goal,
+  Three_Goals,
+  Five_Goals
+}
+
+enum OvertimeOption : ubyte {
+  Unlimited,
+  Five_Max_First_Score,
+  Five_Max_Random_Team
+}
+
+enum SeriesLengthOption : ubyte {
+  Unlimited,
+  Three_Games,
+  Five_Games,
+  Seven_Games
+}
+
+enum GameSpeedOption : ubyte {
+  Default,
+  Slo_Mo,
+  Time_Warp
+}
+
+enum BallMaxSpeedOption : ubyte {
+  Default,
+  Slow,
+  Fast,
+  Super_Fast
+}
+
+enum BallTypeOption : ubyte {
+  Default,
+  Cube,
+  Puck,
+  Basketball
+}
+
+enum BallWeightOption : ubyte {
+  Default,
+  Light,
+  Heavy,
+  Super_Light
+}
+
+enum BallSizeOption : ubyte {
+  Default,
+  Small,
+  Large,
+  Gigantic
+}
+
+enum BallBouncinessOption : ubyte {
+  Default,
+  Low,
+  High,
+  Super_High
+}
+
+enum BoostOption : ubyte {
+  Normal_Boost,
+  Unlimited_Boost,
+  Slow_Recharge,
+  Rapid_Recharge,
+  No_Boost
+}
+
+enum RumbleOption : ubyte {
+  No_Rumble, // Cannot be named None because that breaks Python.
+  Default,
+  Slow,
+  Civilized,
+  Destruction_Derby,
+  Spring_Loaded,
+  Spikes_Only,
+  Spike_Rush
+}
+
+enum BoostStrengthOption : ubyte {
+  One,
+  OneAndAHalf,
+  Two,
+  Ten
+}
+
+enum GravityOption : ubyte {
+  Default,
+  Low,
+  High,
+  Super_High
+}
+
+enum DemolishOption : ubyte {
+  Default,
+  Disabled,
+  Friendly_Fire,
+  On_Contact,
+  On_Contact_FF
+}
+
+enum RespawnTimeOption : ubyte {
+  Three_Seconds,
+  Two_Seconds,
+  One_Seconds,
+  Disable_Goal_Reset
+}
+
+table MutatorSettings {
+  match_length: MatchLength;
+  max_score: MaxScore;
+  overtime_option: OvertimeOption;
+  series_length_option: SeriesLengthOption;
+  game_speed_option: GameSpeedOption;
+  ball_max_speed_option: BallMaxSpeedOption;
+  ball_type_option: BallTypeOption;
+  ball_weight_option: BallWeightOption;
+  ball_size_option: BallSizeOption;
+  ball_bounciness_option: BallBouncinessOption;
+  boost_option: BoostOption;
+  rumble_option: RumbleOption;
+  boost_strength_option: BoostStrengthOption;
+  gravity_option: GravityOption;
+  demolish_option: DemolishOption;
+  respawn_time_option: RespawnTimeOption;
+}
+
+enum ExistingMatchBehavior : ubyte {
+  /// Restart the match if any match settings differ. This is the default because old RLBot always worked this way.
+  Restart_If_Different,
+  /// Always restart the match, even if config is identical
+  Restart,
+  /// Never restart an existing match, just try to remove or spawn cars to match the configuration.
+  /// If we are not in the middle of a match, a match will be started. Handy for LAN matches.
+  Continue_And_Spawn,
+}
+
+enum Launcher : ubyte {
+  Steam,
+  Epic,
+  Custom
+}
+
+table MatchSettings {
+  /// Leave unset to tell RLBot to not launch the game
+  launcher:Launcher;
+  /// The path to the main Rocket League binary
+  game_path:string (required);
+  auto_start_bots:bool;
+  player_configurations:[PlayerConfiguration] (required);
+  game_mode:GameMode;
+  skip_replays:bool;
+  instant_start:bool;
+  mutator_settings:MutatorSettings;
+  existing_match_behavior:ExistingMatchBehavior;
+  enable_rendering:bool;
+  enable_state_setting:bool;
+  auto_save_replay:bool;
+  /// The name of a upk file, like UtopiaStadium_P, which should be loaded.
+  /// On Steam version of Rocket League this can be used to load custom map files,
+  /// but on Epic version it only works on the Psyonix maps.
+  game_map_upk:string (required);
+}
+
+table StartCommand {
+	config_path:string (required);
+}
