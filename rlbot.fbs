@@ -59,16 +59,6 @@ struct Rotator {
   roll:float;
 }
 
-/// Expresses the rotation state of an object.
-/// Learn about quaternions here: https://en.wikipedia.org/wiki/Quaternions_and_spatial_rotation
-/// You can tinker with them here to build an intuition: https://quaternions.online/
-struct Quaternion {
-  x:float;
-  y:float;
-  z:float;
-  w:float;
-}
-
 table BoxShape {
   length:float;
   width:float;

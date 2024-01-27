@@ -247,3 +247,7 @@ table MatchSettings {
   /// but on Epic version it only works on the Psyonix maps.
   game_map_upk:string (required);
 }
+
+table StartCommand {
+	config_path:string (required);
+}
