@@ -1,4 +1,4 @@
-namespace rlbot.flat.event;
+namespace rlbot.flat;
 
 /// Notification that a player triggers some in-game event, such as:
 ///		Win, Loss, TimePlayed;
