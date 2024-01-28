@@ -229,13 +229,23 @@ enum Launcher : ubyte {
   Custom
 }
 
+table ScriptConfiguration {
+  location:string (required);
+  run_command:string (required);
+}
+
 table MatchSettings {
   /// Leave unset to tell RLBot to not launch the game
   launcher:Launcher;
   /// The path to the main Rocket League binary
   game_path:string (required);
   auto_start_bots:bool;
+  /// The name of a upk file, like UtopiaStadium_P, which should be loaded.
+  /// On Steam version of Rocket League this can be used to load custom map files,
+  /// but on Epic version it only works on the Psyonix maps.
+  game_map_upk:string (required);
   player_configurations:[PlayerConfiguration] (required);
+  script_configurations:[ScriptConfiguration] (required);
   game_mode:GameMode;
   skip_replays:bool;
   instant_start:bool;
@@ -244,10 +254,6 @@ table MatchSettings {
   enable_rendering:bool;
   enable_state_setting:bool;
   auto_save_replay:bool;
-  /// The name of a upk file, like UtopiaStadium_P, which should be loaded.
-  /// On Steam version of Rocket League this can be used to load custom map files,
-  /// but on Epic version it only works on the Psyonix maps.
-  game_map_upk:string (required);
 }
 
 table StartCommand {
