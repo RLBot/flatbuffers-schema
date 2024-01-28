@@ -60,8 +60,8 @@ table PlayerConfiguration {
   variety:PlayerClass (required);
   name:string (required);
   team:int;
-  location:string;
-  run_command:string;
+  location:string (required);
+  run_command:string (required);
   loadout:PlayerLoadout;
   /// In the case where the requested player index is not available, spawnId will help
   /// the framework figure out what index was actually assigned to this player instead.
