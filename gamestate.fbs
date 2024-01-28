@@ -1,4 +1,4 @@
-namespace rlbot.flat.gamestate;
+namespace rlbot.flat;
 
 // This section deals with desired game state, useful for teleporting cars around, etc.
 

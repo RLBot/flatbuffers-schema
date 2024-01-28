@@ -1,4 +1,4 @@
-namespace rlbot.flat.rendering;
+namespace rlbot.flat;
 
 enum TextHAlign: ubyte {
   Left = 0,
