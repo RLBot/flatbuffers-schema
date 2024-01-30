@@ -1,60 +1,60 @@
 namespace rlbot.flat;
 
 /// Notification that a player triggers some in-game event, such as:
-///		Win, Loss, TimePlayed;
-///		Shot, Assist, Center, Clear, PoolShot;
-///		Goal, AerialGoal, BicycleGoal, BulletGoal, BackwardsGoal, LongGoal, OvertimeGoal, TurtleGoal;
-///		AerialHit, BicycleHit, BulletHit, JuggleHit, FirstTouch, BallHit;
-///		Save, EpicSave, FreezeSave;
-///		HatTrick, Savior, Playmaker, MVP;
-///		FastestGoal, SlowestGoal, FurthestGoal, OwnGoal;
-///		MostBallTouches, FewestBallTouches, MostBoostPickups, FewestBoostPickups, BoostPickups;
-///		CarTouches, Demolition, Demolish;
-///		LowFive, HighFive;
+///    Win, Loss, TimePlayed;
+///    Shot, Assist, Center, Clear, PoolShot;
+///    Goal, AerialGoal, BicycleGoal, BulletGoal, BackwardsGoal, LongGoal, OvertimeGoal, TurtleGoal;
+///    AerialHit, BicycleHit, BulletHit, JuggleHit, FirstTouch, BallHit;
+///    Save, EpicSave, FreezeSave;
+///    HatTrick, Savior, Playmaker, MVP;
+///    FastestGoal, SlowestGoal, FurthestGoal, OwnGoal;
+///    MostBallTouches, FewestBallTouches, MostBoostPickups, FewestBoostPickups, BoostPickups;
+///    CarTouches, Demolition, Demolish;
+///    LowFive, HighFive;
 table PlayerStatEvent
 {
-	/// index of the player associated with the event
+  /// index of the player associated with the event
   player_index:int;
-	/// Event type
-	stat_type:string (required);
+  /// Event type
+  stat_type:string (required);
 }
 
 /// Notification when the local player is spectating another player.
 table PlayerSpectate
 {
-	/// index of the player that is being spectated. Will be -1 if not spectating anyone.
-	player_index:int;
+  /// index of the player that is being spectated. Will be -1 if not spectating anyone.
+  player_index:int;
 }
 
 /// Rocket League is notifying us that some player has moved their controller. This is an *output*
 table PlayerInputChange
 {
-	player_index:int;
-	controller_state:ControllerState (required);
+  player_index:int;
+  controller_state:ControllerState (required);
   // These are provided by Rocket League, and I'm passing them through. Theoretically they could be
   // inferred by jump + pitch + roll, but nice to have clarity.
-	dodge_forward:float;
-	dodge_right:float;
+  dodge_forward:float;
+  dodge_right:float;
 }
 
 union GameMessage
 {
   PlayerStatEvent,
   PlayerSpectate,
-	PlayerInputChange
+  PlayerInputChange
 }
 
 table GameMessageWrapper
 {
-	message:GameMessage (required);
+  message:GameMessage (required);
 }
 
 /// We have some very small messages that are only a few bytes but potentially sent at high frequency.
 /// Bundle them into a packet to reduce the overhead of sending data over TCP.
 table MessagePacket
 {
-	messages:[GameMessageWrapper] (required);
-	// Corresponds with secondsElapsed in GameInfo
+  messages:[GameMessageWrapper] (required);
+  // Corresponds with secondsElapsed in GameInfo
   game_seconds:float;
   // Corresponds with the frameNum attribute in GameInfo
   frame_num:int;

@@ -257,5 +257,5 @@ table MatchSettings {
 }
 
 table StartCommand {
-	config_path:string (required);
+  config_path:string (required);
 }
