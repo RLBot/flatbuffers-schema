@@ -39,7 +39,7 @@ table ControllerState {
 }
 
 table PlayerInput {
-  player_index:int;
+  player_index:uint;
   controller_state:ControllerState (required);
 }
 
@@ -86,19 +86,19 @@ table Touch {
   /// The direction of the touch.
   normal:Vector3 (required);
   /// The Team which the touch belongs to, 0 for blue 1 for orange.
-  team:int;
+  team:uint;
   /// The index of the player involved with the touch.
-  player_index:int;
+  player_index:uint;
 }
 
 table ScoreInfo {
-  score:int;
-  goals:int;
-  own_goals:int;
-  assists:int;
-  saves:int;
-  shots:int;
-  demolitions:int;
+  score:uint;
+  goals:uint;
+  own_goals:uint;
+  assists:uint;
+  saves:uint;
+  shots:uint;
+  demolitions:uint;
 }
 
 table Physics {
@@ -136,11 +136,11 @@ table PlayerInfo {
   is_supersonic:bool;
   is_bot:bool;
   name:string (required);
-  team:int;
-  boost:int;
+  team:uint;
+  boost:uint;
   /// In the case where the requested player index is not available, spawnId will help
   /// the framework figure out what index was actually assigned to this player instead.
-  spawn_id: int;
+  spawn_id:int;
 }
 
 table BallInfo {
@@ -187,13 +187,13 @@ table GameInfo {
   /// Tracks the number of physics frames the game has computed.
   /// May increase by more than one across consecutive packets.
   /// Data type will roll over after 207 days at 120Hz.
-  frame_num: int;
+  frame_num:uint;
 }
 
 table TeamInfo {
-  team_index:int;
+  team_index:uint;
   /// number of goals scored.
-  score:int;
+  score:uint;
 }
 
 table GameTickPacket {
