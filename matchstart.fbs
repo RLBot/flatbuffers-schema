@@ -1,21 +1,21 @@
 namespace rlbot.flat;
 
 /// A bot controlled by the RLBot framework
-table RLBotPlayer {}
+table RLBot {}
 
 /// A normal human player
-table HumanPlayer {}
+table Human {}
 
 /// A psyonix bot, e.g. All Star bot
-table PsyonixBotPlayer {
+table Psyonix {
   bot_skill:float;
 }
 
 /// A player that Rocket League treats as human, e.g. has a dedicated camera and can do training mode,
 /// but is actually controlled by a bot.
-table PartyMemberBotPlayer {}
+table PartyMember {}
 
-union PlayerClass { RLBotPlayer, HumanPlayer, PsyonixBotPlayer, PartyMemberBotPlayer }
+union PlayerClass { RLBot, Human, Psyonix, PartyMember }
 
 /// The car type, color, and other aspects of the player's appearance.
 /// See https://wiki.rlbot.org/botmaking/bot-customization/
