@@ -20,19 +20,19 @@ union PlayerClass { RLBot, Human, Psyonix, PartyMember }
 /// The car type, color, and other aspects of the player's appearance.
 /// See https://wiki.rlbot.org/botmaking/bot-customization/
 table PlayerLoadout {
-  team_color_id:int;
-  custom_color_id:int;
-  car_id:int;
-  decal_id:int;
-  wheels_id:int;
-  boost_id:int;
-  antenna_id:int;
-  hat_id:int;
-  paint_finish_id:int;
-  custom_finish_id:int;
-  engine_audio_id:int;
-  trails_id:int;
-  goal_explosion_id:int;
+  team_color_id:uint;
+  custom_color_id:uint;
+  car_id:uint;
+  decal_id:uint;
+  wheels_id:uint;
+  boost_id:uint;
+  antenna_id:uint;
+  hat_id:uint;
+  paint_finish_id:uint;
+  custom_finish_id:uint;
+  engine_audio_id:uint;
+  trails_id:uint;
+  goal_explosion_id:uint;
   loadout_paint:LoadoutPaint;
   /// Sets the primary color of the car to the swatch that most closely matches the provided
   /// RGB color value. If set, this overrides teamColorId.
@@ -44,14 +44,14 @@ table PlayerLoadout {
 
 /// Specification for 'painted' items. See https://wiki.rlbot.org/botmaking/bot-customization/
 table LoadoutPaint {
-  car_paint_id:int;
-  decal_paint_id:int;
-  wheels_paint_id:int;
-  boost_paint_id:int;
-  antenna_paint_id:int;
-  hat_paint_id:int;
-  trails_paint_id:int;
-  goal_explosion_paint_id:int;
+  car_paint_id:uint;
+  decal_paint_id:uint;
+  wheels_paint_id:uint;
+  boost_paint_id:uint;
+  antenna_paint_id:uint;
+  hat_paint_id:uint;
+  trails_paint_id:uint;
+  goal_explosion_paint_id:uint;
 }
 
 table PlayerConfiguration {
@@ -59,7 +59,7 @@ table PlayerConfiguration {
   // Cannot be named 'playerClass' because that breaks C#.
   variety:PlayerClass (required);
   name:string (required);
-  team:int;
+  team:uint;
   location:string (required);
   run_command:string (required);
   loadout:PlayerLoadout;
@@ -195,22 +195,22 @@ enum RespawnTimeOption : ubyte {
 }
 
 table MutatorSettings {
-  match_length: MatchLength;
-  max_score: MaxScore;
-  overtime_option: OvertimeOption;
-  series_length_option: SeriesLengthOption;
-  game_speed_option: GameSpeedOption;
-  ball_max_speed_option: BallMaxSpeedOption;
-  ball_type_option: BallTypeOption;
-  ball_weight_option: BallWeightOption;
-  ball_size_option: BallSizeOption;
-  ball_bounciness_option: BallBouncinessOption;
-  boost_option: BoostOption;
-  rumble_option: RumbleOption;
-  boost_strength_option: BoostStrengthOption;
-  gravity_option: GravityOption;
-  demolish_option: DemolishOption;
-  respawn_time_option: RespawnTimeOption;
+  match_length:MatchLength;
+  max_score:MaxScore;
+  overtime_option:OvertimeOption;
+  series_length_option:SeriesLengthOption;
+  game_speed_option:GameSpeedOption;
+  ball_max_speed_option:BallMaxSpeedOption;
+  ball_type_option:BallTypeOption;
+  ball_weight_option:BallWeightOption;
+  ball_size_option:BallSizeOption;
+  ball_bounciness_option:BallBouncinessOption;
+  boost_option:BoostOption;
+  rumble_option:RumbleOption;
+  boost_strength_option:BoostStrengthOption;
+  gravity_option:GravityOption;
+  demolish_option:DemolishOption;
+  respawn_time_option:RespawnTimeOption;
 }
 
 enum ExistingMatchBehavior : ubyte {
@@ -257,5 +257,10 @@ table MatchSettings {
 }
 
 table StartCommand {
-	config_path:string (required);
+  config_path:string (required);
+}
+
+table BotSpawnIndex {
+  spawn_id:int;
+  packet_index:uint;
 }

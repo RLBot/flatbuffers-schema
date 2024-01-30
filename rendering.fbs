@@ -39,10 +39,10 @@ table String2D {
   v_align:TextVAlign;
   /// 0 = Left
   /// 1 = Right
-  x: float;
+  x:float;
   /// 0 = Top
   /// 1 = Bottom
-  y: float;
+  y:float;
 }
 
 table String3D {
