@@ -14,7 +14,7 @@ namespace rlbot.flat;
 table PlayerStatEvent
 {
   /// index of the player associated with the event
-  player_index:int;
+  player_index:uint;
   /// Event type
   stat_type:string (required);
 }
@@ -23,13 +23,13 @@ table PlayerStatEvent
 table PlayerSpectate
 {
   /// index of the player that is being spectated. Will be -1 if not spectating anyone.
-  player_index:int;
+  player_index:uint;
 }
 
 /// Rocket League is notifying us that some player has moved their controller. This is an *output*
 table PlayerInputChange
 {
-  player_index:int;
+  player_index:uint;
   controller_state:ControllerState (required);
   // These are provided by Rocket League, and I'm passing them through. Theoretically they could be
   // inferred by jump + pitch + roll, but nice to have clarity.
@@ -57,5 +57,5 @@ table MessagePacket
   // Corresponds with secondsElapsed in GameInfo
   game_seconds:float;
   // Corresponds with the frameNum attribute in GameInfo
-  frame_num:int;
+  frame_num:uint;
 }
