@@ -259,8 +259,3 @@ table MatchSettings {
 table StartCommand {
   config_path:string (required);
 }
-
-table BotSpawnIndex {
-  spawn_id:int;
-  packet_index:uint;
-}
