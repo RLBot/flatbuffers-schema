@@ -11,10 +11,12 @@ namespace rlbot.flat;
 table ReadyMessage {
   // If this is set, RLBot will send BallPrediction data back to the client when available.
   wants_ball_predictions:bool;
-  // If this is set, RLBot will send QuickChatMessages to the client when available.
-  wants_quick_chat:bool;
+  // If this is set, RLBot will send MatchComms to the client when available.
+  wants_comms:bool;
   // If this is set, RLBot will send MessagePacket data back to the client when available.
   wants_game_messages:bool;
+  // If this is set, RLBot will close the connection after the match ends. The GUI will not want this
+  close_after_match:bool;
 }
 
 table ControllerState {
