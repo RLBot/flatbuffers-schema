@@ -8,7 +8,7 @@ table MatchComm {
   /// True if the chat is team only false if everyone can see it.
   team_only:bool;
   /// The message that will be displayed on the screen
-  display:String (required);
+  display:String;
   /// The contents of the message
   action:[byte] (required);
 }
