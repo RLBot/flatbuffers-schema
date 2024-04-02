@@ -1,11 +1,11 @@
 namespace rlbot.flat;
 
 table MatchComm {
-  /// The index of the player that sent the quick chat
+  /// The index of the player that sent this
   index:uint;
-  /// The team of the player that sent the message
+  /// The team of the player that sent this
   team:uint;
-  /// True if the chat is team only false if everyone can see it.
+  /// True if the chat is team only false if everyone can see it
   team_only:bool;
   /// The message that will be displayed on the screen
   display:String;
