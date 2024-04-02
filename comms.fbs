@@ -10,7 +10,7 @@ table MatchComm {
   /// The message that will be displayed on the screen
   display:String;
   /// The contents of the message
-  action:[byte] (required);
+  content:[byte] (required);
 }
 
 root_type MatchComm;
