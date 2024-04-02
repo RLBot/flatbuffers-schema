@@ -1,3 +1,4 @@
+include "comms.fbs";
 include "event.fbs";
 include "gamestate.fbs";
 include "matchstart.fbs";
