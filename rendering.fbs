@@ -20,12 +20,12 @@ table Color {
 }
 
 table BallAnchor {
-  local:Vector3;
+  local:Vector3 (required);
 }
 
 table CarAnchor {
   index:uint;
-  local:Vector3;
+  local:Vector3 (required);
 }
 
 union RelativeAnchor {
@@ -34,7 +34,7 @@ union RelativeAnchor {
 }
 
 table Anchor {
-  world:Vector3;
+  world:Vector3 (required);
   relative:RelativeAnchor;
 }
 
