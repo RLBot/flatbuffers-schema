@@ -261,6 +261,6 @@ table StartCommand {
 }
 
 table StopCommand {
-	// If we want to shut down RLBot completely after stopping the match, not just the bots
-	shutdown_server:bool;
+  // If we want to shut down RLBot completely after stopping the match, not just the bots
+  shutdown_server:bool;
 }
