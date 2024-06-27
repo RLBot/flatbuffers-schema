@@ -19,28 +19,28 @@ table Color {
   b:ubyte = 0;
 }
 
-table BallRAnchor {
+table BallAnchor {
   local:Vector3 (required);
 }
 
-table CarRAnchor {
+table CarAnchor {
   index:uint;
   local:Vector3 (required);
 }
 
-union RelativeRAnchor {
-  BallRAnchor,
-  CarRAnchor,
+union RelativeAnchor {
+  BallAnchor,
+  CarAnchor,
 }
 
-table RAnchor {
+table RenderAnchor {
   world:Vector3 (required);
-  relative:RelativeRAnchor;
+  relative:RelativeAnchor;
 }
 
 table Line3D {
-  start:RAnchor (required);
-  end:RAnchor (required);
+  start:RenderAnchor (required);
+  end:RenderAnchor (required);
   color:Color (required);
 }
 
@@ -66,7 +66,7 @@ table String2D {
 
 table String3D {
   text:string (required);
-  anchor:RAnchor (required);
+  anchor:RenderAnchor (required);
   scale:float;
   foreground:Color (required);
   background:Color (required);
