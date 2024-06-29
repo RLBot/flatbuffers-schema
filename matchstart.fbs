@@ -86,10 +86,12 @@ enum MatchLength : ubyte {
 }
 
 enum MaxScore : ubyte {
-  Unlimited,
+  Default,
   One_Goal,
   Three_Goals,
-  Five_Goals
+  Five_Goals,
+  Seven_Goals,
+  Unlimited
 }
 
 enum OvertimeOption : ubyte {
@@ -122,14 +124,19 @@ enum BallTypeOption : ubyte {
   Default,
   Cube,
   Puck,
-  Basketball
+  Basketball,
+  Beachball,
+  Anniversary,
+  Haunted
 }
 
 enum BallWeightOption : ubyte {
   Default,
   Light,
   Heavy,
-  Super_Light
+  Super_Light,
+  Curve_Ball,
+  Beach_Ball_Curve
 }
 
 enum BallSizeOption : ubyte {
@@ -162,7 +169,9 @@ enum RumbleOption : ubyte {
   Destruction_Derby,
   Spring_Loaded,
   Spikes_Only,
-  Spike_Rush
+  Spike_Rush,
+  Haunted_Ball_Beam,
+  Tactical
 }
 
 enum BoostStrengthOption : ubyte {
@@ -176,7 +185,8 @@ enum GravityOption : ubyte {
   Default,
   Low,
   High,
-  Super_High
+  Super_High,
+  Reverse
 }
 
 enum DemolishOption : ubyte {
@@ -254,6 +264,7 @@ table MatchSettings {
   enable_rendering:bool;
   enable_state_setting:bool;
   auto_save_replay:bool;
+  freeplay:bool;
 }
 
 table StartCommand {
