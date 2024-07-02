@@ -1,5 +1,4 @@
 include "comms.fbs";
-include "event.fbs";
 include "gamestate.fbs";
 include "matchstart.fbs";
 include "rendering.fbs";
@@ -14,8 +13,6 @@ table ReadyMessage {
   wants_ball_predictions:bool;
   // If this is set, RLBot will send MatchComms to the client when available.
   wants_comms:bool;
-  // If this is set, RLBot will send MessagePacket data back to the client when available.
-  wants_game_messages:bool;
   // If this is set, RLBot will close the connection after the match ends. The GUI will not want this
   close_after_match:bool;
 }
@@ -132,9 +129,9 @@ table PlayerInfo {
   hitbox:BoxShape (required);
   hitbox_offset:Vector3 (required);
   air_state:AirState;
-  // How long until the bot cannot dodge anymore, -1 while on ground or when airborne for too long after jumping
+  /// How long until the bot cannot dodge anymore, -1 while on ground or when airborne for too long after jumping
   dodge_timeout:float;
-  // How long until the bot is not demolished anymore, -1 if not demolished
+  /// How long until the bot is not demolished anymore, -1 if not demolished
   demolished_timeout:float;
   is_supersonic:bool;
   is_bot:bool;
@@ -144,6 +141,22 @@ table PlayerInfo {
   /// In the case where the requested player index is not available, spawnId will help
   /// the framework figure out what index was actually assigned to this player instead.
   spawn_id:int;
+  /// Notification that a player triggers some in-game event, such as:
+  ///    Win, Loss, TimePlayed;
+  ///    Shot, Assist, Center, Clear, PoolShot;
+  ///    Goal, AerialGoal, BicycleGoal, BulletGoal, BackwardsGoal, LongGoal, OvertimeGoal, TurtleGoal;
+  ///    AerialHit, BicycleHit, BulletHit, JuggleHit, FirstTouch, BallHit;
+  ///    Save, EpicSave, FreezeSave;
+  ///    HatTrick, Savior, Playmaker, MVP;
+  ///    FastestGoal, SlowestGoal, FurthestGoal, OwnGoal;
+  ///    MostBallTouches, FewestBallTouches, MostBoostPickups, FewestBoostPickups, BoostPickups;
+  ///    CarTouches, Demolition, Demolish;
+  ///    LowFive, HighFive;
+  accolade:string (required);
+  /// The last known controller input from this player
+  last_input:ControllerState (required);
+  /// If the player was the last one to be watched by a spectator
+  last_spectated:bool;
 }
 
 table BallInfo {
