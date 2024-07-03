@@ -141,7 +141,7 @@ table PlayerInfo {
   /// In the case where the requested player index is not available, spawnId will help
   /// the framework figure out what index was actually assigned to this player instead.
   spawn_id:int;
-  /// Notification that a player triggers some in-game event, such as:
+  /// Notifications the player triggered by some in-game event, such as:
   ///    Win, Loss, TimePlayed;
   ///    Shot, Assist, Center, Clear, PoolShot;
   ///    Goal, AerialGoal, BicycleGoal, BulletGoal, BackwardsGoal, LongGoal, OvertimeGoal, TurtleGoal;
@@ -152,7 +152,8 @@ table PlayerInfo {
   ///    MostBallTouches, FewestBallTouches, MostBoostPickups, FewestBoostPickups, BoostPickups;
   ///    CarTouches, Demolition, Demolish;
   ///    LowFive, HighFive;
-  accolade:string (required);
+  /// Clears every tick.
+  accolades:[string] (required);
   /// The last known controller input from this player
   last_input:ControllerState (required);
   /// If the player was the last one to be watched by a spectator
