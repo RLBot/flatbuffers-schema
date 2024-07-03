@@ -216,7 +216,7 @@ table TeamInfo {
 table GameTickPacket {
   players:[PlayerInfo] (required);
   boost_pad_states:[BoostPadState] (required);
-  ball:BallInfo (required);
+  balls:[BallInfo] (required);
   game_info:GameInfo (required);
   teams:[TeamInfo] (required);
 }
