@@ -94,6 +94,13 @@ enum MaxScore : ubyte {
   Unlimited
 }
 
+enum MultiBall : ubyte {
+  One,
+  Two,
+  Four,
+  Six
+}
+
 enum OvertimeOption : ubyte {
   Unlimited,
   Five_Max_First_Score,
@@ -207,6 +214,7 @@ enum RespawnTimeOption : ubyte {
 table MutatorSettings {
   match_length:MatchLength;
   max_score:MaxScore;
+  multi_ball:MultiBall;
   overtime_option:OvertimeOption;
   series_length_option:SeriesLengthOption;
   game_speed_option:GameSpeedOption;
