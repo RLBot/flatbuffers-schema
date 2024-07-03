@@ -58,7 +58,7 @@ table ConsoleCommand {
 }
 
 table DesiredGameState {
-  ball_state:DesiredBallState;
+  ball_states:[DesiredBallState] (required);
   car_states:[DesiredCarState] (required);
   boost_states:[DesiredBoostState] (required);
   game_info_state:DesiredGameInfoState;
