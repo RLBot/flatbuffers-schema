@@ -200,7 +200,7 @@ enum DemolishOption : ubyte {
 enum RespawnTimeOption : ubyte {
   Three_Seconds,
   Two_Seconds,
-  One_Seconds,
+  One_Second,
   Disable_Goal_Reset
 }
 
