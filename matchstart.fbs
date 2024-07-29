@@ -275,6 +275,8 @@ table MatchSettings {
   freeplay:bool;
 }
 
+root_type MatchSettings;
+
 table StartCommand {
   config_path:string (required);
 }

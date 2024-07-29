@@ -2,6 +2,8 @@ include "comms.fbs";
 include "gamestate.fbs";
 include "matchstart.fbs";
 include "rendering.fbs";
+include "fieldinfo.fbs";
+include "playerinput.fbs";
 
 namespace rlbot.flat;
 
@@ -16,34 +18,6 @@ table ReadyMessage {
   // If this is set, RLBot will close the connection after the match ends. The GUI will not want this
   close_after_match:bool;
 }
-
-table ControllerState {
-  /// -1 for full reverse, 1 for full forward
-  throttle:float;
-  /// -1 for full left, 1 for full right
-  steer:float;
-  /// -1 for nose down, 1 for nose up
-  pitch:float;
-  /// -1 for full left, 1 for full right
-  yaw:float;
-  /// -1 for roll left, 1 for roll right
-  roll:float;
-  /// true if you want to press the jump button
-  jump:bool;
-  /// true if you want to press the boost button
-  boost:bool;
-  /// true if you want to press the handbrake button
-  handbrake:bool;
-  /// true if you want to press the 'use item' button, used in rumble etc.
-  use_item:bool;
-}
-
-table PlayerInput {
-  player_index:uint;
-  controller_state:ControllerState (required);
-}
-
-root_type PlayerInput;
 
 // Values are in "unreal units"
 struct Vector3 {
@@ -222,29 +196,6 @@ table GameTickPacket {
 }
 
 root_type GameTickPacket;
-
-// This section deals with arena information, e.g. where the goals and boost locations are.
-
-table GoalInfo {
-  team_num:int;
-  location:Vector3 (required);
-  direction:Vector3 (required);
-  width:float;
-  height:float;
-}
-
-table BoostPad {
-  location:Vector3 (required);
-  is_full_boost:bool;
-}
-
-table FieldInfo {
-  /// BoostInfo will be provided in the same order.
-  boost_pads:[BoostPad] (required);
-  goals:[GoalInfo] (required);
-}
-
-root_type FieldInfo;
 
 table PredictionSlice {
   /// The moment in game time that this prediction corresponds to.

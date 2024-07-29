@@ -1,0 +1,22 @@
+namespace rlbot.flat;
+
+table GoalInfo {
+  team_num:int;
+  location:Vector3 (required);
+  direction:Vector3 (required);
+  width:float;
+  height:float;
+}
+
+table BoostPad {
+  location:Vector3 (required);
+  is_full_boost:bool;
+}
+
+table FieldInfo {
+  /// BoostInfo will be provided in the same order.
+  boost_pads:[BoostPad] (required);
+  goals:[GoalInfo] (required);
+}
+
+root_type FieldInfo;
