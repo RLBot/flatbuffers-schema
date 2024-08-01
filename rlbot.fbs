@@ -175,21 +175,21 @@ table BoostPadState {
 
 enum GameStateType: ubyte {
   /// Game has not been created yet
-  Inactive = 0,
+  Inactive,
   /// 3-2-1 countdown
-  Countdown = 1,
+  Countdown,
   /// After countdown, but before ball has been hit
-  Kickoff = 2,
+  Kickoff,
   /// Ball has been hit
-  Active = 3,
+  Active,
   /// A goal was scored. Waiting for replay.
-  GoalScored = 4,
+  GoalScored,
   /// Watching replay
-  Replay = 5,
+  Replay,
   /// Game paused
-  Paused = 6,
+  Paused,
   /// Match has ended
-  Ended = 7,
+  Ended,
 }
 
 table GameInfo {
