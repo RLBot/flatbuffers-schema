@@ -54,6 +54,11 @@ table LoadoutPaint {
   goal_explosion_paint_id:uint;
 }
 
+table SetLoadout {
+  spawn_id:int;
+  loadout:PlayerLoadout (required);
+}
+
 table PlayerConfiguration {
   // Cannot be named 'class' because that breaks Java.
   // Cannot be named 'playerClass' because that breaks C#.
