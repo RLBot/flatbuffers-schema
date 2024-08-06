@@ -17,6 +17,9 @@ table ReadyMessage {
   close_after_match:bool;
 }
 
+/// Sent when the bot is ready to start receiving game data.
+table InitComplete {}
+
 table ControllerState {
   /// -1 for full reverse, 1 for full forward
   throttle:float;
