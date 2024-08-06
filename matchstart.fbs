@@ -66,6 +66,7 @@ table PlayerConfiguration {
   /// In the case where the requested player index is not available, spawnId will help
   /// the framework figure out what index was actually assigned to this player instead.
   spawn_id:int;
+  hivemind:bool;
 }
 
 enum GameMode : ubyte {
