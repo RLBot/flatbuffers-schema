@@ -1,22 +1,22 @@
 namespace rlbot.flat;
 
 enum TextHAlign: ubyte {
-  Left = 0,
-  Center = 1,
-  Right = 2,
+  Left,
+  Center,
+  Right,
 }
 
 enum TextVAlign: ubyte {
-  Top = 0,
-  Center = 1,
-  Bottom = 2,
+  Top,
+  Center,
+  Bottom,
 }
 
 table Color {
-  a:ubyte = 0;
-  r:ubyte = 0;
-  g:ubyte = 0;
-  b:ubyte = 0;
+  a:ubyte;
+  r:ubyte;
+  g:ubyte;
+  b:ubyte;
 }
 
 table BallAnchor {
