@@ -17,6 +17,10 @@ table ReadyMessage {
   close_after_match:bool;
 }
 
+table InitComplete {
+  spawn_id:int;
+}
+
 table ControllerState {
   /// -1 for full reverse, 1 for full forward
   throttle:float;
