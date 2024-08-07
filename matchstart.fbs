@@ -68,6 +68,8 @@ table PlayerConfiguration {
   location:string (required);
   run_command:string (required);
   loadout:PlayerLoadout;
+  /// If this bot will send a loadout after booting instead of in 'loadout'
+  loadout_generator:bool;
   /// In the case where the requested player index is not available, spawnId will help
   /// the framework figure out what index was actually assigned to this player instead.
   spawn_id:int;
