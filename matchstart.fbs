@@ -42,6 +42,11 @@ table PlayerLoadout {
   secondary_color_lookup:Color;
 }
 
+table SetLoadout {
+  spawn_id:int;
+  loadout:PlayerLoadout (required);
+}
+
 /// Specification for 'painted' items. See https://wiki.rlbot.org/botmaking/bot-customization/
 table LoadoutPaint {
   car_paint_id:uint;
@@ -63,6 +68,7 @@ table PlayerConfiguration {
   location:string (required);
   run_command:string (required);
   loadout:PlayerLoadout;
+  loadout_generator:bool;
   /// In the case where the requested player index is not available, spawnId will help
   /// the framework figure out what index was actually assigned to this player instead.
   spawn_id:int;
