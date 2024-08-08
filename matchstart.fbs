@@ -6,9 +6,16 @@ table RLBot {}
 /// A normal human player
 table Human {}
 
+enum PsyonixSkill : ubyte {
+  Beginner,
+  Rookie,
+  Pro,
+  AllStar
+}
+
 /// A psyonix bot, e.g. All Star bot
 table Psyonix {
-  bot_skill:float;
+  bot_skill:PsyonixSkill;
 }
 
 /// A player that Rocket League treats as human, e.g. has a dedicated camera and can do training mode,
