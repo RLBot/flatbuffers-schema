@@ -263,6 +263,7 @@ enum Launcher : ubyte {
 table ScriptConfiguration {
   location:string (required);
   run_command:string (required);
+  spawn_id:int;
 }
 
 table MatchSettings {
