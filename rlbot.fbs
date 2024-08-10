@@ -8,13 +8,17 @@ namespace rlbot.flat;
 /// Sent when connecting to RLBot to indicate what type of messages are desired.
 /// This could be sent by a bot, or a bot manager governing several bots, an
 /// overlay, or any other utility that connects to the RLBot process.
-table ReadyMessage {
+table ConnectionSettings {
   // If this is set, RLBot will send BallPrediction data back to the client when available.
   wants_ball_predictions:bool;
   // If this is set, RLBot will send MatchComms to the client when available.
   wants_comms:bool;
   // If this is set, RLBot will close the connection after the match ends. The GUI will not want this
   close_after_match:bool;
+}
+
+table InitComplete {
+  spawn_id:int;
 }
 
 table ControllerState {

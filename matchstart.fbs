@@ -6,9 +6,16 @@ table RLBot {}
 /// A normal human player
 table Human {}
 
+enum PsyonixSkill : ubyte {
+  Beginner,
+  Rookie,
+  Pro,
+  AllStar
+}
+
 /// A psyonix bot, e.g. All Star bot
 table Psyonix {
-  bot_skill:float;
+  bot_skill:PsyonixSkill;
 }
 
 /// A player that Rocket League treats as human, e.g. has a dedicated camera and can do training mode,
@@ -40,6 +47,11 @@ table PlayerLoadout {
   /// Sets the secondary color of the car to the swatch that most closely matches the provided
   /// RGB color value. If set, this overrides customColorId.
   secondary_color_lookup:Color;
+}
+
+table SetLoadout {
+  spawn_id:int;
+  loadout:PlayerLoadout (required);
 }
 
 /// Specification for 'painted' items. See https://wiki.rlbot.org/botmaking/bot-customization/
@@ -249,8 +261,10 @@ enum Launcher : ubyte {
 }
 
 table ScriptConfiguration {
+  name:string (required);
   location:string (required);
   run_command:string (required);
+  spawn_id:int;
 }
 
 table MatchSettings {

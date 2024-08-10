@@ -20,7 +20,7 @@ table Color {
 }
 
 table BallAnchor {
-  index: uint;
+  index:uint;
   local:Vector3 (required);
 }
 
