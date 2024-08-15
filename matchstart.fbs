@@ -230,6 +230,11 @@ enum RespawnTimeOption : ubyte {
   Disable_Goal_Reset
 }
 
+enum MaxTimeOption : ubyte {
+  Default,
+  Eleven_Minutes
+}
+
 enum GameEventOption : ubyte {
   Haunted,
   Rugby
@@ -258,6 +263,7 @@ table MutatorSettings {
   gravity_option:GravityOption;
   demolish_option:DemolishOption;
   respawn_time_option:RespawnTimeOption;
+  max_time:MaxTimeOption;
   game_event_option:GameEventOption;
   audio_option:AudioOption;
 }
