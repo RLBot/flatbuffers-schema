@@ -88,7 +88,8 @@ enum GameMode : ubyte {
   Hockey,
   Rumble,
   Heatseeker,
-  Gridiron
+  Gridiron,
+  Knockout
 }
 
 enum MatchLength : ubyte {
@@ -147,7 +148,8 @@ enum BallTypeOption : ubyte {
   Basketball,
   Beachball,
   Anniversary,
-  Haunted
+  Haunted,
+  Ekin
 }
 
 enum BallWeightOption : ubyte {
@@ -156,7 +158,8 @@ enum BallWeightOption : ubyte {
   Heavy,
   Super_Light,
   Curve_Ball,
-  Beach_Ball_Curve
+  Beach_Ball_Curve,
+  Magnus_FutBall
 }
 
 enum BallSizeOption : ubyte {
@@ -170,7 +173,8 @@ enum BallBouncinessOption : ubyte {
   Default,
   Low,
   High,
-  Super_High
+  Super_High,
+  LowishBounciness,
 }
 
 enum BoostOption : ubyte {
@@ -191,13 +195,15 @@ enum RumbleOption : ubyte {
   Spikes_Only,
   Spike_Rush,
   Haunted_Ball_Beam,
-  Tactical
+  Tactical,
+  BatmanRumble
 }
 
 enum BoostStrengthOption : ubyte {
   One,
   OneAndAHalf,
   Two,
+  Five,
   Ten
 }
 
@@ -224,6 +230,21 @@ enum RespawnTimeOption : ubyte {
   Disable_Goal_Reset
 }
 
+enum MaxTimeOption : ubyte {
+  Default,
+  Eleven_Minutes
+}
+
+enum GameEventOption : ubyte {
+  Haunted,
+  Rugby
+}
+
+enum AudioOption : ubyte {
+  Default,
+  Haunted
+}
+
 table MutatorSettings {
   match_length:MatchLength;
   max_score:MaxScore;
@@ -242,6 +263,9 @@ table MutatorSettings {
   gravity_option:GravityOption;
   demolish_option:DemolishOption;
   respawn_time_option:RespawnTimeOption;
+  max_time:MaxTimeOption;
+  game_event_option:GameEventOption;
+  audio_option:AudioOption;
 }
 
 enum ExistingMatchBehavior : ubyte {
