@@ -165,6 +165,7 @@ enum BallWeightOption : ubyte {
 enum BallSizeOption : ubyte {
   Default,
   Small,
+  Medium,
   Large,
   Gigantic
 }
