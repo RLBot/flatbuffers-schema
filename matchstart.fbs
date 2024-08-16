@@ -149,7 +149,8 @@ enum BallTypeOption : ubyte {
   Beachball,
   Anniversary,
   Haunted,
-  Ekin
+  Ekin,
+  SpookyCube
 }
 
 enum BallWeightOption : ubyte {
