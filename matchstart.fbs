@@ -149,7 +149,8 @@ enum BallTypeOption : ubyte {
   Beachball,
   Anniversary,
   Haunted,
-  Ekin
+  Ekin,
+  SpookyCube
 }
 
 enum BallWeightOption : ubyte {
@@ -165,6 +166,7 @@ enum BallWeightOption : ubyte {
 enum BallSizeOption : ubyte {
   Default,
   Small,
+  Medium,
   Large,
   Gigantic
 }
@@ -236,6 +238,7 @@ enum MaxTimeOption : ubyte {
 }
 
 enum GameEventOption : ubyte {
+  Default,
   Haunted,
   Rugby
 }
@@ -263,7 +266,7 @@ table MutatorSettings {
   gravity_option:GravityOption;
   demolish_option:DemolishOption;
   respawn_time_option:RespawnTimeOption;
-  max_time:MaxTimeOption;
+  max_time_option:MaxTimeOption;
   game_event_option:GameEventOption;
   audio_option:AudioOption;
 }
