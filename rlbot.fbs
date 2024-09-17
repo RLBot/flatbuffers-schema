@@ -81,18 +81,14 @@ table CylinderShape {
 union CollisionShape { BoxShape, SphereShape, CylinderShape }
 
 table Touch {
-  /// The name of the player involved with the touch.
-  player_name:string (required);
   /// Seconds that had elapsed in the game when the touch occurred.
   game_seconds:float;
   /// The point of contact for the touch.
   location:Vector3 (required);
   /// The direction of the touch.
   normal:Vector3 (required);
-  /// The Team which the touch belongs to, 0 for blue 1 for orange.
-  team:uint;
-  /// The index of the player involved with the touch.
-  player_index:uint;
+  /// The index of the ball that was touched.
+  ball_index:uint;
 }
 
 table ScoreInfo {
@@ -132,6 +128,7 @@ table PlayerInfo {
   score_info:ScoreInfo (required);
   hitbox:BoxShape (required);
   hitbox_offset:Vector3 (required);
+  lastest_touch:Touch;
   air_state:AirState;
   /// How long until the bot cannot dodge anymore, -1 while on ground or when airborne for too long after jumping
   dodge_timeout:float;
@@ -166,7 +163,6 @@ table PlayerInfo {
 
 table BallInfo {
   physics:Physics (required);
-  latest_touch:Touch (required);
   shape:CollisionShape (required);
 }
 
@@ -219,7 +215,7 @@ table TeamInfo {
 
 table GameTickPacket {
   players:[PlayerInfo] (required);
-  boost_pad_states:[BoostPadState] (required);
+  boost_pads:[BoostPadState] (required);
   balls:[BallInfo] (required);
   game_info:GameInfo (required);
   teams:[TeamInfo] (required);
