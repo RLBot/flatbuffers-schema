@@ -87,6 +87,8 @@ table Touch {
   location:Vector3 (required);
   /// The direction of the touch.
   normal:Vector3 (required);
+  /// The index of the ball that was touched.
+  ball_index:uint;
 }
 
 table ScoreInfo {
