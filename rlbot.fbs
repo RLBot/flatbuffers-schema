@@ -214,11 +214,11 @@ table TeamInfo {
 }
 
 table GameTickPacket {
-  players:[PlayerInfo] (required);
-  boost_pads:[BoostPadState] (required);
-  balls:[BallInfo] (required);
+  players:[PlayerInfo] = [];
+  boost_pads:[BoostPadState] = [];
+  balls:[BallInfo] = [];
   game_info:GameInfo (required);
-  teams:[TeamInfo] (required);
+  teams:[TeamInfo] = [];
 }
 
 root_type GameTickPacket;
