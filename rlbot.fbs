@@ -128,7 +128,7 @@ table PlayerInfo {
   score_info:ScoreInfo (required);
   hitbox:BoxShape (required);
   hitbox_offset:Vector3 (required);
-  lastest_touch:Touch;
+  latest_touch:Touch;
   air_state:AirState;
   /// How long until the bot cannot dodge anymore, -1 while on ground or when airborne for too long after jumping
   dodge_timeout:float;
