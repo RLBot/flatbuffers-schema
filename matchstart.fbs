@@ -272,13 +272,13 @@ table MutatorSettings {
 }
 
 enum ExistingMatchBehavior : ubyte {
-  /// Restart the match if any match settings differ. This is the default because old RLBot always worked this way.
-  Restart_If_Different,
-  /// Always restart the match, even if config is identical
+  /// Always restart the match, even if config is identical.
   Restart,
   /// Never restart an existing match, just try to remove or spawn cars to match the configuration.
   /// If we are not in the middle of a match, a match will be started. Handy for LAN matches.
   Continue_And_Spawn,
+  /// Restart the match if any match settings differ.
+  Restart_If_Different,
 }
 
 enum Launcher : ubyte {
