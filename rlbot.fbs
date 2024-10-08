@@ -9,6 +9,7 @@ namespace rlbot.flat;
 /// This could be sent by a bot, or a bot manager governing several bots, an
 /// overlay, or any other utility that connects to the RLBot process.
 table ConnectionSettings {
+  group_id: string (required);
   // If this is set, RLBot will send BallPrediction data back to the client when available.
   wants_ball_predictions:bool;
   // If this is set, RLBot will send MatchComms to the client when available.
@@ -17,8 +18,14 @@ table ConnectionSettings {
   close_after_match:bool;
 }
 
-table InitComplete {
+table ControllableInfo {
+  index:uint;
   spawn_id:int;
+}
+
+table TeamControllables {
+  team: uint;
+  controllables:[ControllableInfo] (required);
 }
 
 table ControllerState {
@@ -139,8 +146,6 @@ table PlayerInfo {
   name:string (required);
   team:uint;
   boost:uint;
-  /// In the case where the requested player index is not available, spawnId will help
-  /// the framework figure out what index was actually assigned to this player instead.
   spawn_id:int;
   /// Notifications the player triggered by some in-game event, such as:
   ///    Win, Loss, TimePlayed;

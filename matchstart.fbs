@@ -50,7 +50,7 @@ table PlayerLoadout {
 }
 
 table SetLoadout {
-  spawn_id:int;
+  index:uint;
   loadout:PlayerLoadout (required);
 }
 
@@ -75,9 +75,8 @@ table PlayerConfiguration {
   location:string (required);
   run_command:string (required);
   loadout:PlayerLoadout;
-  /// In the case where the requested player index is not available, spawnId will help
-  /// the framework figure out what index was actually assigned to this player instead.
   spawn_id:int;
+  group_id:string (required);
   hivemind:bool;
 }
 
@@ -292,6 +291,7 @@ table ScriptConfiguration {
   location:string (required);
   run_command:string (required);
   spawn_id:int;
+  group_id:string (required);
 }
 
 table MatchSettings {
