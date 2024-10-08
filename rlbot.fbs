@@ -164,6 +164,9 @@ table PlayerInfo {
   last_input:ControllerState (required);
   /// If the player was the last one to be watched by a spectator
   last_spectated:bool;
+  has_jumped:bool;
+  has_double_jumped:bool;
+  has_flipped:bool;
 }
 
 table BallInfo {
