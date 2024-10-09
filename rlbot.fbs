@@ -188,7 +188,7 @@ struct BoostPadState {
   timer:float;
 }
 
-enum GameStateType: ubyte {
+enum GameStatus: ubyte {
   /// Game has not been created yet
   Inactive,
   /// 3-2-1 countdown
@@ -212,7 +212,7 @@ table GameInfo {
   game_time_remaining:float;
   is_overtime:bool;
   is_unlimited_time:bool;
-  game_state_type:GameStateType;
+  game_status:GameStatus;
   world_gravity_z:float;
   /// Game speed multiplier, 1.0 is regular game speed.
   game_speed:float;
