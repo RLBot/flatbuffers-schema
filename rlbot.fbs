@@ -173,7 +173,7 @@ table PlayerInfo {
   has_double_jumped:bool;
   has_dodged:bool;
   dodge_elapsed:float;
-  dodge_dir:Vector2;
+  dodge_dir:Vector2 (required);
 }
 
 table BallInfo {
