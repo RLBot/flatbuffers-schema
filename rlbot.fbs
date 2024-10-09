@@ -166,7 +166,7 @@ table PlayerInfo {
   last_spectated:bool;
   has_jumped:bool;
   has_double_jumped:bool;
-  has_flipped:bool;
+  has_dodged:bool;
 }
 
 table BallInfo {
