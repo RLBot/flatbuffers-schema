@@ -28,7 +28,7 @@ table TeamControllables {
   controllables:[ControllableInfo] (required);
 }
 
-table ControllerState {
+struct ControllerState {
   /// -1 for full reverse, 1 for full forward
   throttle:float;
   /// -1 for full left, 1 for full right
@@ -98,7 +98,7 @@ table Touch {
   ball_index:uint;
 }
 
-table ScoreInfo {
+struct ScoreInfo {
   score:uint;
   goals:uint;
   own_goals:uint;
@@ -174,7 +174,7 @@ table BallInfo {
   shape:CollisionShape (required);
 }
 
-table BoostPadState {
+struct BoostPadState {
   /// True if the boost can be picked up
   is_active:bool;
   /// The number of seconds since the boost has been picked up, or 0.0 if the boost is active.
@@ -215,7 +215,7 @@ table GameInfo {
   frame_num:uint;
 }
 
-table TeamInfo {
+struct TeamInfo {
   team_index:uint;
   /// number of goals scored.
   score:uint;

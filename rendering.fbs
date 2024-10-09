@@ -12,7 +12,7 @@ enum TextVAlign: ubyte {
   Bottom,
 }
 
-table Color {
+struct Color {
   a:ubyte;
   r:ubyte;
   g:ubyte;
