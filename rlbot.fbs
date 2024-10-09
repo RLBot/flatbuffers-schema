@@ -56,6 +56,11 @@ table PlayerInput {
 
 root_type PlayerInput;
 
+struct Vector2 {
+  x:float;
+  y:float;
+}
+
 // Values are in "unreal units"
 struct Vector3 {
   x:float;
@@ -167,6 +172,8 @@ table PlayerInfo {
   has_jumped:bool;
   has_double_jumped:bool;
   has_dodged:bool;
+  dodge_elapsed:float;
+  dodge_dir:Vector2;
 }
 
 table BallInfo {
