@@ -113,11 +113,11 @@ struct ScoreInfo {
   demolitions:uint;
 }
 
-table Physics {
-  location:Vector3 (required);
-  rotation:Rotator (required);
-  velocity:Vector3 (required);
-  angular_velocity:Vector3 (required);
+struct Physics {
+  location:Vector3;
+  rotation:Rotator;
+  velocity:Vector3;
+  angular_velocity:Vector3;
 }
 
 enum AirState: ubyte {
@@ -261,12 +261,12 @@ table FieldInfo {
 
 root_type FieldInfo;
 
-table PredictionSlice {
+struct PredictionSlice {
   /// The moment in game time that this prediction corresponds to.
   /// This corresponds to 'secondsElapsed' in the GameInfo table.
   game_seconds:float;
   /// The predicted location and motion of the object.
-  physics:Physics (required);
+  physics:Physics;
 }
 
 table BallPrediction {
