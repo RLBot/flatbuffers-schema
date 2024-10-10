@@ -23,7 +23,7 @@ table ControllableInfo {
   spawn_id:int;
 }
 
-table TeamControllables {
+table ControllableTeamInfo {
   team: uint;
   controllables:[ControllableInfo] (required);
 }
