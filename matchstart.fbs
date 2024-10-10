@@ -72,11 +72,11 @@ table PlayerConfiguration {
   variety:PlayerClass (required);
   name:string (required);
   team:uint;
-  location:string (required);
+  root_dir:string (required);
   run_command:string (required);
   loadout:PlayerLoadout;
   spawn_id:int;
-  group_id:string (required);
+  agent_id:string (required);
   hivemind:bool;
 }
 
@@ -291,7 +291,7 @@ table ScriptConfiguration {
   location:string (required);
   run_command:string (required);
   spawn_id:int;
-  group_id:string (required);
+  agent_id:string (required);
 }
 
 table MatchSettings {
