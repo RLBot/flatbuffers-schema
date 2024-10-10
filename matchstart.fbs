@@ -50,7 +50,7 @@ table PlayerLoadout {
 }
 
 table SetLoadout {
-  spawn_id:int;
+  index:uint;
   loadout:PlayerLoadout (required);
 }
 
@@ -72,12 +72,11 @@ table PlayerConfiguration {
   variety:PlayerClass (required);
   name:string (required);
   team:uint;
-  location:string (required);
+  root_dir:string (required);
   run_command:string (required);
   loadout:PlayerLoadout;
-  /// In the case where the requested player index is not available, spawnId will help
-  /// the framework figure out what index was actually assigned to this player instead.
   spawn_id:int;
+  agent_id:string (required);
   hivemind:bool;
 }
 
@@ -272,13 +271,13 @@ table MutatorSettings {
 }
 
 enum ExistingMatchBehavior : ubyte {
-  /// Restart the match if any match settings differ. This is the default because old RLBot always worked this way.
-  Restart_If_Different,
-  /// Always restart the match, even if config is identical
+  /// Always restart the match, even if config is identical.
   Restart,
   /// Never restart an existing match, just try to remove or spawn cars to match the configuration.
   /// If we are not in the middle of a match, a match will be started. Handy for LAN matches.
   Continue_And_Spawn,
+  /// Restart the match if any match settings differ.
+  Restart_If_Different,
 }
 
 enum Launcher : ubyte {
@@ -292,6 +291,7 @@ table ScriptConfiguration {
   location:string (required);
   run_command:string (required);
   spawn_id:int;
+  agent_id:string (required);
 }
 
 table MatchSettings {

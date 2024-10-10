@@ -9,19 +9,29 @@ namespace rlbot.flat;
 /// This could be sent by a bot, or a bot manager governing several bots, an
 /// overlay, or any other utility that connects to the RLBot process.
 table ConnectionSettings {
-  // If this is set, RLBot will send BallPrediction data back to the client when available.
+  /// The ID of the bot/script that is associated with the incoming connection.
+  agent_id: string (required);
+  /// If this is set, RLBot will send BallPrediction data back to the client when available.
   wants_ball_predictions:bool;
-  // If this is set, RLBot will send MatchComms to the client when available.
+  /// If this is set, RLBot will send MatchComms to the client when available.
   wants_comms:bool;
-  // If this is set, RLBot will close the connection after the match ends. The GUI will not want this
+  /// If this is set, RLBot will close the connection after the match ends. The GUI will not want this
   close_after_match:bool;
 }
 
-table InitComplete {
+table ControllableInfo {
+  index:uint;
   spawn_id:int;
 }
 
-table ControllerState {
+table ControllableTeamInfo {
+  /// The assigned team for this connection
+  team: uint;
+  /// The bots that RLBot will allow this connection to control
+  controllables:[ControllableInfo] (required);
+}
+
+struct ControllerState {
   /// -1 for full reverse, 1 for full forward
   throttle:float;
   /// -1 for full left, 1 for full right
@@ -48,6 +58,11 @@ table PlayerInput {
 }
 
 root_type PlayerInput;
+
+struct Vector2 {
+  x:float;
+  y:float;
+}
 
 // Values are in "unreal units"
 struct Vector3 {
@@ -91,7 +106,7 @@ table Touch {
   ball_index:uint;
 }
 
-table ScoreInfo {
+struct ScoreInfo {
   score:uint;
   goals:uint;
   own_goals:uint;
@@ -101,11 +116,11 @@ table ScoreInfo {
   demolitions:uint;
 }
 
-table Physics {
-  location:Vector3 (required);
-  rotation:Rotator (required);
-  velocity:Vector3 (required);
-  angular_velocity:Vector3 (required);
+struct Physics {
+  location:Vector3;
+  rotation:Rotator;
+  velocity:Vector3;
+  angular_velocity:Vector3;
 }
 
 enum AirState: ubyte {
@@ -139,8 +154,6 @@ table PlayerInfo {
   name:string (required);
   team:uint;
   boost:uint;
-  /// In the case where the requested player index is not available, spawnId will help
-  /// the framework figure out what index was actually assigned to this player instead.
   spawn_id:int;
   /// Notifications the player triggered by some in-game event, such as:
   ///    Win, Loss, TimePlayed;
@@ -159,6 +172,13 @@ table PlayerInfo {
   last_input:ControllerState (required);
   /// If the player was the last one to be watched by a spectator
   last_spectated:bool;
+  has_jumped:bool;
+  has_double_jumped:bool;
+  has_dodged:bool;
+  /// The time in seconds since the last dodge was initiated.
+  /// Resets to 0 when the player lands on the ground.
+  dodge_elapsed:float;
+  dodge_dir:Vector2 (required);
 }
 
 table BallInfo {
@@ -166,14 +186,14 @@ table BallInfo {
   shape:CollisionShape (required);
 }
 
-table BoostPadState {
+struct BoostPadState {
   /// True if the boost can be picked up
   is_active:bool;
   /// The number of seconds since the boost has been picked up, or 0.0 if the boost is active.
   timer:float;
 }
 
-enum GameStateType: ubyte {
+enum GameStatus: ubyte {
   /// Game has not been created yet
   Inactive,
   /// 3-2-1 countdown
@@ -197,7 +217,7 @@ table GameInfo {
   game_time_remaining:float;
   is_overtime:bool;
   is_unlimited_time:bool;
-  game_state_type:GameStateType;
+  game_status:GameStatus;
   world_gravity_z:float;
   /// Game speed multiplier, 1.0 is regular game speed.
   game_speed:float;
@@ -207,13 +227,13 @@ table GameInfo {
   frame_num:uint;
 }
 
-table TeamInfo {
+struct TeamInfo {
   team_index:uint;
   /// number of goals scored.
   score:uint;
 }
 
-table GameTickPacket {
+table GamePacket {
   players:[PlayerInfo] (required);
   boost_pads:[BoostPadState] (required);
   balls:[BallInfo] (required);
@@ -221,7 +241,7 @@ table GameTickPacket {
   teams:[TeamInfo] (required);
 }
 
-root_type GameTickPacket;
+root_type GamePacket;
 
 // This section deals with arena information, e.g. where the goals and boost locations are.
 
@@ -246,12 +266,12 @@ table FieldInfo {
 
 root_type FieldInfo;
 
-table PredictionSlice {
+struct PredictionSlice {
   /// The moment in game time that this prediction corresponds to.
   /// This corresponds to 'secondsElapsed' in the GameInfo table.
   game_seconds:float;
   /// The predicted location and motion of the object.
-  physics:Physics (required);
+  physics:Physics;
 }
 
 table BallPrediction {
