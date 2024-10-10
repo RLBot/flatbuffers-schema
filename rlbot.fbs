@@ -228,7 +228,7 @@ struct TeamInfo {
   score:uint;
 }
 
-table GameTickPacket {
+table GamePacket {
   players:[PlayerInfo] (required);
   boost_pads:[BoostPadState] (required);
   balls:[BallInfo] (required);
@@ -236,7 +236,7 @@ table GameTickPacket {
   teams:[TeamInfo] (required);
 }
 
-root_type GameTickPacket;
+root_type GamePacket;
 
 // This section deals with arena information, e.g. where the goals and boost locations are.
 
