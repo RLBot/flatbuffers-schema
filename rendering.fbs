@@ -52,12 +52,8 @@ table PolyLine3D {
 
 table String2D {
   text:string (required);
-  /// 0 = Left
-  /// 1 = Right
-  x:float;
-  /// 0 = Top
-  /// 1 = Bottom
-  y:float;
+  x:int;
+  y:int;
   scale:float;
   foreground:Color (required);
   background:Color (required);
@@ -75,11 +71,31 @@ table String3D {
   v_align:TextVAlign;
 }
 
+table Rect2D {
+  x:float;
+  y:float;
+  width:int;
+  height:int;
+  color:Color (required);
+  filled:bool;
+  centered:bool;
+}
+
+table Rect3D {
+  anchor:RenderAnchor (required);
+  width:int;
+  height:int;
+  color:Color (required);
+  centered;bool;
+}
+
 union RenderType {
   Line3D,
   PolyLine3D,
   String2D,
   String3D,
+  Rect2D,
+  Rect3D,
 }
 
 table RenderMessage {
