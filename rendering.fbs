@@ -86,7 +86,7 @@ table Rect3D {
   width:int;
   height:int;
   color:Color (required);
-  centered;bool;
+  centered:bool;
 }
 
 union RenderType {
