@@ -52,8 +52,10 @@ table PolyLine3D {
 
 table String2D {
   text:string (required);
-  x:int;
-  y:int;
+  /// Screen-space coordinates such that x=0 is left edge and x=1 is right edge of window.
+  x:float;
+  /// Screen-space coordinates such that y=0 is top edge and y=1 is bottom edge of window.
+  y:float;
   scale:float;
   foreground:Color (required);
   background:Color (required);
@@ -72,10 +74,14 @@ table String3D {
 }
 
 table Rect2D {
+  /// Screen-space coordinates such that x=0 is left edge and x=1 is right edge of window.
   x:float;
+  /// Screen-space coordinates such that y=0 is top edge and y=1 is bottom edge of window.
   y:float;
-  width:int;
-  height:int;
+  /// Screen-space size such that width=0.1 is 10% of window width.
+  width:float;
+  /// Screen-space size such that height=0.1 is 10% of window height.
+  height:float;
   color:Color (required);
   filled:bool;
   centered:bool;
