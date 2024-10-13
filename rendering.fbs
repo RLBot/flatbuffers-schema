@@ -83,16 +83,16 @@ table Rect2D {
   /// Screen-space size such that height=0.1 is 10% of window height.
   height:float;
   color:Color (required);
-  filled:bool;
   centered:bool;
 }
 
 table Rect3D {
   anchor:RenderAnchor (required);
-  width:int;
-  height:int;
+  /// Screen-space size such that width=0.1 is 10% of window width.
+  width:float;
+  /// Screen-space size such that height=0.1 is 10% of window height.
+  height:float;
   color:Color (required);
-  centered:bool;
 }
 
 union RenderType {
