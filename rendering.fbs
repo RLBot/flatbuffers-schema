@@ -13,10 +13,10 @@ enum TextVAlign: ubyte {
 }
 
 struct Color {
-  a:ubyte;
   r:ubyte;
   g:ubyte;
   b:ubyte;
+  a:ubyte;
 }
 
 table BallAnchor {
