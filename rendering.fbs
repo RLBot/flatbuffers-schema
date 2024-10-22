@@ -13,10 +13,10 @@ enum TextVAlign: ubyte {
 }
 
 struct Color {
-  a:ubyte;
   r:ubyte;
   g:ubyte;
   b:ubyte;
+  a:ubyte = 255;
 }
 
 table BallAnchor {
@@ -52,11 +52,9 @@ table PolyLine3D {
 
 table String2D {
   text:string (required);
-  /// 0 = Left
-  /// 1 = Right
+  /// Screen-space coordinates such that x=0 is left edge and x=1 is right edge of window.
   x:float;
-  /// 0 = Top
-  /// 1 = Bottom
+  /// Screen-space coordinates such that y=0 is top edge and y=1 is bottom edge of window.
   y:float;
   scale:float;
   foreground:Color (required);
@@ -75,11 +73,35 @@ table String3D {
   v_align:TextVAlign;
 }
 
+table Rect2D {
+  /// Screen-space coordinates such that x=0 is left edge and x=1 is right edge of window.
+  x:float;
+  /// Screen-space coordinates such that y=0 is top edge and y=1 is bottom edge of window.
+  y:float;
+  /// Screen-space size such that width=0.1 is 10% of window width.
+  width:float;
+  /// Screen-space size such that height=0.1 is 10% of window height.
+  height:float;
+  color:Color (required);
+  centered:bool;
+}
+
+table Rect3D {
+  anchor:RenderAnchor (required);
+  /// Screen-space size such that width=0.1 is 10% of window width.
+  width:float;
+  /// Screen-space size such that height=0.1 is 10% of window height.
+  height:float;
+  color:Color (required);
+}
+
 union RenderType {
   Line3D,
   PolyLine3D,
   String2D,
   String3D,
+  Rect2D,
+  Rect3D,
 }
 
 table RenderMessage {
