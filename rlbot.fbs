@@ -15,8 +15,9 @@ table ConnectionSettings {
   wants_ball_predictions:bool;
   /// If this is set, RLBot will send MatchComms to the client when available.
   wants_comms:bool;
-  /// If this is set, RLBot will close the connection after the match ends. The GUI will not want this
-  close_after_match:bool;
+  /// If this is set, RLBot will close the connection when a match is stopped or when a new
+  /// match is started. The GUI and other match runners should likely not set this.
+  close_between_matches:bool;
 }
 
 table ControllableInfo {
