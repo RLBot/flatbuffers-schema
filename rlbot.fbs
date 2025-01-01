@@ -153,7 +153,7 @@ table PlayerInfo {
   is_supersonic:bool;
   is_bot:bool;
   name:string (required);
-  team:uint;
+  team:string (required);
   boost:uint;
   spawn_id:int;
   /// Notifications the player triggered by some in-game event, such as:
