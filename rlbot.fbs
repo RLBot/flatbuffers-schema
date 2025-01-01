@@ -3,7 +3,7 @@ include "gamestate.fbs";
 include "matchstart.fbs";
 include "rendering.fbs";
 
-namespace rlbot.flat;
+namespace RLBot.Flat;
 
 /// Sent when connecting to RLBot to indicate what type of messages are desired.
 /// This could be sent by a bot, or a bot manager governing several bots, an
