@@ -22,7 +22,7 @@ table Psyonix {
 /// but is actually controlled by a bot.
 table PartyMember {}
 
-union PlayerClass { RLBot, Human, Psyonix, PartyMember }
+union PlayerClass { CustomBot, Human, Psyonix, PartyMember }
 
 /// The car type, color, and other aspects of the player's appearance.
 /// See https://wiki.rlbot.org/botmaking/bot-customization/
