@@ -1,7 +1,7 @@
 namespace rlbot.flat;
 
 /// A bot controlled by the RLBot framework
-table RLBot {}
+table CustomBot {}
 
 /// A normal human player
 table Human {}
