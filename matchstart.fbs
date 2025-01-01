@@ -1,7 +1,7 @@
 namespace rlbot.flat;
 
 /// A bot controlled by the RLBot framework
-table RLBot {}
+table CustomBot {}
 
 /// A normal human player
 table Human {}
@@ -22,7 +22,7 @@ table Psyonix {
 /// but is actually controlled by a bot.
 table PartyMember {}
 
-union PlayerClass { RLBot, Human, Psyonix, PartyMember }
+union PlayerClass { CustomBot, Human, Psyonix, PartyMember }
 
 /// The car type, color, and other aspects of the player's appearance.
 /// See https://wiki.rlbot.org/botmaking/bot-customization/
@@ -288,7 +288,7 @@ enum Launcher : ubyte {
 
 table ScriptConfiguration {
   name:string (required);
-  location:string (required);
+  root_dir:string (required);
   run_command:string (required);
   spawn_id:int;
   agent_id:string (required);
