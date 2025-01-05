@@ -26,8 +26,12 @@ table Vector3Partial {
 /// If a component is null, then the component will keep its current value.
 /// Values are in radians.
 table RotatorPartial {
+  /// In radias with range (-pi,+pi) where 0 is flat, +pi is nose straight up, -pi is nose straight down.
   pitch:Float;
+  /// In radias with range [0,2pi) where 0 is towards positive x, rotating clockwise as increased. 
   yaw:Float;
+  /// In radias with range (-pi,+pi) where 0 is upright, positive is tilted left, negative is title right.
+  // TODO: Double check tilt direction.
   roll:Float;
 }
 

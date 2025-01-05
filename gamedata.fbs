@@ -46,6 +46,7 @@ struct Vector2 {
 }
 
 /// A vector with an x, y, z component.
+/// Note that Rocket League uses a left-handed coordinate system.
 struct Vector3 {
   x:float;
   y:float;
@@ -54,9 +55,12 @@ struct Vector3 {
 
 /// Expresses the rotation state of an object in Euler angles. Values are in radians.
 struct Rotator {
-  // TODO: Range of pitch, yaw, roll and what a 0-value indicates. 
+  /// In radias with range (-pi,+pi) where 0 is flat, +pi is nose straight up, -pi is nose straight down.
   pitch:float;
+  /// In radias with range [0,2pi) where 0 is towards positive x, rotating clockwise as increased. 
   yaw:float;
+  /// In radias with range (-pi,+pi) where 0 is upright, positive is tilted left, negative is title right.
+  // TODO: Double check tilt direction.
   roll:float;
 }
 
@@ -123,15 +127,21 @@ struct Physics {
 }
 
 /// Possible states of a car in regards to ground contact and jump/dodging forces.
-/// This includes 
+/// See more about jumping physics at https://wiki.rlbot.org/botmaking/jumping-physics/
 enum AirState: ubyte {
   /// All wheels are on the ground and the car is affected by wall-stickiness forces.
   OnGround,
-  /// The car is currently affected by jumping forces of an initial jump. The following AirState is typically InAir.
+  /// The car is currently affected by jumping forces of an initial jump.
+  /// Lasts until the player lets go of jump button but at most for 0.2 seconds (240 ticks).
+  /// The following AirState is typically InAir.
   Jumping,
-  /// The car is currently affected by jumping forces of a secondary jump. The following AirState is typically InAir.
+  /// The car is currently affected by jumping forces of a secondary jump (just an impulse in practice).
+  /// Lasts for 13 ticks.
+  /// The following AirState is typically InAir.
   DoubleJumping,
-  /// The car is currently affected by forces of a dodges. The following AirState is typically InAir.
+  /// The car is currently affected by forces and torque of a dodges.
+  /// This lasts for 79 ticks.
+  /// The following AirState is typically InAir.
   Dodging,
   /// The car is free falling.
   InAir,
@@ -149,6 +159,7 @@ table PlayerInfo {
   // TODO: Is the hitbox tilted? If so, by how much?
   hitbox_offset:Vector3 (required);
   /// Information about the latest touch with a ball.
+  /// Is null if the player has yet to touch the ball.
   latest_touch:Touch;
   /// Whether the player's car is on the ground or in the air, and what jump/dodging forces current affects the car.
   air_state:AirState;
@@ -215,8 +226,9 @@ table BallInfo {
 struct BoostPadState {
   /// True if the boost can be picked up right now.
   is_active:bool;
-  /// The number of seconds since the boost has been picked up, or 0.0 if the boost is active.
-  // TODO: Isn't this the time until the boost pad is active? If not, why? That's more useful.
+  /// The number of seconds since the boost has been picked up, or 0 if the boost is active.
+  /// A big boost pad becomes active again after 10 seconds.
+  /// A small boost pad becomes active again after 4 seconds.
   timer:float;
 }
 
@@ -299,6 +311,7 @@ root_type GamePacket;
 // This section deals with arena information, e.g. where the goals and boost locations are.
 
 /// Static information about a goal on the field such as dimensions and location.
+/// More values can be found on https://wiki.rlbot.org/botmaking/useful-game-values/
 table GoalInfo {
   /// The index of the team that this goal belongs to.
   team_num:int;
@@ -306,11 +319,9 @@ table GoalInfo {
   location:Vector3 (required);
   /// The unit direction point away from the opening of the goal.
   direction:Vector3 (required);
-  /// The width of the goal.
-  // TODO: Insert value for standard map in doc string.
+  /// The width of the goal. 1785 uu wide on a standard field.
   width:float;
-  /// The height of the goal.
-  // TODO: Insert value for standard map in doc string.
+  /// The height of the goal. 643 uu tall on a standard field.
   height:float;
 }
 
@@ -320,7 +331,7 @@ table BoostPad {
   location:Vector3 (required);
   /// Whether the boost pad provides a full tank of boost.
   /// A big boost pad provides 100 boost and respawns in 10 seconds.
-  /// A small boost pad provides 12 boost and respawns in 3 seconds.
+  /// A small boost pad provides 12 boost and respawns in 4 seconds.
   is_full_boost:bool;
 }
 

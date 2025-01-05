@@ -55,7 +55,6 @@ table PlayerLoadout {
 /// If sent before the ready message, this simply sets the loadout of the car.
 /// If sent after the ready message and if game state setting is enabled, this will respawn the car with the new loadout.
 /// Bots can only set the loadout of their own car(s).
-// TODO: Is the above tested?
 table SetLoadout {
   /// The index of the car to change loadout off.
   index:uint;
@@ -354,8 +353,8 @@ enum ExistingMatchBehavior : ubyte {
 enum Launcher : ubyte {
   Steam,
   Epic,
-  /// E.g. Legendary.
-  // TODO: Where is the command given?
+  /// E.g. if you use Legendary.
+  /// The game path is specified in the MatchConfiguration.
   Custom
 }
 
@@ -375,6 +374,7 @@ table MatchConfiguration {
   /// If left unset, RLBot will not launch the game.
   launcher:Launcher;
   /// The path to the main Rocket League binary.
+  /// Only used for launcher is set to Custom.
   game_path:string (required);
   /// If true, RLBot will start the bots with a non-empty run command in their player configuration.
   auto_start_bots:bool;
