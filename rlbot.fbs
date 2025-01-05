@@ -1,7 +1,7 @@
 include "gamedata.fbs";
 include "comms.fbs";
 include "gamestatemanip.fbs";
-include "matchstart.fbs";
+include "matchconfig.fbs";
 include "rendering.fbs";
 
 namespace rlbot.flat;

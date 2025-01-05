@@ -232,14 +232,14 @@ struct BoostPadState {
   timer:float;
 }
 
-/// Possible phases of the game.
-enum GameStatus: ubyte {
-  /// Game has not been created yet.
+/// Possible phases of the match.
+enum MatchPhase: ubyte {
+  /// Match has not been created yet.
   Inactive,
   /// 3-2-1 countdown of a kickoff.
   Countdown,
   /// After kickoff countdown, but before ball has been hit.
-  /// The game automatically proceeds to Active after 2 seconds.
+  /// The match automatically proceeds to Active after 2 seconds.
   Kickoff,
   /// The ball is in play and time is ticking.
   Active,
@@ -247,14 +247,14 @@ enum GameStatus: ubyte {
   GoalScored,
   /// Goal replay is being shown.
   Replay,
-  /// The game is paused.
+  /// The match is paused.
   Paused,
   /// The match has ended.
   Ended,
 }
 
-/// Information about the game and current match.
-table GameInfo {
+/// Information about the current match such as time and gravity.
+table MatchInfo {
   /// How many seconds have elapsed since the first game packet of the match.
   /// This value ticks up even during kickoffs, replays, pause, etc.
   seconds_elapsed:float;
@@ -300,8 +300,8 @@ table GamePacket {
   boost_pads:[BoostPadState] (required);
   /// The current state of all balls.
   balls:[BallInfo] (required);
-  /// The current state of the game such as timers and gravity.
-  game_info:GameInfo (required);
+  /// The current state of the match such as timers and gravity.
+  match:MatchInfo (required);
   /// The current state of teams, i.e. the team scores.
   teams:[TeamInfo] (required);
 }
