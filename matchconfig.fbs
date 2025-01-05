@@ -1,7 +1,7 @@
 namespace rlbot.flat;
 
 /// A bot controlled by the RLBot framework.
-table RLBot {}
+table CustomBot {}
 
 /// A normal human player.
 table Human {}
@@ -24,7 +24,7 @@ table Psyonix {
 table PartyMember {}
 
 /// Possible player types.
-union PlayerClass { RLBot, Human, Psyonix, PartyMember }
+union PlayerClass { CustomBot, Human, Psyonix, PartyMember }
 
 /// Defines the car type, color, and other aspects of the player's appearance.
 /// See https://wiki.rlbot.org/botmaking/bot-customization/
