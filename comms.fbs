@@ -1,15 +1,23 @@
 namespace rlbot.flat;
 
+/// A message sent to other bots and scripts through RLBot.
+/// Use the team_only field if the message should only be received by team mates.
+/// The message can also have a human-readable summary displayed in quick chat through the display field.
 table MatchComm {
-  /// The index of the player that sent this
+  /// The index of the player that sent this message.
+  /// For scripts, this value is the index in the match configuration instead.
   index:uint;
-  /// The team of the player that sent this
+  /// The team of the player that sent this message.
+  /// For scripts, this value is 2.
   team:uint;
-  /// True if the chat is team only false if everyone can see it
+  /// True if this message is team-only, false if everyone can see it
   team_only:bool;
-  /// The message that will be displayed on the screen
+  /// The message that will be displayed on the screen in quick chat.
+  /// This is intended for communication with humans.
+  /// Use the content field for communication with bots and scripts.
   display:string;
-  /// The contents of the message
+  /// The contents of the message.
+  /// Use the display field for messages in quick chat.
   content:[ubyte] (required);
 }
 

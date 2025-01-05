@@ -1,16 +1,28 @@
+include "gamedata.fbs";
 include "comms.fbs";
-include "gamestate.fbs";
+include "gamestatemanip.fbs";
 include "matchstart.fbs";
 include "rendering.fbs";
 
 namespace rlbot.flat;
 
-/// Sent when connecting to RLBot to indicate what type of messages are desired.
+/// A client message to start a match using a path to a match config file.
+table StartCommand {
+  config_path:string (required);
+}
+
+/// A client message to stop a match and optionally the RLBot server too.
+table StopCommand {
+  // Whether RLBot should shutdown completely after stopping the match.
+  shutdown_server:bool;
+}
+
+/// Sent by clients when connecting to RLBot to indicate what type of messages are desired.
 /// This could be sent by a bot, or a bot manager governing several bots, an
 /// overlay, or any other utility that connects to the RLBot process.
 table ConnectionSettings {
   /// The ID of the bot/script that is associated with the incoming connection.
-  agent_id: string (required);
+  agent_id:string (required);
   /// If this is set, RLBot will send BallPrediction data back to the client when available.
   wants_ball_predictions:bool;
   /// If this is set, RLBot will send MatchComms to the client when available.
@@ -19,264 +31,22 @@ table ConnectionSettings {
   close_after_match:bool;
 }
 
+/// Information about a car that the client can control.
 table ControllableInfo {
+  /// The index of the bot.
   index:uint;
+  /// The spawn id of the bot.
+  /// This value is mostly used internally to keep track of which car was spawned for which client.
+  // TODO: Correct Virx?
   spawn_id:int;
 }
 
+/// Server message with information about the cars that the client can control.
+/// Sent to bot clients as a response to ConnectionSettings.
+/// There may be more than one car in case the bot is a hivemind.
 table ControllableTeamInfo {
-  /// The assigned team for this connection
-  team: uint;
-  /// The bots that RLBot will allow this connection to control
-  controllables:[ControllableInfo] (required);
-}
-
-struct ControllerState {
-  /// -1 for full reverse, 1 for full forward
-  throttle:float;
-  /// -1 for full left, 1 for full right
-  steer:float;
-  /// -1 for nose down, 1 for nose up
-  pitch:float;
-  /// -1 for full left, 1 for full right
-  yaw:float;
-  /// -1 for roll left, 1 for roll right
-  roll:float;
-  /// true if you want to press the jump button
-  jump:bool;
-  /// true if you want to press the boost button
-  boost:bool;
-  /// true if you want to press the handbrake button
-  handbrake:bool;
-  /// true if you want to press the 'use item' button, used in rumble etc.
-  use_item:bool;
-}
-
-table PlayerInput {
-  player_index:uint;
-  controller_state:ControllerState (required);
-}
-
-root_type PlayerInput;
-
-struct Vector2 {
-  x:float;
-  y:float;
-}
-
-// Values are in "unreal units"
-struct Vector3 {
-  x:float;
-  y:float;
-  z:float;
-}
-
-/// Expresses the rotation state of an object in Euler angles, with values in radians.
-struct Rotator {
-  pitch:float;
-  yaw:float;
-  roll:float;
-}
-
-table BoxShape {
-  length:float;
-  width:float;
-  height:float;
-}
-
-table SphereShape {
-  diameter:float;
-}
-
-table CylinderShape {
-  diameter:float;
-  height:float;
-}
-
-union CollisionShape { BoxShape, SphereShape, CylinderShape }
-
-table Touch {
-  /// Seconds that had elapsed in the game when the touch occurred.
-  game_seconds:float;
-  /// The point of contact for the touch.
-  location:Vector3 (required);
-  /// The direction of the touch.
-  normal:Vector3 (required);
-  /// The index of the ball that was touched.
-  ball_index:uint;
-}
-
-struct ScoreInfo {
-  score:uint;
-  goals:uint;
-  own_goals:uint;
-  assists:uint;
-  saves:uint;
-  shots:uint;
-  demolitions:uint;
-}
-
-struct Physics {
-  location:Vector3;
-  rotation:Rotator;
-  velocity:Vector3;
-  angular_velocity:Vector3;
-}
-
-enum AirState: ubyte {
-  /// All wheels are on the ground
-  OnGround,
-  /// When the bot is jumping,
-  /// then InAir right after
-  Jumping,
-  /// When the bot is double jumping,
-  /// then InAir right after
-  DoubleJumping,
-  /// When the bot is dodging,
-  /// then InAir right after
-  Dodging,
-  InAir,
-}
-
-table PlayerInfo {
-  physics:Physics (required);
-  score_info:ScoreInfo (required);
-  hitbox:BoxShape (required);
-  hitbox_offset:Vector3 (required);
-  latest_touch:Touch;
-  air_state:AirState;
-  /// How long until the bot cannot dodge anymore, -1 while on ground or when airborne for too long after jumping
-  dodge_timeout:float;
-  /// How long until the bot is not demolished anymore, -1 if not demolished
-  demolished_timeout:float;
-  is_supersonic:bool;
-  is_bot:bool;
-  name:string (required);
+  /// The assigned team for this client.
   team:uint;
-  boost:uint;
-  spawn_id:int;
-  /// Notifications the player triggered by some in-game event, such as:
-  ///    Win, Loss, TimePlayed;
-  ///    Shot, Assist, Center, Clear, PoolShot;
-  ///    Goal, AerialGoal, BicycleGoal, BulletGoal, BackwardsGoal, LongGoal, OvertimeGoal, TurtleGoal;
-  ///    AerialHit, BicycleHit, BulletHit, JuggleHit, FirstTouch, BallHit;
-  ///    Save, EpicSave, FreezeSave;
-  ///    HatTrick, Savior, Playmaker, MVP;
-  ///    FastestGoal, SlowestGoal, FurthestGoal, OwnGoal;
-  ///    MostBallTouches, FewestBallTouches, MostBoostPickups, FewestBoostPickups, BoostPickups;
-  ///    CarTouches, Demolition, Demolish;
-  ///    LowFive, HighFive;
-  /// Clears every tick.
-  accolades:[string] (required);
-  /// The last known controller input from this player
-  last_input:ControllerState (required);
-  /// If the player was the last one to be watched by a spectator
-  last_spectated:bool;
-  has_jumped:bool;
-  has_double_jumped:bool;
-  has_dodged:bool;
-  /// The time in seconds since the last dodge was initiated.
-  /// Resets to 0 when the player lands on the ground.
-  dodge_elapsed:float;
-  dodge_dir:Vector2 (required);
-}
-
-table BallInfo {
-  physics:Physics (required);
-  shape:CollisionShape (required);
-}
-
-struct BoostPadState {
-  /// True if the boost can be picked up
-  is_active:bool;
-  /// The number of seconds since the boost has been picked up, or 0.0 if the boost is active.
-  timer:float;
-}
-
-enum GameStatus: ubyte {
-  /// Game has not been created yet
-  Inactive,
-  /// 3-2-1 countdown
-  Countdown,
-  /// After countdown, but before ball has been hit
-  Kickoff,
-  /// Ball has been hit
-  Active,
-  /// A goal was scored. Waiting for replay.
-  GoalScored,
-  /// Watching replay
-  Replay,
-  /// Game paused
-  Paused,
-  /// Match has ended
-  Ended,
-}
-
-table GameInfo {
-  seconds_elapsed:float;
-  game_time_remaining:float;
-  is_overtime:bool;
-  is_unlimited_time:bool;
-  game_status:GameStatus;
-  world_gravity_z:float;
-  /// Game speed multiplier, 1.0 is regular game speed.
-  game_speed:float;
-  /// Tracks the number of physics frames the game has computed.
-  /// May increase by more than one across consecutive packets.
-  /// Data type will roll over after 207 days at 120Hz.
-  frame_num:uint;
-}
-
-struct TeamInfo {
-  team_index:uint;
-  /// number of goals scored.
-  score:uint;
-}
-
-table GamePacket {
-  players:[PlayerInfo] (required);
-  boost_pads:[BoostPadState] (required);
-  balls:[BallInfo] (required);
-  game_info:GameInfo (required);
-  teams:[TeamInfo] (required);
-}
-
-root_type GamePacket;
-
-// This section deals with arena information, e.g. where the goals and boost locations are.
-
-table GoalInfo {
-  team_num:int;
-  location:Vector3 (required);
-  direction:Vector3 (required);
-  width:float;
-  height:float;
-}
-
-table BoostPad {
-  location:Vector3 (required);
-  is_full_boost:bool;
-}
-
-table FieldInfo {
-  /// BoostInfo will be provided in the same order.
-  boost_pads:[BoostPad] (required);
-  goals:[GoalInfo] (required);
-}
-
-root_type FieldInfo;
-
-struct PredictionSlice {
-  /// The moment in game time that this prediction corresponds to.
-  /// This corresponds to 'secondsElapsed' in the GameInfo table.
-  game_seconds:float;
-  /// The predicted location and motion of the object.
-  physics:Physics;
-}
-
-table BallPrediction {
-  /// A list of places the ball will be at specific times in the future.
-  /// It is guaranteed to sorted so that time increases with each slice.
-  /// It is NOT guaranteed to have a consistent amount of time between slices.
-  slices:[PredictionSlice] (required);
+  /// The bots that RLBot will allow this client to control.
+  controllables:[ControllableInfo] (required);
 }

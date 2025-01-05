@@ -1,0 +1,99 @@
+namespace rlbot.flat;
+
+// This section deals with desired game state, useful for teleporting cars around, etc.
+
+/// A floating point value located in a separate struct allowing for optional floats elsewhere.
+struct Float {
+  val:float;
+}
+
+/// A boolean value located in a separate struct allowing for optional floats elsewhere.
+struct Bool {
+  val:bool;
+}
+
+/// A 3D vector where x, y, and z can be null.
+/// Used for game state setting to define which part of a vector should change.
+/// If a component is null, then the component will keep its current value.
+table Vector3Partial {
+  x:Float;
+  y:Float;
+  z:Float;
+}
+
+/// A rotator describing a rotation with nullable pith, yall, and roll.
+/// Used for game state setting to define which part of a rotator should change.
+/// If a component is null, then the component will keep its current value.
+/// Values are in radians.
+table RotatorPartial {
+  pitch:Float;
+  yaw:Float;
+  roll:Float;
+}
+
+/// A physical state of an object, with nullable components.
+/// Used for game state setting to define which part of a physics body should change.
+/// If a component is null, then the component will keep its current value.
+table DesiredPhysics {
+  location:Vector3Partial;
+  rotation:RotatorPartial;
+  velocity:Vector3Partial;
+  angular_velocity:Vector3Partial;
+}
+
+/// A ball state with nullable components.
+/// Used for game state setting to define which part of a ball's state should change.
+table DesiredBallState {
+  physics:DesiredPhysics (required);
+}
+
+/// A car state with nullable components.
+/// Used for game state setting to define which part of a car's state should change.
+table DesiredCarState {
+  physics:DesiredPhysics;
+  boost_amount:Float;
+}
+
+/// A boost pad state with nullable components.
+/// Used for game state setting to define which part of a boost pad's state should change.
+table DesiredBoostState {
+  respawn_time:Float;
+}
+
+/// A game info state with nullable components.
+/// Used for game state setting to define which part of the game info should change.
+table DesiredGameInfoState {
+  /// The strength of gravity. Default is -650.
+  world_gravity_z:Float;
+  /// The game speed. Default is 1.0.
+  game_speed:Float;
+  /// Whether the game is paused.
+  paused:Bool;
+  /// Wether the match should end.
+  end_match:Bool;
+}
+
+/// A console command which will be executed inside Rocket League.
+/// See https://wiki.rlbot.org/framework/console-commands/ for a list of known commands.
+table ConsoleCommand {
+  command:string (required);
+}
+
+/// A game state with nullable subcomponents.
+/// Used for game state setting to define which part of the game should change.
+/// Values not set will not be updated.
+table DesiredGameState {
+  /// A list of desired ball states.
+  ball_states:[DesiredBallState] (required);
+  /// A list of desired car states.
+  car_states:[DesiredCarState] (required);
+  /// A list of desired boost pad states.
+  boost_states:[DesiredBoostState] (required);
+  /// The desired game info.
+  game_info_state:DesiredGameInfoState;
+  /// A list of console commands to execute.
+  /// See https://wiki.rlbot.org/framework/console-commands/ for a list of known commands.
+  console_commands:[ConsoleCommand] (required);
+}
+
+root_type DesiredGameState;
