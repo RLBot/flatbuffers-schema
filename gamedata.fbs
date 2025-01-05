@@ -161,11 +161,15 @@ table PlayerInfo {
   /// Information about the latest touch with a ball.
   /// Is null if the player has yet to touch the ball.
   latest_touch:Touch;
-  /// Whether the player's car is on the ground or in the air, and what jump/dodging forces current affects the car.
+  /// Whether the player's car is on the ground or in the air, and what jump/dodging forces currently affects the car.
   air_state:AirState;
-  /// How long until the player cannot dodge anymore. Is -1 while on ground or when airborne for too long after jumping.
+  /// How long until the player cannot dodge/double jump anymore.
+  /// The value is -1 while on ground or when airborne for too long after jumping.
+  /// A dodge/double jump is possible for 1.25 seconds after the first jump plus
+  /// up to an additional 0.2 seconds depending how long the jump button was pressed for the first jump.
   dodge_timeout:float;
-  /// How long until the player is not demolished anymore. Is -1 if not demolished.
+  /// How long until the player is not demolished anymore.
+  /// The value is -1 if while not demolished.
   demolished_timeout:float;
   /// Whether the player's car is moving at supersonic speed and can demolish.
   is_supersonic:bool;
@@ -179,8 +183,7 @@ table PlayerInfo {
   /// The current boost.
   boost:uint;
   /// The spawn id of the player.
-  /// This value is mostly used internally to keep track of which car was spawned for which client.
-  // TODO: Is this correct Virx?
+  /// This value is mostly used internally to keep track of participants in the match.
   spawn_id:int;
   /// Events from the latest tick involving this player. Possible values include:
   ///    Win, Loss, TimePlayed;
@@ -209,7 +212,7 @@ table PlayerInfo {
   /// Resets to 0 when the player lands on the ground.
   dodge_elapsed:float;
   /// The unit direction of the latest dodge.
-  // TODO: What if it was a stall?
+  /// The value will be (0,0) if it was a stall.
   dodge_dir:Vector2 (required);
 }
 
@@ -274,7 +277,7 @@ table MatchInfo {
   game_speed:float;
   /// Tracks the number of physics frames the game has computed.
   /// May increase by more than one across consecutive packets.
-  /// Data type will roll over after 207 days at 120Hz.
+  /// Data type will roll over after 414 days at 120Hz.
   frame_num:uint;
 }
 

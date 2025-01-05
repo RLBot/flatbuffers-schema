@@ -91,12 +91,11 @@ table PlayerConfiguration {
   /// The loadout of the player.
   loadout:PlayerLoadout;
   /// The spawn id of the player.
-  /// This value is mostly used internally to keep track of which car was spawned for which client.
-  // TODO: Is this correct Virx?
+  /// This value is mostly used internally to keep track of participants in the match.
   spawn_id:int;
-  /// A unique user-defined string that is used to connect bot clients to the right cars.
-  /// If the player is a bot with a run command, RLBot will pass this agent id to the process using an environment variable, RLBOT_AGENT_ID.
-  /// Upon connecting the bot process announces that it is responsible for this agent id and RLBot will pair the two.
+  /// A unique user-defined string that is used to connect clients to the right players/scripts.
+  /// If a bot/script has a run command, RLBot will pass this agent id to the process using an environment variable, RLBOT_AGENT_ID.
+  /// Upon connecting the process announces that it is responsible for this agent id and RLBot will pair the two.
   /// The recommended format for agent ids is "developername/botname".
   agent_id:string (required);
   /// Whether this player is part of a hivemind bot where all players/cars are controlled by the same process.
@@ -300,7 +299,7 @@ table MutatorSettings {
   max_score:MaxScore;
   /// The number of balls.
   multi_ball:MultiBall;
-  /// The overtime rules.
+  /// The overtime rules and tiebreaker.
   overtime:OvertimeMutator;
   /// The series length (unsupported).
   series_length:SeriesLengthMutator;
@@ -328,8 +327,8 @@ table MutatorSettings {
   demolish:DemolishMutator;
   /// Demolition respawn time.
   respawn_time:RespawnTimeMutator;
-  /// Match max duration including kickoff, replays, and more.
-  // TODO: Is this correct? 
+  /// Max real-time duration of match including kickoff, replays, and more.
+  /// If the score is tied upon time-out, the number of shots determine the winner.
   max_time:MaxTimeMutator;
   /// Additional game haviour for custom modes.
   game_event:GameEventMutator;
@@ -360,10 +359,19 @@ enum Launcher : ubyte {
 
 /// A ScriptConfiguration defines a script of a match.
 table ScriptConfiguration {
+  /// The name of the script.
   name:string (required);
-  location:string (required);
+  /// The root directory of the script and the working directory for the run command.
+  root_dir:string (required);
+  /// A console command that will start up the script.
   run_command:string (required);
+  /// The spawn id of the script.
+  /// This value is mostly used internally to keep track of participants in the match.
   spawn_id:int;
+  /// A unique user-defined string that is used to connect clients to the right players/scripts.
+  /// If a bot/script has a run command, RLBot will pass this agent id to the process using an environment variable, RLBOT_AGENT_ID.
+  /// Upon connecting the process announces that it is responsible for this agent id and RLBot will pair the two.
+  /// The recommended format for agent ids is "developername/botname".
   agent_id:string (required);
 }
 
@@ -388,6 +396,7 @@ table MatchConfiguration {
   /// The custom scripts used in the match.
   script_configurations:[ScriptConfiguration] (required);
   /// The game mode.
+  // TODO: What does this *actually* do that cannot be done with mutators?
   game_mode:GameMode;
   /// Whether to skip goal replays.
   skip_replays:bool;
@@ -401,9 +410,9 @@ table MatchConfiguration {
   enable_rendering:bool;
   /// Whether clients are allowed to manipulate the game state, e.g. teleporting cars and ball.
   enable_state_setting:bool;
-  /// Whethre the match replay should be saved.
+  /// Whether the match replay should be saved.
   auto_save_replay:bool;
-  /// Whether the freeplay mode should be used.
-  // TODO: More details
+  /// If set to true, a free play match is launched instead of an exhibition match.
+  /// This allows the players to use training keybinds, Bakkesmod plugins, and other features that are only allowed in free play.
   freeplay:bool;
 }
