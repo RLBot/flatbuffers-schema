@@ -70,6 +70,8 @@ table PlayerConfiguration {
   // Cannot be named 'playerClass' because that breaks C#.
   variety:PlayerClass (required);
   /// The name of the player.
+  /// When match start, RLBot will ensure each bot has a unique name.
+  /// In other words, the MatchConfiguration sent upon match start may contain a "Nexto (2)" if there are two Nexto's in the match.
   name:string (required);
   /// The team of the player. Blue is 0, orange is 1.
   team:uint;
