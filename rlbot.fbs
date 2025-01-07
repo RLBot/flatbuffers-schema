@@ -32,6 +32,17 @@ table ConnectionSettings {
   close_between_matches:bool;
 }
 
+/// A client message to change the loadout of a car.
+/// If sent before the ready message, this simply sets the loadout of the car.
+/// If sent after the ready message and if game state setting is enabled, this will respawn the car with the new loadout.
+/// Bots can only set the loadout of their own car(s).
+table SetLoadout {
+  /// The index of the car to change loadout off.
+  index:uint;
+  /// The new loadout of the car.
+  loadout:PlayerLoadout (required);
+}
+
 /// Information about a car that the client can control.
 table ControllableInfo {
   /// The index of the bot.
