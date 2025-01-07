@@ -184,6 +184,7 @@ table PlayerInfo {
   boost:uint;
   /// The spawn id of the player.
   /// This value is mostly used internally to keep track of participants in the match.
+  /// The spawn id can be used to find the corresponding PlayerConfiguration in the MatchConfiguration.
   spawn_id:int;
   /// Events from the latest tick involving this player. Possible values include:
   ///    Win, Loss, TimePlayed;
@@ -200,8 +201,6 @@ table PlayerInfo {
   accolades:[string] (required);
   /// The last controller input from this player.
   last_input:ControllerState (required);
-  /// If the player was the last one to be watched by a spectator.
-  last_spectated:bool;
   /// True if the player has jumped. See dodge_timeout to know if a dodge/secondary jump is available.
   has_jumped:bool;
   /// True if the player has doubled jumped.
@@ -307,6 +306,8 @@ table GamePacket {
   match:MatchInfo (required);
   /// The current state of teams, i.e. the team scores.
   teams:[TeamInfo] (required);
+  /// Index of the player who was most recently a spectated by the host.
+  last_spectated:uint;
 }
 
 root_type GamePacket;

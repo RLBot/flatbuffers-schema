@@ -396,7 +396,8 @@ table MatchConfiguration {
   /// The custom scripts used in the match.
   script_configurations:[ScriptConfiguration] (required);
   /// The game mode.
-  // TODO: What does this *actually* do that cannot be done with mutators?
+  /// This affects a few of the game rules although many game modes can also be recreated solely from mutators.
+  /// See what mutators and game mode combinations make up the official modes at https://github.com/VirxEC/python-interface/tree/master/tests/gamemodes
   game_mode:GameMode;
   /// Whether to skip goal replays.
   skip_replays:bool;
