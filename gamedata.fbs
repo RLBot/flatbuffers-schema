@@ -55,12 +55,11 @@ struct Vector3 {
 
 /// Expresses the rotation state of an object in Euler angles. Values are in radians.
 struct Rotator {
-  /// In radias with range (-pi,+pi) where 0 is flat, +pi is nose straight up, -pi is nose straight down.
+  /// In radians with range (-pi/2,+pi/2) where 0 is flat, +pi/2 is nose straight up, -pi/2 is nose straight down.
   pitch:float;
-  /// In radias with range [0,2pi) where 0 is towards positive x, rotating clockwise as increased. 
+  /// In radians with range [-pi,+pi) where 0 is towards positive x, rotating clockwise as increased (when seen from above). 
   yaw:float;
-  /// In radias with range (-pi,+pi) where 0 is upright, positive is tilted left, negative is title right.
-  // TODO: Double check tilt direction.
+  /// In radians with range (-pi,+pi) where 0 is upright, positive is tilted right, negative is tilted left.
   roll:float;
 }
 
@@ -93,8 +92,7 @@ table Touch {
   game_seconds:float;
   /// The point of contact for the touch.
   location:Vector3 (required);
-  /// The direction of the touch as a unit vector pointing away from the center of the ball.
-  // TODO: Confirm above statement.
+  /// The direction of the touch as a unit vector pointing from the point of contact towards the center of the ball.
   normal:Vector3 (required);
   /// The index of the ball that was touched (in case there are multiple balls).
   ball_index:uint;
@@ -153,10 +151,11 @@ table PlayerInfo {
   physics:Physics (required);
   /// The various scores of this player, e.g. those on the leaderboard.
   score_info:ScoreInfo (required);
-  /// The collision shape of the player's car.
+  /// The hitbox of the player's car.
+  /// Note that the hitbox is not centered at the cars location.
+  /// See the hitbox offset.
   hitbox:BoxShape (required);
-  /// The center of the collision shape in local coordinates.
-  // TODO: Is the hitbox tilted? If so, by how much?
+  /// The center of the hitbox in local coordinates.
   hitbox_offset:Vector3 (required);
   /// Information about the latest touch with a ball.
   /// Is null if the player has yet to touch the ball.

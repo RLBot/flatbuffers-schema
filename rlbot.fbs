@@ -48,8 +48,8 @@ table ControllableInfo {
   /// The index of the bot.
   index:uint;
   /// The spawn id of the bot.
-  /// This value is mostly used internally to keep track of which car was spawned for which client.
-  // TODO: Correct Virx?
+  /// This value is mostly used internally to keep track of participants in the match.
+  /// The spawn id can be used to find the corresponding PlayerConfiguration in the MatchConfiguration.
   spawn_id:int;
 }
 
