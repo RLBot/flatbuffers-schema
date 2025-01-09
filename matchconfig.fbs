@@ -373,7 +373,7 @@ table ScriptConfiguration {
 table MatchConfiguration {
   /// How to launch Rocket League.
   /// If left unset, RLBot will not launch the game.
-  /// To use Heroic, use Custom and set launcher_arg="heroic".
+  /// To use Legendary, use Custom and set launcher_arg="legendary".
   launcher:Launcher;
   /// Additional configuration for the launching method.
   /// See launcher.
