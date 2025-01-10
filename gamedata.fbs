@@ -301,7 +301,7 @@ table GamePacket {
   /// The current state of all balls.
   balls:[BallInfo] (required);
   /// The current state of the match such as timers and gravity.
-  match:MatchInfo (required);
+  match_info:MatchInfo (required);
   /// The current state of teams, i.e. the team scores.
   teams:[TeamInfo] (required);
   /// Index of the player who was most recently a spectated by the host.
