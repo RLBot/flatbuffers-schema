@@ -1,6 +1,4 @@
-include "comms.fbs";
 include "matchconfig.fbs";
-include "rendering.fbs";
 
 namespace rlbot.flat;
 
