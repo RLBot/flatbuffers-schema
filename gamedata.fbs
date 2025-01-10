@@ -1,7 +1,4 @@
-include "comms.fbs";
-include "gamestate.fbs";
-include "matchstart.fbs";
-include "rendering.fbs";
+include "matchconfig.fbs";
 
 namespace rlbot.flat;
 
@@ -268,7 +265,7 @@ table MatchInfo {
   /// True if the game duration is set to Unlimited.
   is_unlimited_time:bool;
   /// The current phase of the match, i.e. kickoff, replay, active, etc.
-  game_status:GameStatus;
+  match_phase:MatchPhase;
   /// The current strength of gravity. Default is -650.
   world_gravity_z:float;
   /// Game speed multiplier. Regular game speed is 1.0.
@@ -302,7 +299,7 @@ table GamePacket {
   /// The current state of all balls.
   balls:[BallInfo] (required);
   /// The current state of the match such as timers and gravity.
-  match:MatchInfo (required);
+  match_info:MatchInfo (required);
   /// The current state of teams, i.e. the team scores.
   teams:[TeamInfo] (required);
   /// Index of the player who was most recently a spectated by the host.
