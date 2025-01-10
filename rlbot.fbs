@@ -1,5 +1,5 @@
-include "gamedata.fbs";
 include "comms.fbs";
+include "gamedata.fbs";
 include "gamestatemanip.fbs";
 include "matchconfig.fbs";
 include "rendering.fbs";

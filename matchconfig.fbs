@@ -287,11 +287,11 @@ enum AudioMutator : ubyte {
 /// All mutators options.
 table MutatorSettings {
   /// Duration of the match.
-  match_length:MatchLength;
+  match_length:MatchLengthMutator;
   /// Max score of match. If this score is reached, the team immediately wins.
-  max_score:MaxScore;
+  max_score:MaxScoreMutator;
   /// The number of balls.
-  multi_ball:MultiBall;
+  multi_ball:MultiBallMutator;
   /// The overtime rules and tiebreaker.
   overtime:OvertimeMutator;
   /// The series length (unsupported).
