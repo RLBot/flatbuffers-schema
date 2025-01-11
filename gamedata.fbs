@@ -270,6 +270,8 @@ table MatchInfo {
   world_gravity_z:float;
   /// Game speed multiplier. Regular game speed is 1.0.
   game_speed:float;
+  /// Index of the player who was most recently a spectated by the host.
+  last_spectated:uint;
   /// Tracks the number of physics frames the game has computed.
   /// May increase by more than one across consecutive packets.
   /// Data type will roll over after 414 days at 120Hz.
@@ -302,8 +304,6 @@ table GamePacket {
   match_info:MatchInfo (required);
   /// The current state of teams, i.e. the team scores.
   teams:[TeamInfo] (required);
-  /// Index of the player who was most recently a spectated by the host.
-  last_spectated:uint;
 }
 
 root_type GamePacket;
