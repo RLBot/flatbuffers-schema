@@ -63,17 +63,14 @@ table DesiredBoostState {
   respawn_time:Float;
 }
 
-/// A game info state with nullable components.
-/// Used for game state setting to define which part of the game info should change.
-table DesiredGameInfoState {
-  /// The strength of gravity. Default is -650.
+/// Match info with nullable components.
+/// Used for game state setting to define which part of the match info should change.
+table DesiredMatchInfo {
+  /// The strength of gravity. Default is usually -650 depending on mutators.
+  /// To set gravity to 0, use 0.0000001 instead, as 0 will set gravity back to the default.
   world_gravity_z:Float;
   /// The game speed. Default is 1.0.
   game_speed:Float;
-  /// Whether the game is paused.
-  paused:Bool;
-  /// Wether the match should end.
-  end_match:Bool;
 }
 
 /// A console command which will be executed inside Rocket League.
@@ -93,7 +90,7 @@ table DesiredGameState {
   /// A list of desired boost pad states.
   boost_states:[DesiredBoostState] (required);
   /// The desired game info.
-  game_info_state:DesiredGameInfoState;
+  match_info:DesiredMatchInfo;
   /// A list of console commands to execute.
   /// See https://wiki.rlbot.org/framework/console-commands/ for a list of known commands.
   console_commands:[ConsoleCommand] (required);
