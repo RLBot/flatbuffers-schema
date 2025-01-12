@@ -75,7 +75,7 @@ table SphereShape {
 }
 
 /// A cylinder with diameter and height.
-/// Used for balls with a cyllindical shape like the puck.
+/// Used for balls with a cylindrical shape like the puck.
 table CylinderShape {
   diameter:float;
   height:float;
@@ -169,7 +169,7 @@ table PlayerInfo {
   demolished_timeout:float;
   /// Whether the player's car is moving at supersonic speed and can demolish.
   is_supersonic:bool;
-  /// Wehther the player is a bot or a human.
+  /// Whether the player is a bot or a human.
   is_bot:bool;
   /// The name of the player as it appears in game, i.e. possibly appended with "(2)".
   /// The original name can be found in the match configuration.
@@ -294,9 +294,9 @@ struct TeamInfo {
 table GamePacket {
   /// The current state of all players and their cars.
   players:[PlayerInfo] (required);
-  /// The currente state of all boost pads.
+  /// The current state of all boost pads.
   /// The static information about boost pads are found in the FieldInfo.
-  /// The boost pads are ordered by y-coordinate and then x-coordidate.
+  /// The boost pads are ordered by y-coordinate and then x-coordinate.
   boost_pads:[BoostPadState] (required);
   /// The current state of all balls.
   balls:[BallInfo] (required);
@@ -341,7 +341,7 @@ table BoostPad {
 table FieldInfo {
   /// Static information about boost pads on the field.
   /// The dynamic information is found in the GamePacket
-  /// The boost pads are ordered by y-coordinate and then x-coordidate.
+  /// The boost pads are ordered by y-coordinate and then x-coordinate.
   boost_pads:[BoostPad] (required);
   /// Information about the goals on the field.
   goals:[GoalInfo] (required);
@@ -352,13 +352,13 @@ root_type FieldInfo;
 /// An entry in the ball prediction describing where a ball will be at some future time.
 struct PredictionSlice {
   /// The moment in game time that this prediction corresponds to.
-  /// This corresponds to 'seconds_elapsed' in the GameInfo.
+  /// This corresponds to 'seconds_elapsed' in the MatchInfo.
   game_seconds:float;
   /// The predicted location and motion of the object.
   physics:Physics;
 }
 
-/// A prediection of a ball's trajectory, assuming no collision with cars.
+/// A prediction of a ball's trajectory, assuming no collision with cars.
 table BallPrediction {
   /// A list of predicted states of the ball at specific times in the future, assuming no collision with cars.
   /// The beginning of the list is now, and the end is 6 seconds into the future.

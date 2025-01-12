@@ -71,7 +71,7 @@ table PlayerConfiguration {
   variety:PlayerClass (required);
   /// The name of the player.
   /// When match start, RLBot will ensure each bot has a unique name.
-  /// In other words, the MatchConfiguration sent upon match start may contain a "Nexto (2)" if there are two Nexto's in the match.
+  /// In other words, the MatchConfiguration sent upon match start may contain a "Nexto (2)" if there are two Nextos in the match.
   name:string (required);
   /// The team of the player. Blue is 0, orange is 1.
   team:uint;
@@ -89,7 +89,7 @@ table PlayerConfiguration {
   /// A unique user-defined string that is used to connect clients to the right players/scripts.
   /// If a bot/script has a run command, RLBot will pass this agent id to the process using an environment variable, RLBOT_AGENT_ID.
   /// Upon connecting the process announces that it is responsible for this agent id and RLBot will pair the two.
-  /// The recommended format for agent ids is "developername/botname".
+  /// The recommended format for agent ids is "developer_name/bot_name".
   agent_id:string (required);
   /// Whether this player is part of a hivemind bot where all players/cars are controlled by the same process.
   /// Players in the hivemind must have the same name, team, run command, and agent id.
@@ -323,7 +323,7 @@ table MutatorSettings {
   /// Max real-time duration of match including kickoff, replays, and more.
   /// If the score is tied upon time-out, the number of shots determine the winner.
   max_time:MaxTimeMutator;
-  /// Additional game haviour for custom modes.
+  /// Additional game behaviour for custom modes.
   game_event:GameEventMutator;
   /// Additional audio options for custom modes.
   audio:AudioMutator;

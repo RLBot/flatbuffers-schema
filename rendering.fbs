@@ -1,6 +1,6 @@
 namespace rlbot.flat;
 
-/// Horizonal text alignment.
+/// Horizontal text alignment.
 enum TextHAlign: ubyte {
   Left,
   Center,
@@ -51,7 +51,7 @@ union RelativeAnchor {
 /// A RenderAnchor is a point in space consisting of a world component and optionally a relative component.
 /// The relative component is given by a car or ball and includes a local offset that takes the orientation of the object into account.
 /// The RenderAnchor stays attached to the object and does not have to be updated each tick.
-/// Rendering that uses a RenderAnchor attached to an object dissappears if the object is destroyed, i.e. the car demolished or the ball is scored.
+/// Rendering that uses a RenderAnchor attached to an object disappears if the object is destroyed, i.e. the car demolished or the ball is scored.
 table RenderAnchor {
   /// An offset in global coordinates.
   /// If the relative component is null, then this simply a point in 3D space.

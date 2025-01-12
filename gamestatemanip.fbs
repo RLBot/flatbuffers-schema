@@ -21,7 +21,7 @@ table Vector3Partial {
   z:Float;
 }
 
-/// A rotator describing a rotation with nullable pith, yall, and roll.
+/// A rotator describing a rotation with nullable pith, yaw, and roll.
 /// Used for game state setting to define which part of a rotator should change.
 /// If a component is null, then the component will keep its current value.
 /// Values are in radians.
