@@ -57,12 +57,6 @@ table DesiredCarState {
   boost_amount:Float;
 }
 
-/// A boost pad state with nullable components.
-/// Used for game state setting to define which part of a boost pad's state should change.
-table DesiredBoostState {
-  respawn_time:Float;
-}
-
 /// Match info with nullable components.
 /// Used for game state setting to define which part of the match info should change.
 table DesiredMatchInfo {
@@ -87,8 +81,6 @@ table DesiredGameState {
   ball_states:[DesiredBallState] (required);
   /// A list of desired car states.
   car_states:[DesiredCarState] (required);
-  /// A list of desired boost pad states.
-  boost_states:[DesiredBoostState] (required);
   /// The desired game info.
   match_info:DesiredMatchInfo;
   /// A list of console commands to execute.
