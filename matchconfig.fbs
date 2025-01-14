@@ -347,7 +347,8 @@ enum Launcher : ubyte {
   Epic,
   /// E.g. if you use Legendary.
   /// The game path is specified in the MatchConfiguration.
-  Custom
+  Custom,
+  NoLaunch,
 }
 
 /// A ScriptConfiguration defines a script of a match.
