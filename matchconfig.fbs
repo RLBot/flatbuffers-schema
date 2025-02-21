@@ -206,8 +206,8 @@ enum BallBouncinessMutator : ubyte {
   LowishBounciness,
 }
 
-/// Boost mutator options.
-enum BoostMutator : ubyte {
+/// Boost amount mutator options.
+enum BoostAmountMutator : ubyte {
   NormalBoost,
   UnlimitedBoost,
   SlowRecharge,
@@ -308,8 +308,8 @@ table MutatorSettings {
   ball_size:BallSizeMutator;
   /// Ball bounciness.
   ball_bounciness:BallBouncinessMutator;
-  /// Boost meter behaviour.
-  boost:BoostMutator;
+  /// Boost amount/recharge.
+  boost_amount:BoostAmountMutator;
   /// Rumble item rules.
   rumble:RumbleMutator;
   /// Boost strength multiplier.
@@ -347,7 +347,8 @@ enum Launcher : ubyte {
   Epic,
   /// E.g. if you use Legendary.
   /// The game path is specified in the MatchConfiguration.
-  Custom
+  Custom,
+  NoLaunch,
 }
 
 /// A ScriptConfiguration defines a script of a match.
