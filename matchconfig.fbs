@@ -174,7 +174,8 @@ enum BallTypeMutator : ubyte {
   Anniversary,
   Haunted,
   Ekin,
-  SpookyCube
+  SpookyCube,
+  Egg
 }
 
 /// Ball weight mutator options.
@@ -203,7 +204,14 @@ enum BallBouncinessMutator : ubyte {
   Low,
   High,
   SuperHigh,
-  LowishBounciness,
+  Lowish,
+}
+
+/// Ball gravity mutator options.
+enum BallGravityMutator: ubyte {
+  Default,
+  Low,
+  High
 }
 
 /// Boost amount mutator options.
@@ -275,7 +283,8 @@ enum MaxTimeMutator : ubyte {
 enum GameEventMutator : ubyte {
   Default,
   Haunted,
-  Rugby
+  Rugby,
+  Territory
 }
 
 /// Audio mutator options.
@@ -327,6 +336,8 @@ table MutatorSettings {
   game_event:GameEventMutator;
   /// Additional audio options for custom modes.
   audio:AudioMutator;
+  /// Ball gravity.
+  ball_gravity:BallGravityMutator;
 }
 
 /// Possible behaviours when a match is started while another match is in progress.
