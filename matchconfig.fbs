@@ -298,6 +298,11 @@ enum TerritoryMutator : ubyte {
   Territory
 }
 
+enum StaleBallMutator : ubyte {
+  Default,
+  ThirtySeconds
+}
+
 /// All mutators options.
 table MutatorSettings {
   /// Duration of the match.
@@ -345,6 +350,8 @@ table MutatorSettings {
   ball_gravity:BallGravityMutator;
   /// Territory mutator.
   territory:TerritoryMutator;
+  /// Stale ball mutator.
+  stale_ball:StaleBallMutator;
 }
 
 /// Possible behaviours when a match is started while another match is in progress.
