@@ -211,7 +211,8 @@ enum BallBouncinessMutator : ubyte {
 enum BallGravityMutator: ubyte {
   Default,
   Low,
-  High
+  High,
+  SuperHigh
 }
 
 /// Boost amount mutator options.
@@ -283,14 +284,18 @@ enum MaxTimeMutator : ubyte {
 enum GameEventMutator : ubyte {
   Default,
   Haunted,
-  Rugby,
-  Territory
+  Rugby
 }
 
 /// Audio mutator options.
 enum AudioMutator : ubyte {
   Default,
   Haunted
+}
+
+enum TerritoryMutator : ubyte {
+  Default,
+  Territory
 }
 
 /// All mutators options.
@@ -338,6 +343,8 @@ table MutatorSettings {
   audio:AudioMutator;
   /// Ball gravity.
   ball_gravity:BallGravityMutator;
+  /// Territory mutator.
+  territory:TerritoryMutator;
 }
 
 /// Possible behaviours when a match is started while another match is in progress.
