@@ -123,6 +123,16 @@ enum MaxScoreMutator : ubyte {
   ThreeGoals,
   FiveGoals,
   SevenGoals,
+  TenGoals,
+  TwentyGoals,
+  ThirtyGoals,
+  FortyGoals,
+  FiftyGoals,
+  SixtyGoals,
+  SeventyGoals,
+  EightyGoals,
+  NinetyGoals,
+  HundredGoals,
   Unlimited
 }
 
@@ -175,7 +185,10 @@ enum BallTypeMutator : ubyte {
   Haunted,
   Ekin,
   SpookyCube,
-  Egg
+  Egg,
+  PlayerSeeking,
+  Dropshot,
+  ScoreAbsorb
 }
 
 /// Ball weight mutator options.
@@ -236,7 +249,9 @@ enum RumbleMutator : ubyte {
   SpikeRush,
   HauntedBallBeam,
   Tactical,
-  BatmanRumble
+  BatmanRumble,
+  GrapplingOnly,
+  HaymakerOnly,
 }
 
 /// Boost strength mutator options.
@@ -263,7 +278,9 @@ enum DemolishMutator : ubyte {
   Disabled,
   FriendlyFire,
   OnContact,
-  OnContactFF
+  OnContactFF,
+  OnBallContact,
+  OnBallContactFF
 }
 
 /// Respawn time mutator options.
@@ -303,6 +320,62 @@ enum StaleBallMutator : ubyte {
   ThirtySeconds
 }
 
+enum JumpMutator : ubyte {
+  Default,
+  Grounded,
+  Two,
+  Three,
+  Four,
+  Unlimited,
+  NoJumps
+}
+
+enum DodgeTimerMutator : ubyte {
+  Default,
+  TwoSeconds,
+  ThreeSeconds,
+  Unlimited
+}
+
+enum PossessionScoreMutator : ubyte {
+  Default,
+  OneSecond,
+  TwoSeconds,
+  ThreeSeconds
+}
+
+enum DemolishScoreMutator : ubyte {
+  Default,
+  One,
+  Two,
+  Three
+}
+
+enum NormalGoalScoreMutator : ubyte {
+  Default,
+  Zero,
+  Two,
+  Three,
+  Five,
+  Ten
+}
+
+enum AerialGoalScoreMutator : ubyte {
+  Default,
+  Zero,
+  Two,
+  Three,
+  Five,
+  Ten
+}
+
+enum AssistGoalScoreMutator : ubyte {
+  Default,
+  One,
+  Two,
+  Three
+}
+
 /// All mutators options.
 table MutatorSettings {
   /// Duration of the match.
@@ -313,7 +386,7 @@ table MutatorSettings {
   multi_ball:MultiBallMutator;
   /// The overtime rules and tiebreaker.
   overtime:OvertimeMutator;
-  /// The series length (unsupported).
+  /// The series length.
   series_length:SeriesLengthMutator;
   /// A game speed multiplier.
   game_speed:GameSpeedMutator;
@@ -352,6 +425,20 @@ table MutatorSettings {
   territory:TerritoryMutator;
   /// Stale ball mutator.
   stale_ball:StaleBallMutator;
+  /// Jumps mutator.
+  jump:JumpMutator;
+  /// Dodge timer mutator.
+  dodge_timer:DodgeTimerMutator;
+  /// Possession score mutator.
+  possession_score:PossessionScoreMutator;
+  /// Demolish score mutator.
+  demolish_score:DemolishScoreMutator;
+  /// Normal goal score mutator.
+  normal_goal_score:NormalGoalScoreMutator;
+  /// Aerial goal score mutator.
+  aerial_goal_score:AerialGoalScoreMutator;
+  /// Assist goal score mutator.
+  assist_goal_score:AssistGoalScoreMutator;
 }
 
 /// Possible behaviours when a match is started while another match is in progress.
