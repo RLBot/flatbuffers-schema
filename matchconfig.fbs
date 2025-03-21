@@ -376,6 +376,11 @@ enum AssistGoalScoreMutator : ubyte {
   Three
 }
 
+enum InputRestrictionMutator : ubyte {
+  Default,
+  Backwards
+}
+
 /// All mutators options.
 table MutatorSettings {
   /// Duration of the match.
@@ -439,6 +444,8 @@ table MutatorSettings {
   aerial_goal_score:AerialGoalScoreMutator;
   /// Assist goal score mutator.
   assist_goal_score:AssistGoalScoreMutator;
+  /// Player input restriction mutator.
+  input_restriction:InputRestrictionMutator;
 }
 
 /// Possible behaviours when a match is started while another match is in progress.
