@@ -177,7 +177,7 @@ table PlayerInfo {
   /// The team of the player.
   team:uint;
   /// The current boost.
-  boost:uint;
+  boost:float;
   /// The spawn id of the player.
   /// This value is mostly used internally to keep track of participants in the match.
   /// The spawn id can be used to find the corresponding PlayerConfiguration in the MatchConfiguration.
