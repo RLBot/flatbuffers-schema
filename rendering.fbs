@@ -127,8 +127,10 @@ table Rect2D {
   height:float;
   /// Color of the rectangle.
   color:Color (required);
-  /// Whether the rectangle centered at (x,y). Otherwise, (x,y) is the top left of the rectangle.
-  centered:bool;
+  /// The horizontal alignment of the rectangle.
+  h_align:TextHAlign;
+  /// The vertical alignment of the rectangle.
+  v_align:TextVAlign;
 }
 
 /// A RenderMessage for a rectangle in 3D space.
@@ -142,6 +144,10 @@ table Rect3D {
   height:float;
   /// The color of the rectangle.
   color:Color (required);
+  /// The horizontal alignment of the anchor in the rectangle.
+  h_align:TextHAlign;
+  /// The vertical alignment of the anchor in the rectangle.
+  v_align:TextVAlign;
 }
 
 /// The different types of RenderMessages.
