@@ -127,7 +127,7 @@ table Rect2D {
   height:float;
   /// Color of the rectangle.
   color:Color (required);
-  /// The position of x in the rectangle.
+  /// The horizontal alignment of the text.
   h_align:TextHAlign;
   /// The position of y in the rectangle.
   v_align:TextVAlign;
