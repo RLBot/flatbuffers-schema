@@ -118,7 +118,7 @@ enum MatchLengthMutator : ubyte {
 
 /// Max score mutator options.
 enum MaxScoreMutator : ubyte {
-  Default,
+  Unlimited,
   OneGoal,
   ThreeGoals,
   FiveGoals,
@@ -132,8 +132,7 @@ enum MaxScoreMutator : ubyte {
   SeventyGoals,
   EightyGoals,
   NinetyGoals,
-  HundredGoals,
-  Unlimited
+  HundredGoals
 }
 
 /// Multi ball mutator options.
@@ -239,7 +238,7 @@ enum BoostAmountMutator : ubyte {
 
 /// Rumble mutator options.
 enum RumbleMutator : ubyte {
-  NoRumble, // Cannot be named None because that breaks Python.
+  Off,
   DefaultRumble,
   Slow,
   Civilized,
@@ -293,7 +292,7 @@ enum RespawnTimeMutator : ubyte {
 
 /// Max time mutator options.
 enum MaxTimeMutator : ubyte {
-  Default,
+  Unlimited,
   ElevenMinutes
 }
 
@@ -311,12 +310,12 @@ enum AudioMutator : ubyte {
 }
 
 enum TerritoryMutator : ubyte {
-  Default,
+  Off,
   Territory
 }
 
 enum StaleBallMutator : ubyte {
-  Default,
+  Unlimited,
   ThirtySeconds
 }
 
@@ -331,28 +330,28 @@ enum JumpMutator : ubyte {
 }
 
 enum DodgeTimerMutator : ubyte {
-  Default,
+  OnePointTwentyFiveSeconds,
   TwoSeconds,
   ThreeSeconds,
   Unlimited
 }
 
 enum PossessionScoreMutator : ubyte {
-  Default,
+  Off,
   OneSecond,
   TwoSeconds,
   ThreeSeconds
 }
 
 enum DemolishScoreMutator : ubyte {
-  Default,
+  Zero,
   One,
   Two,
   Three
 }
 
 enum NormalGoalScoreMutator : ubyte {
-  Default,
+  One,
   Zero,
   Two,
   Three,
@@ -361,7 +360,7 @@ enum NormalGoalScoreMutator : ubyte {
 }
 
 enum AerialGoalScoreMutator : ubyte {
-  Default,
+  One,
   Zero,
   Two,
   Three,
@@ -370,7 +369,7 @@ enum AerialGoalScoreMutator : ubyte {
 }
 
 enum AssistGoalScoreMutator : ubyte {
-  Default,
+  Zero,
   One,
   Two,
   Three
