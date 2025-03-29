@@ -144,9 +144,9 @@ table Rect3D {
   height:float;
   /// The color of the rectangle.
   color:Color (required);
-  /// The position of the anchor in the rectangle.
+  /// The horizontal alignment of the anchor in the rectangle.
   h_align:TextHAlign;
-  /// The position of the anchor in the rectangle.
+  /// The vertical alignment of the anchor in the rectangle.
   v_align:TextVAlign;
 }
 
