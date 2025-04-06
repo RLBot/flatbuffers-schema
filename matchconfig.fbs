@@ -497,8 +497,11 @@ table MatchConfiguration {
   /// Additional configuration for the launching method.
   /// See launcher.
   launcher_arg:string (required);
-  /// If true, RLBot will start the bots with a non-empty run command in their player configuration.
-  auto_start_bots:bool;
+  /// If true, RLBot will start the bots and scripts that has a non-empty run command in their player/script configuration.
+  auto_start_bots:bool=true;
+  /// If true, RLBot will start the match only once all bots and script have connected and are ready.
+  /// If false, the match will start as soon as the map loads.
+  wait_for_bots:bool=true;
   /// The name of a upk file, like UtopiaStadium_P, which should be loaded.
   /// On Steam version of Rocket League this can be used to load custom map files,
   /// but on Epic version it only works on the Psyonix maps.
@@ -523,7 +526,7 @@ table MatchConfiguration {
   /// Whether debug rendering is displayed.
   enable_rendering:bool;
   /// Whether clients are allowed to manipulate the game state, e.g. teleporting cars and ball.
-  enable_state_setting:bool;
+  enable_state_setting:bool=true;
   /// Whether the match replay should be saved.
   auto_save_replay:bool;
   /// If set to true, a free play match is launched instead of an exhibition match.
