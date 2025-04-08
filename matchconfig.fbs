@@ -498,10 +498,10 @@ table MatchConfiguration {
   /// See launcher.
   launcher_arg:string (required);
   /// If true, RLBot will start the bots and scripts that has a non-empty run command in their player/script configuration.
-  auto_start_bots:bool=true;
+  auto_start_agents:bool=true;
   /// If true, RLBot will start the match only once all bots and script have connected and are ready.
   /// If false, the match will start as soon as the map loads.
-  wait_for_bots:bool=true;
+  wait_for_agents:bool=true;
   /// The name of a upk file, like UtopiaStadium_P, which should be loaded.
   /// On Steam version of Rocket League this can be used to load custom map files,
   /// but on Epic version it only works on the Psyonix maps.
