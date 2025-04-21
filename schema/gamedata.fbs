@@ -34,8 +34,6 @@ table PlayerInput {
   controller_state:ControllerState (required);
 }
 
-root_type PlayerInput;
-
 /// A vector with an x and y component.
 struct Vector2 {
   x:float;
@@ -54,7 +52,7 @@ struct Vector3 {
 struct Rotator {
   /// In radians with range (-pi/2,+pi/2) where 0 is flat, +pi/2 is nose straight up, -pi/2 is nose straight down.
   pitch:float;
-  /// In radians with range [-pi,+pi) where 0 is towards positive x, rotating clockwise as increased (when seen from above). 
+  /// In radians with range [-pi,+pi) where 0 is towards positive x, rotating clockwise as increased (when seen from above).
   yaw:float;
   /// In radians with range (-pi,+pi) where 0 is upright, positive is tilted right, negative is tilted left.
   roll:float;
@@ -306,8 +304,6 @@ table GamePacket {
   teams:[TeamInfo] (required);
 }
 
-root_type GamePacket;
-
 // This section deals with arena information, e.g. where the goals and boost locations are.
 
 /// Static information about a goal on the field such as dimensions and location.
@@ -346,8 +342,6 @@ table FieldInfo {
   /// Information about the goals on the field.
   goals:[GoalInfo] (required);
 }
-
-root_type FieldInfo;
 
 /// An entry in the ball prediction describing where a ball will be at some future time.
 struct PredictionSlice {

@@ -28,7 +28,7 @@ table Vector3Partial {
 table RotatorPartial {
   /// In radians with range (-pi/2,+pi/2) where 0 is flat, +pi/2 is nose straight up, -pi/2 is nose straight down.
   pitch:Float;
-  /// In radians with range [-pi,+pi) where 0 is towards positive x, rotating clockwise as increased (when seen from above). 
+  /// In radians with range [-pi,+pi) where 0 is towards positive x, rotating clockwise as increased (when seen from above).
   yaw:Float;
   /// In radians with range (-pi,+pi) where 0 is upright, positive is tilted right, negative is tilted left.
   roll:Float;
@@ -87,5 +87,3 @@ table DesiredGameState {
   /// See https://wiki.rlbot.org/framework/console-commands/ for a list of known commands.
   console_commands:[ConsoleCommand] (required);
 }
-
-root_type DesiredGameState;

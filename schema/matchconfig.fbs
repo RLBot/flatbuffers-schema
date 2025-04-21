@@ -1,3 +1,5 @@
+include "rendering.fbs";
+
 namespace rlbot.flat;
 
 /// A bot controlled by the RLBot framework.

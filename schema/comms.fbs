@@ -20,5 +20,3 @@ table MatchComm {
   /// Use the display field for messages in quick chat.
   content:[ubyte] (required);
 }
-
-root_type MatchComm;

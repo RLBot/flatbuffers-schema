@@ -1,3 +1,5 @@
+include "gamedata.fbs";
+
 namespace rlbot.flat;
 
 /// Horizontal text alignment.
@@ -175,8 +177,6 @@ table RenderGroup {
   /// The id of the RenderGroup.
   id:int;
 }
-
-root_type RenderGroup;
 
 /// A client message request removal of a RenderGroup.
 /// A client can only clear its own RenderGroups.
