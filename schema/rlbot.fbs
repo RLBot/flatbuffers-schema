@@ -6,6 +6,64 @@ include "rendering.fbs";
 
 namespace rlbot.flat;
 
+table DisconnectSignal{}
+table InitComplete{}
+
+/// Packets sent from core to interfaces
+union CorePacket {
+    /// Interface should exit when this packet is received.
+    DisconnectSignal,
+    /// Main game packet containing all relevant data.
+    /// Sent every tick once core has received InitComplete
+    GamePacket,
+    /// Sent once core receives a valid ConnectionSettings from the interface
+    FieldInfo,
+    /// Sent once core receives a valid MatchConfiguration from the interface
+    MatchConfiguration,
+    /// Core relays matchcomms to bot agents in the same team if team_only is true
+    MatchComm,
+    /// Prediction of ball trajectory
+    BallPrediction,
+    /// Sent once core receives a valid ConnectionSettings from the interface
+    ControllableTeamInfo,
+}
+
+/// Packets sent from interfaces to core
+union InterfacePacket {
+    /// Sent to core to indicate that you want to disconnect.
+    DisconnectSignal,
+    /// Starts a new match with a rlbot.toml file
+    StartCommand,
+    /// Starts a new match from a MatchConfiguration
+    MatchConfiguration,
+    /// Sent by bot agents to control their car(s)
+    PlayerInput,
+    /// Sent by agents to state-set the game state.
+    /// `enable_state_setting` must be true in the MatchConfiguration.
+    DesiredGameState,
+    /// Sent by agents to render lines & text in the game.
+    RenderGroup,
+    /// Sent by agents to remove a render group.
+    RemoveRenderGroup,
+    /// Agents may send a MatchComm packet to communicate with other agents,
+    /// core relays this to other agents. May be `team_only` if set.
+    MatchComm,
+    /// Should be sent by agents immediately after connecting.
+    /// Tells core about who the connection represents and what data they want to receive.
+    ConnectionSettings,
+    /// Ends the match and optionally the RLBotServer too.
+    StopCommand,
+    /// Sent by sessions to change the loadout of their cars. Will always work if a loadout was not
+    /// specified in match settings and when sent before `InitComplete`. Ignored if state setting
+    /// was disabled in the match settings, and a loadout was set in match settings.
+    SetLoadout,
+    /// Indicates that the session has finished all initialization and is ready to start receiving
+    /// game messages without delay. The match will not start until all sessions have sent this
+    /// message.
+    InitComplete,
+}
+
+
 /// A client message to start a match using a path to a match config file.
 table StartCommand {
   config_path:string (required);
