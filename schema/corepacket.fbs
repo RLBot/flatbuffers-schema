@@ -1,0 +1,35 @@
+include "misc.fbs";
+
+namespace rlbot.flat;
+
+/// Packet containing a CoreMessage
+table CorePacket {
+  message: CoreMessage;
+}
+
+root_type CorePacket;
+
+/// Messages sent from core to interfaces
+union CoreMessage {
+  /// Interface should exit when this packet is received.
+  DisconnectSignal,
+
+  /// Main game packet containing all relevant data.
+  /// Sent every tick once core has received InitComplete
+  GamePacket,
+
+  /// Sent once core receives a valid ConnectionSettings from the interface
+  FieldInfo,
+
+  /// Sent once core receives a valid MatchConfiguration from the interface
+  MatchConfiguration,
+
+  /// Core relays matchcomms to bot agents in the same team if team_only is true
+  MatchComm,
+
+  /// Prediction of ball trajectory
+  BallPrediction,
+
+  /// Sent once core receives a valid ConnectionSettings from the interface
+  ControllableTeamInfo,
+}

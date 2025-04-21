@@ -1,0 +1,56 @@
+include "misc.fbs";
+
+namespace rlbot.flat;
+
+/// Packet containing a InterfaceMessage
+table InterfacePacket {
+  message: InterfaceMessage;
+}
+
+root_type InterfacePacket;
+
+/// Messages sent from interfaces to core
+union InterfaceMessage {
+  /// Sent to core to indicate that you want to disconnect.
+  DisconnectSignal,
+
+  /// Starts a new match with a rlbot.toml file
+  StartCommand,
+
+  /// Starts a new match from a MatchConfiguration
+  MatchConfiguration,
+
+  /// Sent by bot agents to control their car(s)
+  PlayerInput,
+
+  /// Sent by agents to state-set the game state.
+  /// `enable_state_setting` must be true in the MatchConfiguration.
+  DesiredGameState,
+
+  /// Sent by agents to render lines & text in the game.
+  RenderGroup,
+
+  /// Sent by agents to remove a render group.
+  RemoveRenderGroup,
+
+  /// Agents may send a MatchComm packet to communicate with other agents,
+  /// core relays this to other agents. May be `team_only` if set.
+  MatchComm,
+
+  /// Should be sent by agents immediately after connecting.
+  /// Tells core about who the connection represents and what data they want to receive.
+  ConnectionSettings,
+
+  /// Ends the match and optionally the RLBotServer too.
+  StopCommand,
+
+  /// Sent by sessions to change the loadout of their cars. Will always work if a loadout was not
+  /// specified in match settings and when sent before `InitComplete`. Ignored if state setting
+  /// was disabled in the match settings, and a loadout was set in match settings.
+  SetLoadout,
+
+  /// Indicates that the session has finished all initialization and is ready to start receiving
+  /// game messages without delay. The match will not start until all sessions have sent this
+  /// message.
+  InitComplete,
+}
