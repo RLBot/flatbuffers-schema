@@ -6,73 +6,90 @@ include "rendering.fbs";
 
 namespace rlbot.flat;
 
-table DisconnectSignal{}
-table InitComplete{}
+table DisconnectSignal {}
+
+table InitComplete {}
 
 /// Packets sent from core to interfaces
 union CorePacket {
-    /// Interface should exit when this packet is received.
-    DisconnectSignal,
-    /// Main game packet containing all relevant data.
-    /// Sent every tick once core has received InitComplete
-    GamePacket,
-    /// Sent once core receives a valid ConnectionSettings from the interface
-    FieldInfo,
-    /// Sent once core receives a valid MatchConfiguration from the interface
-    MatchConfiguration,
-    /// Core relays matchcomms to bot agents in the same team if team_only is true
-    MatchComm,
-    /// Prediction of ball trajectory
-    BallPrediction,
-    /// Sent once core receives a valid ConnectionSettings from the interface
-    ControllableTeamInfo,
+  /// Interface should exit when this packet is received.
+  DisconnectSignal,
+
+  /// Main game packet containing all relevant data.
+  /// Sent every tick once core has received InitComplete
+  GamePacket,
+
+  /// Sent once core receives a valid ConnectionSettings from the interface
+  FieldInfo,
+
+  /// Sent once core receives a valid MatchConfiguration from the interface
+  MatchConfiguration,
+
+  /// Core relays matchcomms to bot agents in the same team if team_only is true
+  MatchComm,
+
+  /// Prediction of ball trajectory
+  BallPrediction,
+
+  /// Sent once core receives a valid ConnectionSettings from the interface
+  ControllableTeamInfo,
 }
 
 /// Packets sent from interfaces to core
 union InterfacePacket {
-    /// Sent to core to indicate that you want to disconnect.
-    DisconnectSignal,
-    /// Starts a new match with a rlbot.toml file
-    StartCommand,
-    /// Starts a new match from a MatchConfiguration
-    MatchConfiguration,
-    /// Sent by bot agents to control their car(s)
-    PlayerInput,
-    /// Sent by agents to state-set the game state.
-    /// `enable_state_setting` must be true in the MatchConfiguration.
-    DesiredGameState,
-    /// Sent by agents to render lines & text in the game.
-    RenderGroup,
-    /// Sent by agents to remove a render group.
-    RemoveRenderGroup,
-    /// Agents may send a MatchComm packet to communicate with other agents,
-    /// core relays this to other agents. May be `team_only` if set.
-    MatchComm,
-    /// Should be sent by agents immediately after connecting.
-    /// Tells core about who the connection represents and what data they want to receive.
-    ConnectionSettings,
-    /// Ends the match and optionally the RLBotServer too.
-    StopCommand,
-    /// Sent by sessions to change the loadout of their cars. Will always work if a loadout was not
-    /// specified in match settings and when sent before `InitComplete`. Ignored if state setting
-    /// was disabled in the match settings, and a loadout was set in match settings.
-    SetLoadout,
-    /// Indicates that the session has finished all initialization and is ready to start receiving
-    /// game messages without delay. The match will not start until all sessions have sent this
-    /// message.
-    InitComplete,
-}
+  /// Sent to core to indicate that you want to disconnect.
+  DisconnectSignal,
 
+  /// Starts a new match with a rlbot.toml file
+  StartCommand,
+
+  /// Starts a new match from a MatchConfiguration
+  MatchConfiguration,
+
+  /// Sent by bot agents to control their car(s)
+  PlayerInput,
+
+  /// Sent by agents to state-set the game state.
+  /// `enable_state_setting` must be true in the MatchConfiguration.
+  DesiredGameState,
+
+  /// Sent by agents to render lines & text in the game.
+  RenderGroup,
+
+  /// Sent by agents to remove a render group.
+  RemoveRenderGroup,
+
+  /// Agents may send a MatchComm packet to communicate with other agents,
+  /// core relays this to other agents. May be `team_only` if set.
+  MatchComm,
+
+  /// Should be sent by agents immediately after connecting.
+  /// Tells core about who the connection represents and what data they want to receive.
+  ConnectionSettings,
+
+  /// Ends the match and optionally the RLBotServer too.
+  StopCommand,
+
+  /// Sent by sessions to change the loadout of their cars. Will always work if a loadout was not
+  /// specified in match settings and when sent before `InitComplete`. Ignored if state setting
+  /// was disabled in the match settings, and a loadout was set in match settings.
+  SetLoadout,
+
+  /// Indicates that the session has finished all initialization and is ready to start receiving
+  /// game messages without delay. The match will not start until all sessions have sent this
+  /// message.
+  InitComplete,
+}
 
 /// A client message to start a match using a path to a match config file.
 table StartCommand {
-  config_path:string (required);
+  config_path: string (required);
 }
 
 /// A client message to stop a match and optionally the RLBot server too.
 table StopCommand {
   // Whether RLBot should shutdown completely after stopping the match.
-  shutdown_server:bool;
+  shutdown_server: bool;
 }
 
 /// Sent by clients when connecting to RLBot to indicate what type of messages are desired.
@@ -80,14 +97,17 @@ table StopCommand {
 /// overlay, or any other utility that connects to the RLBot process.
 table ConnectionSettings {
   /// The ID of the bot/script that is associated with the incoming connection.
-  agent_id:string (required);
+  agent_id: string (required);
+
   /// If this is set, RLBot will send BallPrediction data back to the client when available.
-  wants_ball_predictions:bool;
+  wants_ball_predictions: bool;
+
   /// If this is set, RLBot will send MatchComms to the client when available.
-  wants_comms:bool;
+  wants_comms: bool;
+
   /// If this is set, RLBot will close the connection when a match is stopped or when a new
   /// match is started. The GUI and other match runners should likely not set this.
-  close_between_matches:bool;
+  close_between_matches: bool;
 }
 
 /// A client message to change the loadout of a car.
@@ -96,19 +116,21 @@ table ConnectionSettings {
 /// Bots can only set the loadout of their own car(s).
 table SetLoadout {
   /// The index of the car to change loadout off.
-  index:uint;
+  index: uint;
+
   /// The new loadout of the car.
-  loadout:PlayerLoadout (required);
+  loadout: PlayerLoadout (required);
 }
 
 /// Information about a car that the client can control.
 table ControllableInfo {
   /// The index of the bot.
-  index:uint;
+  index: uint;
+
   /// The spawn id of the bot.
   /// This value is mostly used internally to keep track of participants in the match.
   /// The spawn id can be used to find the corresponding PlayerConfiguration in the MatchConfiguration.
-  spawn_id:int;
+  spawn_id: int;
 }
 
 /// Server message with information about the cars that the client can control.
@@ -116,7 +138,8 @@ table ControllableInfo {
 /// There may be more than one car in case the bot is a hivemind.
 table ControllableTeamInfo {
   /// The assigned team for this client.
-  team:uint;
+  team: uint;
+
   /// The bots that RLBot will allow this client to control.
-  controllables:[ControllableInfo] (required);
+  controllables: [ControllableInfo] (required);
 }

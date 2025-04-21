@@ -8,115 +8,138 @@ namespace rlbot.flat;
 /// Remember to send controller states with jump set to false to let go of the jump button afterwards.
 struct ControllerState {
   /// -1 for full reverse, 1 for full forward.
-  throttle:float;
+  throttle: float;
+
   /// -1 for full left, 1 for full right.
-  steer:float;
+  steer: float;
+
   /// -1 for nose down, 1 for nose up.
-  pitch:float;
+  pitch: float;
+
   /// -1 for full left, 1 for full right.
-  yaw:float;
+  yaw: float;
+
   /// -1 for roll left, 1 for roll right.
-  roll:float;
+  roll: float;
+
   /// True if you want to press the jump button.
-  jump:bool;
+  jump: bool;
+
   /// True if you want to press the boost button.
-  boost:bool;
+  boost: bool;
+
   /// True if you want to press the handbrake button.
-  handbrake:bool;
+  handbrake: bool;
+
   /// True if you want to press the 'use item' button. Used in Rumble and other game modes.
-  use_item:bool;
+  use_item: bool;
 }
 
 /// A player index and the controller state of that player.
 /// Used to indicate what the player is doing this tick.
 table PlayerInput {
-  player_index:uint;
-  controller_state:ControllerState (required);
+  player_index: uint;
+  controller_state: ControllerState (required);
 }
 
 /// A vector with an x and y component.
 struct Vector2 {
-  x:float;
-  y:float;
+  x: float;
+  y: float;
 }
 
 /// A vector with an x, y, z component.
 /// Note that Rocket League uses a left-handed coordinate system.
 struct Vector3 {
-  x:float;
-  y:float;
-  z:float;
+  x: float;
+  y: float;
+  z: float;
 }
 
 /// Expresses the rotation state of an object in Euler angles. Values are in radians.
 struct Rotator {
   /// In radians with range (-pi/2,+pi/2) where 0 is flat, +pi/2 is nose straight up, -pi/2 is nose straight down.
-  pitch:float;
+  pitch: float;
+
   /// In radians with range [-pi,+pi) where 0 is towards positive x, rotating clockwise as increased (when seen from above).
-  yaw:float;
+  yaw: float;
+
   /// In radians with range (-pi,+pi) where 0 is upright, positive is tilted right, negative is tilted left.
-  roll:float;
+  roll: float;
 }
 
 /// A box with dimensions.
 /// Used for cars and balls with a box shapes.
 table BoxShape {
-  length:float;
-  width:float;
-  height:float;
+  length: float;
+  width: float;
+  height: float;
 }
 
 /// A sphere with diameter.
 /// Used for balls with a spherical shapes.
 table SphereShape {
-  diameter:float;
+  diameter: float;
 }
 
 /// A cylinder with diameter and height.
 /// Used for balls with a cylindrical shape like the puck.
 table CylinderShape {
-  diameter:float;
-  height:float;
+  diameter: float;
+  height: float;
 }
 
-union CollisionShape { BoxShape, SphereShape, CylinderShape }
+union CollisionShape {
+  BoxShape,
+  SphereShape,
+  CylinderShape
+}
 
 /// Information about a ball touch.
 table Touch {
   /// Seconds that had elapsed in the game when the touch occurred.
-  game_seconds:float;
+  game_seconds: float;
+
   /// The point of contact for the touch.
-  location:Vector3 (required);
+  location: Vector3 (required);
+
   /// The direction of the touch as a unit vector pointing from the point of contact towards the center of the ball.
-  normal:Vector3 (required);
+  normal: Vector3 (required);
+
   /// The index of the ball that was touched (in case there are multiple balls).
-  ball_index:uint;
+  ball_index: uint;
 }
 
 /// A collection of values shown on the scoreboard (and a few more).
 struct ScoreInfo {
   /// The accumulated score, roughly indicating how well a player performs.
-  score:uint;
+  score: uint;
+
   /// Number of goals scored.
-  goals:uint;
+  goals: uint;
+
   /// Number of own-goals scored.
-  own_goals:uint;
+  own_goals: uint;
+
   /// Number of goals assisted.
-  assists:uint;
+  assists: uint;
+
   /// Number of shots saved.
-  saves:uint;
+  saves: uint;
+
   /// Number of shots on opponent goal.
-  shots:uint;
+  shots: uint;
+
   /// Number of demolitions made.
-  demolitions:uint;
+  demolitions: uint;
 }
 
 /// The physical state of an object.
 struct Physics {
-  location:Vector3;
-  rotation:Rotator;
-  velocity:Vector3;
-  angular_velocity:Vector3;
+  location: Vector3;
+  rotation: Rotator;
+  velocity: Vector3;
+  angular_velocity: Vector3;
 }
 
 /// Possible states of a car in regards to ground contact and jump/dodging forces.
@@ -124,18 +147,22 @@ struct Physics {
 enum AirState: ubyte {
   /// All wheels are on the ground and the car is affected by wall-stickiness forces.
   OnGround,
+
   /// The car is currently affected by jumping forces of an initial jump.
   /// Lasts until the player lets go of jump button but at most for 0.2 seconds (240 ticks).
   /// The following AirState is typically InAir.
   Jumping,
+
   /// The car is currently affected by jumping forces of a secondary jump (just an impulse in practice).
   /// Lasts for 13 ticks.
   /// The following AirState is typically InAir.
   DoubleJumping,
+
   /// The car is currently affected by forces and torque of a dodges.
   /// This lasts for 79 ticks.
   /// The following AirState is typically InAir.
   Dodging,
+
   /// The car is free falling.
   InAir,
 }
@@ -143,43 +170,57 @@ enum AirState: ubyte {
 /// A collection of information about a player and their car.
 table PlayerInfo {
   /// The physical state of the player's car.
-  physics:Physics (required);
+  physics: Physics (required);
+
   /// The various scores of this player, e.g. those on the leaderboard.
-  score_info:ScoreInfo (required);
+  score_info: ScoreInfo (required);
+
   /// The hitbox of the player's car.
   /// Note that the hitbox is not centered at the cars location.
   /// See the hitbox offset.
-  hitbox:BoxShape (required);
+  hitbox: BoxShape (required);
+
   /// The center of the hitbox in local coordinates.
-  hitbox_offset:Vector3 (required);
+  hitbox_offset: Vector3 (required);
+
   /// Information about the latest touch with a ball.
   /// Is null if the player has yet to touch the ball.
-  latest_touch:Touch;
+  latest_touch: Touch;
+
   /// Whether the player's car is on the ground or in the air, and what jump/dodging forces currently affects the car.
-  air_state:AirState;
+  air_state: AirState;
+
   /// How long until the player cannot dodge/double jump anymore.
   /// The value is -1 while on ground or when airborne for too long after jumping.
   /// A dodge/double jump is possible for 1.25 seconds after the first jump plus
   /// up to an additional 0.2 seconds depending how long the jump button was pressed for the first jump.
-  dodge_timeout:float;
+  dodge_timeout: float;
+
   /// How long until the player is not demolished anymore.
   /// The value is -1 if while not demolished.
-  demolished_timeout:float;
+  demolished_timeout: float;
+
   /// Whether the player's car is moving at supersonic speed and can demolish.
-  is_supersonic:bool;
+  is_supersonic: bool;
+
   /// Whether the player is a bot or a human.
-  is_bot:bool;
+  is_bot: bool;
+
   /// The name of the player as it appears in game, i.e. possibly appended with "(2)".
   /// The original name can be found in the match configuration.
-  name:string (required);
+  name: string (required);
+
   /// The team of the player.
-  team:uint;
+  team: uint;
+
   /// The current boost, from 0 to 100.
-  boost:float;
+  boost: float;
+
   /// The spawn id of the player.
   /// This value is mostly used internally to keep track of participants in the match.
   /// The spawn id can be used to find the corresponding PlayerConfiguration in the MatchConfiguration.
-  spawn_id:int;
+  spawn_id: int;
+
   /// Events from the latest tick involving this player. Possible values include:
   ///    Win, Loss, TimePlayed;
   ///    Shot, Assist, Center, Clear, PoolShot;
@@ -192,59 +233,74 @@ table PlayerInfo {
   ///    CarTouches, Demolition, Demolish;
   ///    LowFive, HighFive;
   /// Note that the list clears every tick.
-  accolades:[string] (required);
+  accolades: [string] (required);
+
   /// The last controller input from this player.
-  last_input:ControllerState (required);
+  last_input: ControllerState (required);
+
   /// True if the player has jumped. See dodge_timeout to know if a dodge/secondary jump is available.
-  has_jumped:bool;
+  has_jumped: bool;
+
   /// True if the player has doubled jumped.
-  has_double_jumped:bool;
+  has_double_jumped: bool;
+
   /// True if the player has dodged.
-  has_dodged:bool;
+  has_dodged: bool;
+
   /// The time in seconds since the last dodge was initiated.
   /// Resets to 0 when the player lands on the ground.
-  dodge_elapsed:float;
+  dodge_elapsed: float;
+
   /// The unit direction of the latest dodge.
   /// The value will be (0,0) if it was a stall.
-  dodge_dir:Vector2 (required);
+  dodge_dir: Vector2 (required);
 }
 
 /// Information about a ball.
 table BallInfo {
   /// The physical state of the ball.
-  physics:Physics (required);
+  physics: Physics (required);
+
   /// The collision shape of the ball.
-  shape:CollisionShape (required);
+  shape: CollisionShape (required);
 }
 
 /// The state of a boost pad.
 /// Note, static properties of boost pads, such as their location and size, are found in the field info.
 struct BoostPadState {
   /// True if the boost can be picked up right now.
-  is_active:bool;
+  is_active: bool;
+
   /// The number of seconds since the boost has been picked up, or 0 if the boost is active.
   /// A big boost pad becomes active again after 10 seconds.
   /// A small boost pad becomes active again after 4 seconds.
-  timer:float;
+  timer: float;
 }
 
 /// Possible phases of the match.
 enum MatchPhase: ubyte {
   /// Match has not been created yet.
   Inactive,
+
   /// 3-2-1 countdown of a kickoff.
   Countdown,
+
   /// After kickoff countdown, but before ball has been hit.
   /// The match automatically proceeds to Active after 2 seconds.
   Kickoff,
+
   /// The ball is in play and time is ticking.
   Active,
+
   /// A goal was just scored. Waiting for replay to start.
   GoalScored,
+
   /// Goal replay is being shown.
   Replay,
+
   /// The match is paused.
   Paused,
+
   /// The match has ended.
   Ended,
 }
@@ -253,37 +309,46 @@ enum MatchPhase: ubyte {
 table MatchInfo {
   /// How many seconds have elapsed since the first game packet of the match.
   /// This value ticks up even during kickoffs, replays, pause, etc.
-  seconds_elapsed:float;
+  seconds_elapsed: float;
+
   /// Seconds remaining of the match.
   /// This value ticks up instead of down during overtime or when the game duration mutator is set to Unlimited.
   /// I.e. it matches the in-game timer at the top.
-  game_time_remaining:float;
+  game_time_remaining: float;
+
   /// True if the game is in overtime.
-  is_overtime:bool;
+  is_overtime: bool;
+
   /// True if the game duration is set to Unlimited.
-  is_unlimited_time:bool;
+  is_unlimited_time: bool;
+
   /// The current phase of the match, i.e. kickoff, replay, active, etc.
-  match_phase:MatchPhase;
+  match_phase: MatchPhase;
+
   /// The current strength of gravity. Default is -650.
-  world_gravity_z:float;
+  world_gravity_z: float;
+
   /// Game speed multiplier. Regular game speed is 1.0.
-  game_speed:float;
+  game_speed: float;
+
   /// Index of the player who was most recently a spectated by the host.
-  last_spectated:uint;
+  last_spectated: uint;
+
   /// Tracks the number of physics frames the game has computed.
   /// May increase by more than one across consecutive packets.
   /// Data type will roll over after 414 days at 120Hz.
-  frame_num:uint;
+  frame_num: uint;
 }
 
 /// Information about teams. Currently only the number of goals scored.
 struct TeamInfo {
   /// The index of the team. Blue is 0, orange is 1.
-  team_index:uint;
+  team_index: uint;
+
   /// Number of goals scored.
   /// Note, this value may be different than the sum of the goals scored by the current players on the team as player may join/leave the game or switch teams.
   /// This value is what is shown on the heads-up display.
-  score:uint;
+  score: uint;
 }
 
 /// A packet of data from the game.
@@ -291,17 +356,21 @@ struct TeamInfo {
 /// Static data is found in the FieldInfo.
 table GamePacket {
   /// The current state of all players and their cars.
-  players:[PlayerInfo] (required);
+  players: [PlayerInfo] (required);
+
   /// The current state of all boost pads.
   /// The static information about boost pads are found in the FieldInfo.
   /// The boost pads are ordered by y-coordinate and then x-coordinate.
-  boost_pads:[BoostPadState] (required);
+  boost_pads: [BoostPadState] (required);
+
   /// The current state of all balls.
-  balls:[BallInfo] (required);
+  balls: [BallInfo] (required);
+
   /// The current state of the match such as timers and gravity.
-  match_info:MatchInfo (required);
+  match_info: MatchInfo (required);
+
   /// The current state of teams, i.e. the team scores.
-  teams:[TeamInfo] (required);
+  teams: [TeamInfo] (required);
 }
 
 // This section deals with arena information, e.g. where the goals and boost locations are.
@@ -310,25 +379,30 @@ table GamePacket {
 /// More values can be found on https://wiki.rlbot.org/botmaking/useful-game-values/
 table GoalInfo {
   /// The index of the team that this goal belongs to.
-  team_num:int;
+  team_num: int;
+
   /// The center location of the goal.
-  location:Vector3 (required);
+  location: Vector3 (required);
+
   /// The unit direction point away from the opening of the goal.
-  direction:Vector3 (required);
+  direction: Vector3 (required);
+
   /// The width of the goal. 1785 uu wide on a standard field.
-  width:float;
+  width: float;
+
   /// The height of the goal. 643 uu tall on a standard field.
-  height:float;
+  height: float;
 }
 
 /// Static information about a boost pad such as location and size.
 table BoostPad {
   /// The location of the boost pad.
-  location:Vector3 (required);
+  location: Vector3 (required);
+
   /// Whether the boost pad provides a full tank of boost.
   /// A big boost pad provides 100 boost and respawns in 10 seconds.
   /// A small boost pad provides 12 boost and respawns in 4 seconds.
-  is_full_boost:bool;
+  is_full_boost: bool;
 }
 
 /// Static information about the field.
@@ -338,18 +412,20 @@ table FieldInfo {
   /// Static information about boost pads on the field.
   /// The dynamic information is found in the GamePacket
   /// The boost pads are ordered by y-coordinate and then x-coordinate.
-  boost_pads:[BoostPad] (required);
+  boost_pads: [BoostPad] (required);
+
   /// Information about the goals on the field.
-  goals:[GoalInfo] (required);
+  goals: [GoalInfo] (required);
 }
 
 /// An entry in the ball prediction describing where a ball will be at some future time.
 struct PredictionSlice {
   /// The moment in game time that this prediction corresponds to.
   /// This corresponds to 'seconds_elapsed' in the MatchInfo.
-  game_seconds:float;
+  game_seconds: float;
+
   /// The predicted location and motion of the object.
-  physics:Physics;
+  physics: Physics;
 }
 
 /// A prediction of a ball's trajectory, assuming no collision with cars.
@@ -357,5 +433,5 @@ table BallPrediction {
   /// A list of predicted states of the ball at specific times in the future, assuming no collision with cars.
   /// The beginning of the list is now, and the end is 6 seconds into the future.
   /// The prediction is made at 120 Hz, resulting in 720 entries.
-  slices:[PredictionSlice] (required);
+  slices: [PredictionSlice] (required);
 }
