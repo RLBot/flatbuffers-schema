@@ -6,12 +6,24 @@ include "rendering.fbs";
 
 namespace rlbot.flat;
 
-table DisconnectSignal {}
+root_type RLBotPacket;
 
-table InitComplete {}
+table RLBotPacket {
+  message: RLBotMessage;
+}
 
-/// Packets sent from core to interfaces
-union CorePacket {
+union RLBotMessage {
+  CorePacket,
+  InterfacePacket,
+}
+
+/// Packet containing a CoreMessage
+table CorePacket {
+  message: CoreMessage;
+}
+
+/// Messages sent from core to interfaces
+union CoreMessage {
   /// Interface should exit when this packet is received.
   DisconnectSignal,
 
@@ -35,8 +47,13 @@ union CorePacket {
   ControllableTeamInfo,
 }
 
-/// Packets sent from interfaces to core
-union InterfacePacket {
+/// Packet containing a InterfaceMessage
+table InterfacePacket{
+  message: InterfaceMessage;
+}
+
+/// Messages sent from interfaces to core
+union InterfaceMessage {
   /// Sent to core to indicate that you want to disconnect.
   DisconnectSignal,
 
@@ -80,6 +97,14 @@ union InterfacePacket {
   /// message.
   InitComplete,
 }
+
+/// Sent to core to indicate that you want to disconnect.
+/// Sent from core to indicate that you should exit.
+table DisconnectSignal {}
+
+/// Indicates that the session has finished all initialization and is ready to start receiving
+/// game messages without delay.
+table InitComplete {}
 
 /// A client message to start a match using a path to a match config file.
 table StartCommand {
