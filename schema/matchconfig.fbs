@@ -96,10 +96,10 @@ table PlayerConfiguration {
   /// The loadout of the player.
   loadout: PlayerLoadout;
 
-  /// The spawn id of the player.
+  /// The id of the player.
   /// The value will be set by RLBot.
   /// This value is mostly used internally to keep track of participants in the match.
-  /// The spawn id can be used to find the corresponding player in the GamePacket.
+  /// The id can be used to find the corresponding player in the GamePacket.
   player_id: int;
 
   /// A unique user-defined string that is used to connect clients to the right players/scripts.
@@ -530,9 +530,9 @@ table ScriptConfiguration {
   /// A console command that will start up the script.
   run_command: string (required);
 
-  /// The spawn id of the script.
+  /// The id of the script.
   /// This value is mostly used internally to keep track of participants in the match.
-  player_id: int;
+  script_id: int;
 
   /// A unique user-defined string that is used to connect clients to the right players/scripts.
   /// If a bot/script has a run command, RLBot will pass this agent id to the process using an environment variable, RLBOT_AGENT_ID.
