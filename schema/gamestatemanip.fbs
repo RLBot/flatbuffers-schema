@@ -4,21 +4,21 @@ namespace rlbot.flat;
 
 /// A floating point value located in a separate struct allowing for optional floats elsewhere.
 struct Float {
-  val:float;
+  val: float;
 }
 
 /// A boolean value located in a separate struct allowing for optional floats elsewhere.
 struct Bool {
-  val:bool;
+  val: bool;
 }
 
 /// A 3D vector where x, y, and z can be null.
 /// Used for game state setting to define which part of a vector should change.
 /// If a component is null, then the component will keep its current value.
 table Vector3Partial {
-  x:Float;
-  y:Float;
-  z:Float;
+  x: Float;
+  y: Float;
+  z: Float;
 }
 
 /// A rotator describing a rotation with nullable pith, yaw, and roll.
@@ -27,34 +27,36 @@ table Vector3Partial {
 /// Values are in radians.
 table RotatorPartial {
   /// In radians with range (-pi/2,+pi/2) where 0 is flat, +pi/2 is nose straight up, -pi/2 is nose straight down.
-  pitch:Float;
-  /// In radians with range [-pi,+pi) where 0 is towards positive x, rotating clockwise as increased (when seen from above). 
-  yaw:Float;
+  pitch: Float;
+
+  /// In radians with range [-pi,+pi) where 0 is towards positive x, rotating clockwise as increased (when seen from above).
+  yaw: Float;
+
   /// In radians with range (-pi,+pi) where 0 is upright, positive is tilted right, negative is tilted left.
-  roll:Float;
+  roll: Float;
 }
 
 /// A physical state of an object, with nullable components.
 /// Used for game state setting to define which part of a physics body should change.
 /// If a component is null, then the component will keep its current value.
 table DesiredPhysics {
-  location:Vector3Partial;
-  rotation:RotatorPartial;
-  velocity:Vector3Partial;
-  angular_velocity:Vector3Partial;
+  location: Vector3Partial;
+  rotation: RotatorPartial;
+  velocity: Vector3Partial;
+  angular_velocity: Vector3Partial;
 }
 
 /// A ball state with nullable components.
 /// Used for game state setting to define which part of a ball's state should change.
 table DesiredBallState {
-  physics:DesiredPhysics (required);
+  physics: DesiredPhysics (required);
 }
 
 /// A car state with nullable components.
 /// Used for game state setting to define which part of a car's state should change.
 table DesiredCarState {
-  physics:DesiredPhysics;
-  boost_amount:Float;
+  physics: DesiredPhysics;
+  boost_amount: Float;
 }
 
 /// Match info with nullable components.
@@ -62,15 +64,16 @@ table DesiredCarState {
 table DesiredMatchInfo {
   /// The strength of gravity. Default is usually -650 depending on mutators.
   /// To set gravity to 0, use 0.0000001 instead, as 0 will set gravity back to the default.
-  world_gravity_z:Float;
+  world_gravity_z: Float;
+
   /// The game speed. Default is 1.0.
-  game_speed:Float;
+  game_speed: Float;
 }
 
 /// A console command which will be executed inside Rocket League.
 /// See https://wiki.rlbot.org/framework/console-commands/ for a list of known commands.
 table ConsoleCommand {
-  command:string (required);
+  command: string (required);
 }
 
 /// A game state with nullable subcomponents.
@@ -78,14 +81,15 @@ table ConsoleCommand {
 /// Values not set will not be updated.
 table DesiredGameState {
   /// A list of desired ball states.
-  ball_states:[DesiredBallState] (required);
+  ball_states: [DesiredBallState] (required);
+
   /// A list of desired car states.
-  car_states:[DesiredCarState] (required);
+  car_states: [DesiredCarState] (required);
+
   /// The desired game info.
-  match_info:DesiredMatchInfo;
+  match_info: DesiredMatchInfo;
+
   /// A list of console commands to execute.
   /// See https://wiki.rlbot.org/framework/console-commands/ for a list of known commands.
-  console_commands:[ConsoleCommand] (required);
+  console_commands: [ConsoleCommand] (required);
 }
-
-root_type DesiredGameState;

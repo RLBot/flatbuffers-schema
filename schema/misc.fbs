@@ -6,15 +6,23 @@ include "rendering.fbs";
 
 namespace rlbot.flat;
 
+/// Sent to core to indicate that you want to disconnect.
+/// Sent from core to indicate that you should exit.
+table DisconnectSignal {}
+
+/// Indicates that the session has finished all initialization and is ready to start receiving
+/// game messages without delay.
+table InitComplete {}
+
 /// A client message to start a match using a path to a match config file.
 table StartCommand {
-  config_path:string (required);
+  config_path: string (required);
 }
 
 /// A client message to stop a match and optionally the RLBot server too.
 table StopCommand {
   // Whether RLBot should shutdown completely after stopping the match.
-  shutdown_server:bool;
+  shutdown_server: bool;
 }
 
 /// Sent by clients when connecting to RLBot to indicate what type of messages are desired.
@@ -22,14 +30,17 @@ table StopCommand {
 /// overlay, or any other utility that connects to the RLBot process.
 table ConnectionSettings {
   /// The ID of the bot/script that is associated with the incoming connection.
-  agent_id:string (required);
+  agent_id: string (required);
+
   /// If this is set, RLBot will send BallPrediction data back to the client when available.
-  wants_ball_predictions:bool;
+  wants_ball_predictions: bool;
+
   /// If this is set, RLBot will send MatchComms to the client when available.
-  wants_comms:bool;
+  wants_comms: bool;
+
   /// If this is set, RLBot will close the connection when a match is stopped or when a new
   /// match is started. The GUI and other match runners should likely not set this.
-  close_between_matches:bool;
+  close_between_matches: bool;
 }
 
 /// A client message to change the loadout of a car.
@@ -38,19 +49,21 @@ table ConnectionSettings {
 /// Bots can only set the loadout of their own car(s).
 table SetLoadout {
   /// The index of the car to change loadout off.
-  index:uint;
+  index: uint;
+
   /// The new loadout of the car.
-  loadout:PlayerLoadout (required);
+  loadout: PlayerLoadout (required);
 }
 
 /// Information about a car that the client can control.
 table ControllableInfo {
   /// The index of the bot.
-  index:uint;
+  index: uint;
+
   /// The spawn id of the bot.
   /// This value is mostly used internally to keep track of participants in the match.
   /// The spawn id can be used to find the corresponding PlayerConfiguration in the MatchConfiguration.
-  spawn_id:int;
+  spawn_id: int;
 }
 
 /// Server message with information about the cars that the client can control.
@@ -58,7 +71,8 @@ table ControllableInfo {
 /// There may be more than one car in case the bot is a hivemind.
 table ControllableTeamInfo {
   /// The assigned team for this client.
-  team:uint;
+  team: uint;
+
   /// The bots that RLBot will allow this client to control.
-  controllables:[ControllableInfo] (required);
+  controllables: [ControllableInfo] (required);
 }

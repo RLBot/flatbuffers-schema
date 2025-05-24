@@ -1,3 +1,5 @@
+include "gamedata.fbs";
+
 namespace rlbot.flat;
 
 /// Horizontal text alignment.
@@ -16,30 +18,32 @@ enum TextVAlign: ubyte {
 
 /// An RGBA color.
 struct Color {
-  r:ubyte;
-  g:ubyte;
-  b:ubyte;
-  a:ubyte;
+  r: ubyte;
+  g: ubyte;
+  b: ubyte;
+  a: ubyte;
 }
 
 /// A RenderAnchor attached to a ball.
 /// The local field allows for an offset in local coordinates taking the ball's orientation into account.
 table BallAnchor {
   /// The index of the ball.
-  index:uint;
+  index: uint;
+
   /// An offset in local coordinates.
   /// x is forwards, y is left, and z is up.
-  local:Vector3 (required);
+  local: Vector3 (required);
 }
 
 /// A RenderAnchor attached to a car.
 /// The local field allows for an offset in local coordinates taking the car's orientation into account.
 table CarAnchor {
   /// The index of the car.
-  index:uint;
+  index: uint;
+
   /// An offset in local coordinates.
   /// x is forwards, y is left, and z is up.
-  local:Vector3 (required);
+  local: Vector3 (required);
 }
 
 /// Anchors attached to objects.
@@ -55,99 +59,124 @@ union RelativeAnchor {
 table RenderAnchor {
   /// An offset in global coordinates.
   /// If the relative component is null, then this simply a point in 3D space.
-  world:Vector3 (required);
+  world: Vector3 (required);
+
   /// An optional offset given by the position of an object and includes a local offset that takes the object's orientation into account.
-  relative:RelativeAnchor;
+  relative: RelativeAnchor;
 }
 
 /// A RenderMessage for a line in 3D space between two RenderAnchors.
 table Line3D {
-  start:RenderAnchor (required);
-  end:RenderAnchor (required);
-  color:Color (required);
+  start: RenderAnchor (required);
+  end: RenderAnchor (required);
+  color: Color (required);
 }
 
 /// A RenderMessage for a line in 3D space going through a series of points.
 table PolyLine3D {
-  points:[Vector3] (required);
-  color:Color (required);
+  points: [Vector3] (required);
+  color: Color (required);
 }
 
 /// A RenderMessage for text in 2D space.
 /// Note that the position is given in screen-space coordinates.
 table String2D {
   /// The text to be displayed.
-  text:string (required);
+  text: string (required);
+
   /// Screen-space x coordinate such that x=0 is left edge and x=1 is right edge of window.
-  x:float;
+  x: float;
+
   /// Screen-space y coordinate such that y=0 is top edge and y=1 is bottom edge of window.
-  y:float;
+  y: float;
+
   /// Scale of the text.
   /// When scale is 1, the characters are 20 pixels tall and 10 pixels wide.
-  scale:float;
+  scale: float;
+
   /// The color of the text.
-  foreground:Color (required);
+  foreground: Color (required);
+
   /// The color of the background for the text.
-  background:Color (required);
+  background: Color (required);
+
   /// The horizontal alignment of the text.
-  h_align:TextHAlign;
+  h_align: TextHAlign;
+
   /// The vertical alignment of the text.
-  v_align:TextVAlign;
+  v_align: TextVAlign;
 }
 
 /// A RenderMessage for text in 3D space.
 table String3D {
   /// The text to be displayed.
-  text:string (required);
+  text: string (required);
+
   /// The position of the text.
-  anchor:RenderAnchor (required);
+  anchor: RenderAnchor (required);
+
   /// The scale of the text.
   /// When scale is 1, the characters are 20 pixels tall and 10 pixels wide.
-  scale:float;
+  scale: float;
+
   /// The color of the text.
-  foreground:Color (required);
+  foreground: Color (required);
+
   /// The color of the background for the text.
-  background:Color (required);
+  background: Color (required);
+
   /// The horizontal alignment of the text.
-  h_align:TextHAlign;
+  h_align: TextHAlign;
+
   /// The vertical alignment of the text.
-  v_align:TextVAlign;
+  v_align: TextVAlign;
 }
 
 /// A RenderMessage for a rectangle in 2D space.
 /// Note that the position and size is given in screen-space coordinates.
 table Rect2D {
   /// Screen-space x coordinate such that x=0 is left edge and x=1 is right edge of window.
-  x:float;
+  x: float;
+
   /// Screen-space y coordinate such that y=0 is top edge and y=1 is bottom edge of window.
-  y:float;
+  y: float;
+
   /// Screen-space size such that width=0.1 is 10% of window width.
-  width:float;
+  width: float;
+
   /// Screen-space size such that height=0.1 is 10% of window height.
-  height:float;
+  height: float;
+
   /// Color of the rectangle.
-  color:Color (required);
+  color: Color (required);
+
   /// The horizontal alignment of the rectangle.
-  h_align:TextHAlign;
+  h_align: TextHAlign;
+
   /// The vertical alignment of the rectangle.
-  v_align:TextVAlign;
+  v_align: TextVAlign;
 }
 
 /// A RenderMessage for a rectangle in 3D space.
 /// Note that the size is given in screen-space sizes.
 table Rect3D {
   /// The position of the rectangle.
-  anchor:RenderAnchor (required);
+  anchor: RenderAnchor (required);
+
   /// Screen-space size such that width=0.1 is 10% of window width.
-  width:float;
+  width: float;
+
   /// Screen-space size such that height=0.1 is 10% of window height.
-  height:float;
+  height: float;
+
   /// The color of the rectangle.
-  color:Color (required);
+  color: Color (required);
+
   /// The horizontal alignment of the anchor in the rectangle.
-  h_align:TextHAlign;
+  h_align: TextHAlign;
+
   /// The vertical alignment of the anchor in the rectangle.
-  v_align:TextVAlign;
+  v_align: TextVAlign;
 }
 
 /// The different types of RenderMessages.
@@ -162,7 +191,7 @@ union RenderType {
 
 /// A RenderMessage, describing a piece of debug rendering.
 table RenderMessage {
-  variety:RenderType (required);
+  variety: RenderType (required);
 }
 
 /// A group of RenderMessages that are drawn and cleared together.
@@ -171,15 +200,14 @@ table RenderMessage {
 /// A client can only clear its own RenderGroups.
 table RenderGroup {
   /// The content of the RenderGroup.
-  render_messages:[RenderMessage] (required);
-  /// The id of the RenderGroup.
-  id:int;
-}
+  render_messages: [RenderMessage] (required);
 
-root_type RenderGroup;
+  /// The id of the RenderGroup.
+  id: int;
+}
 
 /// A client message request removal of a RenderGroup.
 /// A client can only clear its own RenderGroups.
 table RemoveRenderGroup {
-  id:int;
+  id: int;
 }

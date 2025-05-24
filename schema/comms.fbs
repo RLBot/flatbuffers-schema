@@ -6,19 +6,21 @@ namespace rlbot.flat;
 table MatchComm {
   /// The index of the player that sent this message.
   /// For scripts, this value is the index in the match configuration instead.
-  index:uint;
+  index: uint;
+
   /// The team of the player that sent this message.
   /// For scripts, this value is 2.
-  team:uint;
+  team: uint;
+
   /// True if this message is team-only, false if everyone can see it
-  team_only:bool;
+  team_only: bool;
+
   /// The message that will be displayed on the screen in quick chat.
   /// This is intended for communication with humans.
   /// Use the content field for communication with bots and scripts.
-  display:string;
+  display: string;
+
   /// The contents of the message.
   /// Use the display field for messages in quick chat.
-  content:[ubyte] (required);
+  content: [ubyte] (required);
 }
-
-root_type MatchComm;
