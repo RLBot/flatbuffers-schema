@@ -2,13 +2,6 @@ include "misc.fbs";
 
 namespace rlbot.flat;
 
-/// Packet containing a InterfaceMessage
-table InterfacePacket {
-  message: InterfaceMessage;
-}
-
-root_type InterfacePacket;
-
 /// Messages sent from interfaces to core
 union InterfaceMessage {
   /// Sent to core to indicate that you want to disconnect.
@@ -54,3 +47,10 @@ union InterfaceMessage {
   /// message.
   InitComplete,
 }
+
+/// Packet containing a InterfaceMessage
+table InterfacePacket {
+  message: InterfaceMessage;
+}
+
+root_type InterfacePacket;

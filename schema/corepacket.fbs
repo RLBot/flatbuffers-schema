@@ -2,13 +2,6 @@ include "misc.fbs";
 
 namespace rlbot.flat;
 
-/// Packet containing a CoreMessage
-table CorePacket {
-  message: CoreMessage;
-}
-
-root_type CorePacket;
-
 /// Messages sent from core to interfaces
 union CoreMessage {
   /// Interface should exit when this packet is received.
@@ -33,3 +26,10 @@ union CoreMessage {
   /// Sent once core receives a valid ConnectionSettings from the interface
   ControllableTeamInfo,
 }
+
+/// Packet containing a CoreMessage
+table CorePacket {
+  message: CoreMessage;
+}
+
+root_type CorePacket;
