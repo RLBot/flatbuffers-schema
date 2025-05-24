@@ -50,7 +50,7 @@ union InterfaceMessage {
 
 /// Packet containing a InterfaceMessage
 table InterfacePacket {
-  message: InterfaceMessage;
+  message: InterfaceMessage (required);
 }
 
 root_type InterfacePacket;
