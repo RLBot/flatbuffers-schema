@@ -1,0 +1,4 @@
+include "corepacket.fbs";
+include "interfacepacket.fbs";
+
+namespace rlbot.flat;
