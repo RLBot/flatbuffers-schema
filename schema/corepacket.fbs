@@ -29,7 +29,7 @@ union CoreMessage {
 
 /// Packet containing a CoreMessage
 table CorePacket {
-  message: CoreMessage;
+  message: CoreMessage (required);
 }
 
 root_type CorePacket;
