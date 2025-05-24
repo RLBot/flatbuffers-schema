@@ -62,7 +62,7 @@ table ControllableInfo {
 
   /// The id of the bot/script.
   /// This value is mostly used internally to keep track of participants in the match.
-  /// The spawn id can be used to find the corresponding PlayerConfiguration in the MatchConfiguration.
+  /// The id can be used to find the corresponding PlayerConfiguration in the MatchConfiguration.
   id: int;
 }
 
