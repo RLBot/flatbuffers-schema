@@ -57,13 +57,13 @@ table SetLoadout {
 
 /// Information about a car that the client can control.
 table ControllableInfo {
-  /// The index of the bot.
+  /// The index of the bot/script.
   index: uint;
 
-  /// The spawn id of the bot.
+  /// The id of the bot/script.
   /// This value is mostly used internally to keep track of participants in the match.
-  /// The spawn id can be used to find the corresponding PlayerConfiguration in the MatchConfiguration.
-  spawn_id: int;
+  /// The id can be used to find the corresponding PlayerConfiguration in the MatchConfiguration.
+  identifier: int;
 }
 
 /// Server message with information about the cars that the client can control.
