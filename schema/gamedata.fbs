@@ -1,4 +1,4 @@
-include "matchconfig.fbs";
+include "vector.fbs";
 
 namespace rlbot.flat;
 
@@ -40,20 +40,6 @@ struct ControllerState {
 table PlayerInput {
   player_index: uint;
   controller_state: ControllerState (required);
-}
-
-/// A vector with an x and y component.
-struct Vector2 {
-  x: float;
-  y: float;
-}
-
-/// A vector with an x, y, z component.
-/// Note that Rocket League uses a left-handed coordinate system.
-struct Vector3 {
-  x: float;
-  y: float;
-  z: float;
 }
 
 /// Expresses the rotation state of an object in Euler angles. Values are in radians.

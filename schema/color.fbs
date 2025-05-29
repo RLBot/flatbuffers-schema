@@ -1,0 +1,9 @@
+namespace rlbot.flat;
+
+/// An RGBA color.
+struct Color {
+  r: ubyte;
+  g: ubyte;
+  b: ubyte;
+  a: ubyte;
+}

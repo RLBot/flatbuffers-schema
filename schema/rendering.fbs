@@ -1,4 +1,5 @@
-include "gamedata.fbs";
+include "color.fbs";
+include "vector.fbs";
 
 namespace rlbot.flat;
 
@@ -14,14 +15,6 @@ enum TextVAlign: ubyte {
   Top,
   Center,
   Bottom,
-}
-
-/// An RGBA color.
-struct Color {
-  r: ubyte;
-  g: ubyte;
-  b: ubyte;
-  a: ubyte;
 }
 
 /// A RenderAnchor attached to a ball.
