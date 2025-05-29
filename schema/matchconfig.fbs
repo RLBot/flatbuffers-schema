@@ -1,4 +1,4 @@
-include "rendering.fbs";
+include "color.fbs";
 
 namespace rlbot.flat;
 
