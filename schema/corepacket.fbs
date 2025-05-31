@@ -27,7 +27,7 @@ union CoreMessage {
   ControllableTeamInfo,
   
   /// An agent had its ability to render changed
-  RenderStatus,
+  RenderingStatus,
 }
 
 /// Packet containing a CoreMessage

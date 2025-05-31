@@ -50,7 +50,7 @@ union InterfaceMessage {
   /// Requests for a specificed agent to have its ability to render changed.
   /// This changed will then be broadcasted to all current connections.
   /// Does nothing if rendering has been completely disabled.
-  RenderStatus,
+  RenderingStatus,
 }
 
 /// Packet containing a InterfaceMessage
