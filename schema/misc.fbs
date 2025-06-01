@@ -76,3 +76,18 @@ table ControllableTeamInfo {
   /// The bots that RLBot will allow this client to control.
   controllables: [ControllableInfo] (required);
 }
+
+/// As an interface message, this requests for a specificed agent to have its ability to render changed.
+/// This changed will then be broadcasted to all current connections as a core message.
+/// Does nothing if rendering has been completely disabled.
+table RenderingStatus {
+  /// If `is_bot`, this is the index of the bot in `GamePacket` that has been updated.
+  /// Otherwise, this is the index of the script in `MatchConfiguration` that has been updated.
+  index: uint;
+
+  /// Identifies if the index is that of a bot or a script
+  is_bot: bool;
+
+  /// If rendering is now enabled or disabled for the specific agent
+  status: bool;
+}

@@ -25,6 +25,9 @@ union CoreMessage {
 
   /// Sent once core receives a valid ConnectionSettings from the interface
   ControllableTeamInfo,
+  
+  /// An agent had its ability to render changed
+  RenderingStatus,
 }
 
 /// Packet containing a CoreMessage
