@@ -1,4 +1,4 @@
-include "rendering.fbs";
+include "color.fbs";
 
 namespace rlbot.flat;
 
@@ -496,6 +496,17 @@ table MutatorSettings {
   input_restriction: InputRestrictionMutator;
 }
 
+enum DebugRendering: ubyte {
+  /// Renders are ignored unless explicitly enabled per-agent
+  OffByDefault,
+  
+  /// Rendering is enabled for everyone by default
+  OnByDefault,
+  
+  /// Ignore all render attempts at all times
+  AlwaysOff
+}
+
 /// Possible behaviours when a match is started while another match is in progress.
 enum ExistingMatchBehavior: ubyte {
   /// Always restart the match, even if config is identical.
@@ -532,9 +543,9 @@ table ScriptConfiguration {
   /// A console command that will start up the script.
   run_command: string (required);
 
-  /// The spawn id of the script.
+  /// The id of the script.
   /// This value is mostly used internally to keep track of participants in the match.
-  spawn_id: int;
+  script_id: int;
 
   /// A unique user-defined string that is used to connect clients to the right players/scripts.
   /// If a bot/script has a run command, RLBot will pass this agent id to the process using an environment variable, RLBOT_AGENT_ID.
@@ -592,7 +603,7 @@ table MatchConfiguration {
   existing_match_behavior: ExistingMatchBehavior;
 
   /// Whether debug rendering is displayed.
-  enable_rendering: bool;
+  enable_rendering: DebugRendering;
 
   /// Whether clients are allowed to manipulate the game state, e.g. teleporting cars and ball.
   enable_state_setting: bool = true;
