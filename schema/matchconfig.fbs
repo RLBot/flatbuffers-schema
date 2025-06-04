@@ -2,11 +2,47 @@ include "rendering.fbs";
 
 namespace rlbot.flat;
 
-/// A bot controlled by the RLBot framework.
-table CustomBot {}
-
 /// A normal human player.
 table Human {}
+
+/// A bot controlled by the RLBot framework.
+table CustomBot {
+  /// Requested bot name. When match start, RLBot will ensure each bot has a unique name; bots with
+  /// duplicate names will be renamed with a suffix like `(2)`
+  name: string (required);
+
+  /// The root directory of the bot and the working directory for the run command.
+  root_dir: string (required);
+
+  /// The console command that starts this bot.
+  run_command: string (required);
+
+  /// The loadout of the player.
+  loadout: PlayerLoadout;
+
+  /// A unique user-defined string that is used to connect clients to the right players/scripts.
+  /// If a bot/script has a run command, RLBot will pass this agent id to the process using an environment variable, RLBOT_AGENT_ID.
+  /// Upon connecting the process announces that it is responsible for this agent id and RLBot will pair the two.
+  /// The recommended format for agent ids is "developer_name/bot_name".
+  agent_id: string (required);
+
+  /// Whether this player is part of a hivemind bot where all players/cars are controlled by the same process.
+  /// Players in the hivemind must have the same name, team, run command, and agent id.
+  hivemind: bool;
+}
+
+/// A Psyonix bot, e.g. All Star bot.
+table PsyonixBot {
+  /// Requested bot name. When match start, RLBot will ensure each bot has a unique name; bots with
+  /// duplicate names will be renamed with a suffix like `(2)`. For psyonix bots, a blank name will
+  /// be replaced with one of the official names.
+  name: string (required);
+
+  /// The loadout of the player.
+  loadout: PlayerLoadout;
+
+  bot_skill: PsyonixSkill;
+}
 
 /// Various skill levels of Psyonix bots.
 enum PsyonixSkill: ubyte {
@@ -16,21 +52,28 @@ enum PsyonixSkill: ubyte {
   AllStar
 }
 
-/// A Psyonix bot, e.g. All Star bot.
-table Psyonix {
-  bot_skill: PsyonixSkill;
-}
-
-/// A player that Rocket League treats as human, e.g. has a dedicated camera and can do training mode,
-/// but is actually controlled by a bot.
-table PartyMember {}
-
 /// Possible player types.
 union PlayerClass {
-  CustomBot,
   Human,
-  Psyonix,
-  PartyMember
+  CustomBot,
+  PsyonixBot,
+}
+
+/// A PlayerConfiguration defines a player of a match.
+table PlayerConfiguration {
+  /// The type of the player, i.e. human, Psyonix bot, or a custom bot.
+  // Cannot be named 'class' because that breaks Java.
+  // Cannot be named 'playerClass' because that breaks C#.
+  variety: PlayerClass (required);
+
+  /// The team of the player. Blue is 0, orange is 1.
+  team: uint;
+
+  /// The spawn id of the player.
+  /// The value will be set by RLBot.
+  /// This value is mostly used internally to keep track of participants in the match.
+  /// The spawn id can be used to find the corresponding player in the GamePacket.
+  spawn_id: int;
 }
 
 /// Defines the car type, color, and other aspects of the player's appearance.
@@ -70,47 +113,6 @@ table LoadoutPaint {
   hat_paint_id: uint;
   trails_paint_id: uint;
   goal_explosion_paint_id: uint;
-}
-
-/// A PlayerConfiguration defines a player of a match.
-table PlayerConfiguration {
-  /// The type of the player, i.e. human, Psyonix bot, or a custom bot.
-  // Cannot be named 'class' because that breaks Java.
-  // Cannot be named 'playerClass' because that breaks C#.
-  variety: PlayerClass (required);
-
-  /// The name of the player.
-  /// When match start, RLBot will ensure each bot has a unique name.
-  /// In other words, the MatchConfiguration sent upon match start may contain a "Nexto (2)" if there are two Nextos in the match.
-  name: string (required);
-
-  /// The team of the player. Blue is 0, orange is 1.
-  team: uint;
-
-  /// The root directory of the bot and the working directory for the run command.
-  root_dir: string (required);
-
-  /// The console command that starts this bot.
-  run_command: string (required);
-
-  /// The loadout of the player.
-  loadout: PlayerLoadout;
-
-  /// The spawn id of the player.
-  /// The value will be set by RLBot.
-  /// This value is mostly used internally to keep track of participants in the match.
-  /// The spawn id can be used to find the corresponding player in the GamePacket.
-  spawn_id: int;
-
-  /// A unique user-defined string that is used to connect clients to the right players/scripts.
-  /// If a bot/script has a run command, RLBot will pass this agent id to the process using an environment variable, RLBOT_AGENT_ID.
-  /// Upon connecting the process announces that it is responsible for this agent id and RLBot will pair the two.
-  /// The recommended format for agent ids is "developer_name/bot_name".
-  agent_id: string (required);
-
-  /// Whether this player is part of a hivemind bot where all players/cars are controlled by the same process.
-  /// Players in the hivemind must have the same name, team, run command, and agent id.
-  hivemind: bool;
 }
 
 /// Various game modes.
