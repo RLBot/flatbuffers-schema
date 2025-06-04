@@ -69,11 +69,10 @@ table PlayerConfiguration {
   /// The team of the player. Blue is 0, orange is 1.
   team: uint;
 
-  /// The spawn id of the player.
-  /// The value will be set by RLBot.
+  /// The value will be set by RLBot and is always overriden.
   /// This value is mostly used internally to keep track of participants in the match.
-  /// The spawn id can be used to find the corresponding player in the GamePacket.
-  spawn_id: int;
+  /// The player id can be used to find the corresponding player in the GamePacket.
+  player_id: int;
 }
 
 /// Defines the car type, color, and other aspects of the player's appearance.
@@ -499,10 +498,10 @@ table MutatorSettings {
 enum DebugRendering: ubyte {
   /// Renders are ignored unless explicitly enabled per-agent
   OffByDefault,
-  
+
   /// Rendering is enabled for everyone by default
   OnByDefault,
-  
+
   /// Ignore all render attempts at all times
   AlwaysOff
 }
