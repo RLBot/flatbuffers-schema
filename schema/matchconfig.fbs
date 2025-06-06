@@ -31,6 +31,14 @@ table CustomBot {
   hivemind: bool;
 }
 
+/// Various skill levels of Psyonix bots.
+enum PsyonixSkill: ubyte {
+  Beginner,
+  Rookie,
+  Pro,
+  AllStar
+}
+
 /// A Psyonix bot, e.g. All Star bot.
 table PsyonixBot {
   /// Requested bot name. When match start, RLBot will ensure each bot has a unique name; bots with
@@ -42,14 +50,6 @@ table PsyonixBot {
   loadout: PlayerLoadout;
 
   bot_skill: PsyonixSkill;
-}
-
-/// Various skill levels of Psyonix bots.
-enum PsyonixSkill: ubyte {
-  Beginner,
-  Rookie,
-  Pro,
-  AllStar
 }
 
 /// Possible player types.
