@@ -1,5 +1,3 @@
-include "vector.fbs";
-
 namespace rlbot.flat;
 
 /// A vector with an x and y component.
