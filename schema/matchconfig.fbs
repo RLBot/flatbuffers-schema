@@ -116,10 +116,10 @@ table LoadoutPaint {
 
 /// Various game modes.
 enum GameMode: ubyte {
-  Soccer,
+  Soccar,
   Hoops,
   Dropshot,
-  Hockey,
+  Snowday,
   Rumble,
   Heatseeker,
   Gridiron,
