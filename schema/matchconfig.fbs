@@ -205,7 +205,9 @@ enum BallTypeMutator: ubyte {
   Egg,
   PlayerSeeking,
   Dropshot,
-  ScoreAbsorb
+  ScoreAbsorb,
+  Shoe,
+  PizzaPuck
 }
 
 /// Ball weight mutator options.
@@ -216,7 +218,8 @@ enum BallWeightMutator: ubyte {
   SuperLight,
   CurveBall,
   BeachBallCurve,
-  MagnusFutBall
+  MagnusFutBall,
+  MagnusFutballLess
 }
 
 /// Ball size mutator options.
@@ -269,6 +272,8 @@ enum RumbleMutator: ubyte {
   BatmanRumble,
   GrapplingOnly,
   HaymakerOnly,
+  SpikeRushForce,
+  RPS,
 }
 
 /// Boost strength mutator options.
@@ -297,7 +302,9 @@ enum DemolishMutator: ubyte {
   OnContact,
   OnContactFF,
   OnBallContact,
-  OnBallContactFF
+  OnBallContactFF,
+  OnBallContactSilent,
+  OnBallContactFFSilent
 }
 
 /// Respawn time mutator options.
@@ -398,6 +405,11 @@ enum InputRestrictionMutator: ubyte {
   Backwards
 }
 
+enum ScoringRule: ubyte {
+  Default,
+  DisableGoalScoring
+}
+
 /// All mutators options.
 table MutatorSettings {
   /// Duration of the match.
@@ -493,6 +505,9 @@ table MutatorSettings {
 
   /// Player input restriction mutator.
   input_restriction: InputRestrictionMutator;
+
+  /// Additional rules that apply to scoring goals
+  scoring_rule: ScoringRule;
 }
 
 enum DebugRendering: ubyte {
