@@ -405,9 +405,9 @@ enum InputRestrictionMutator: ubyte {
   Backwards
 }
 
-enum ScoringRule: ubyte {
+enum ScoringRuleMutator: ubyte {
   Default,
-  DisableGoalScoring
+  Disabled
 }
 
 /// All mutators options.
@@ -506,7 +506,7 @@ table MutatorSettings {
   /// Player input restriction mutator.
   input_restriction: InputRestrictionMutator;
 
-  /// Additional rules that apply to scoring goals
+  /// Additional rules about scoring (ball-goal interaction).
   scoring_rule: ScoringRule;
 }
 
