@@ -7,11 +7,6 @@ struct Float {
   val: float;
 }
 
-/// A boolean value located in a separate struct allowing for optional floats elsewhere.
-struct Bool {
-  val: bool;
-}
-
 /// A 3D vector where x, y, and z can be null.
 /// Used for game state setting to define which part of a vector should change.
 /// If a component is null, then the component will keep its current value.
