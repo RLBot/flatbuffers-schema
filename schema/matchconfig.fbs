@@ -507,7 +507,7 @@ table MutatorSettings {
   input_restriction: InputRestrictionMutator;
 
   /// Additional rules about scoring (ball-goal interaction).
-  scoring_rule: ScoringRule;
+  scoring_rule: ScoringRuleMutator;
 }
 
 enum DebugRendering: ubyte {
