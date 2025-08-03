@@ -20,7 +20,7 @@ union InterfaceMessage {
   /// `enable_state_setting` must be true in the MatchConfiguration.
   DesiredGameState,
 
-  /// Sent by agents to render lines & text in the game.
+  /// Sent by agents to render lines and text in the game.
   RenderGroup,
 
   /// Sent by agents to remove a render group.
