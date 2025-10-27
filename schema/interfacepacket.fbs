@@ -51,6 +51,12 @@ union InterfaceMessage {
   /// This changed will then be broadcasted to all current connections.
   /// Does nothing if rendering has been completely disabled.
   RenderingStatus,
+
+  /// Requests for server to send a PingResponse asap for measuring latency
+  PingRequest,
+
+  /// Response to PingRequest for measuring latency
+  PingResponse,
 }
 
 /// Packet containing a InterfaceMessage

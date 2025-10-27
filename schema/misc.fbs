@@ -91,3 +91,9 @@ table RenderingStatus {
   /// If rendering is now enabled or disabled for the specific agent
   status: bool;
 }
+
+/// Ping request message
+table PingRequest {}
+
+/// Ping response message
+table PingResponse {}

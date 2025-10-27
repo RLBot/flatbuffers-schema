@@ -28,6 +28,12 @@ union CoreMessage {
   
   /// An agent had its ability to render changed
   RenderingStatus,
+
+  /// Requests for client to send a PingResponse asap for measuring latency
+  PingRequest,
+
+  /// Response to PingRequest for measuring latency
+  PingResponse,
 }
 
 /// Packet containing a CoreMessage
