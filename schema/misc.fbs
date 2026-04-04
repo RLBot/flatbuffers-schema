@@ -93,7 +93,11 @@ table RenderingStatus {
 }
 
 /// Ping request message
-table PingRequest {}
+table PingRequest {
+  cookie: ulong;
+}
 
 /// Ping response message
-table PingResponse {}
+table PingResponse {
+  cookie: ulong;
+}
