@@ -102,7 +102,7 @@ table PingResponse {
   cookie: ulong;
 }
 
-/// Enables or disables the in-game performance monitor.
-table PerformanceMonitor {
-  show: bool;
+/// Controls when the in-game performance monitor will display.
+table UpdatePerformanceMonitor {
+  show: PerformanceMonitor;
 }

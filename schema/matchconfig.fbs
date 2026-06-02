@@ -568,6 +568,13 @@ table ScriptConfiguration {
   agent_id: string (required);
 }
 
+/// Controls when the in-game performance monitor is shown.
+enum PerformanceMonitor: ubyte {
+  ShowWhenSuboptimal,
+  AlwaysShow,
+  NeverShow,
+}
+
 /// Definition of a match.
 /// Can be sent to RLBot to request the start of a match.
 table MatchConfiguration {
@@ -628,4 +635,7 @@ table MatchConfiguration {
   /// If set to true, a free play match is launched instead of an exhibition match.
   /// This allows the players to use training keybinds, Bakkesmod plugins, and other features that are only allowed in free play.
   freeplay: bool;
+
+  /// Controls when the in-game performance monitor will display.
+  performance_monitor: PerformanceMonitor;
 }
