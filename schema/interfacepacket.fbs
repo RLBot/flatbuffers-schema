@@ -46,7 +46,7 @@ union InterfaceMessage {
   /// game messages without delay. The match will not start until all sessions have sent this
   /// message.
   InitComplete,
-  
+
   /// Requests for a specificed agent to have its ability to render changed.
   /// This changed will then be broadcasted to all current connections.
   /// Does nothing if rendering has been completely disabled.
@@ -57,6 +57,9 @@ union InterfaceMessage {
 
   /// Response to PingRequest for measuring latency
   PingResponse,
+
+  /// Sent by sessions to control when the in-game performance monitor will display
+  UpdatePerformanceMonitor,
 }
 
 /// Packet containing a InterfaceMessage

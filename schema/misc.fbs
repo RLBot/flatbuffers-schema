@@ -101,3 +101,8 @@ table PingRequest {
 table PingResponse {
   cookie: ulong;
 }
+
+/// Controls when the in-game performance monitor will display.
+table UpdatePerformanceMonitor {
+  show: PerformanceMonitor;
+}
