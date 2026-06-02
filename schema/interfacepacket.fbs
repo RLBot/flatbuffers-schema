@@ -57,6 +57,9 @@ union InterfaceMessage {
 
   /// Response to PingRequest for measuring latency
   PingResponse,
+
+  /// Sent by sessions to enable or disable the in-game performance monitor
+  PerformanceMonitor,
 }
 
 /// Packet containing a InterfaceMessage
