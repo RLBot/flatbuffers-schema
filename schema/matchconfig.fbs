@@ -150,7 +150,8 @@ enum MaxScoreMutator: ubyte {
   SeventyGoals,
   EightyGoals,
   NinetyGoals,
-  HundredGoals
+  HundredGoals,
+  OneHundredFiftyOneGoals,
 }
 
 /// Multi ball mutator options.
@@ -207,7 +208,9 @@ enum BallTypeMutator: ubyte {
   Dropshot,
   ScoreAbsorb,
   Shoe,
-  PizzaPuck
+  PizzaPuck,
+  Strike,
+  SpookyBalloon
 }
 
 /// Ball weight mutator options.
@@ -219,7 +222,8 @@ enum BallWeightMutator: ubyte {
   CurveBall,
   BeachBallCurve,
   MagnusFutBall,
-  MagnusFutballLess
+  MagnusFutballLess,
+  Balloon
 }
 
 /// Ball size mutator options.
@@ -318,7 +322,21 @@ enum RespawnTimeMutator: ubyte {
 /// Max time mutator options.
 enum MaxTimeMutator: ubyte {
   Unlimited,
-  ElevenMinutes
+  OneMinute,
+  TwoMinutes,
+  ThreeMinutes,
+  FourMinutes,
+  FiveMinutes,
+  SixMinutes,
+  SevenMinutes,
+  EightMinutes,
+  NineMinutes,
+  TenMinutes,
+  ElevenMinutes,
+  TwelveMinutes,
+  ThirteenMinutes,
+  FourteenMinutes,
+  FifteenMinutes
 }
 
 /// Game event mutator options.
@@ -408,6 +426,37 @@ enum InputRestrictionMutator: ubyte {
 enum ScoringRuleMutator: ubyte {
   Default,
   Disabled
+}
+
+enum TriTipModeMutator: ubyte {
+  Off,
+  Tritip
+}
+
+enum LockedDamagePhaseMutator: ubyte {
+  Default,
+  High
+}
+
+enum SpawnDemoballMutator: ubyte {
+  Off,
+  On
+}
+
+enum BoostRestritionMutator: ubyte {
+  Default,
+  AerialOnly
+}
+
+enum KeepUpRulesMutator: ubyte {
+  Off,
+  EnabledIncrement,
+  Enabled
+}
+
+enum MatchAdminMutator: ubyte {
+  Off,
+  On
 }
 
 /// All mutators options.
@@ -508,6 +557,24 @@ table MutatorSettings {
 
   /// Additional rules about scoring (ball-goal interaction).
   scoring_rule: ScoringRuleMutator;
+
+  /// Tri tip car mode.
+  tri_tip_mode: TriTipModeMutator;
+
+  /// Locked damage phase mode.
+  locked_damage_phase: LockedDamagePhaseMutator;
+
+  /// Spawn demoball.
+  spawn_demoball: SpawnDemoballMutator;
+
+  /// Boost restriction.
+  boost_restriction: BoostRestritionMutator;
+
+  /// Keep up rules.
+  keep_up_rules: KeepUpRulesMutator;
+
+  /// Match admin.
+  match_admin: MatchAdminMutator;
 }
 
 enum DebugRendering: ubyte {
