@@ -322,7 +322,21 @@ enum RespawnTimeMutator: ubyte {
 /// Max time mutator options.
 enum MaxTimeMutator: ubyte {
   Unlimited,
-  ElevenMinutes
+  OneMinute,
+  TwoMinutes,
+  ThreeMinutes,
+  FourMinutes,
+  FiveMinutes,
+  SixMinutes,
+  SevenMinutes,
+  EightMinutes,
+  NineMinutes,
+  TenMinutes,
+  ElevenMinutes,
+  TwelveMinutes,
+  ThirteenMinutes,
+  FourteenMinutes,
+  FifteenMinutes
 }
 
 /// Game event mutator options.
@@ -412,25 +426,6 @@ enum InputRestrictionMutator: ubyte {
 enum ScoringRuleMutator: ubyte {
   Default,
   Disabled
-}
-
-enum MaxTimeLimitMutator: ubyte {
-  Unlimited,
-  OneMinute,
-  TwoMinutes,
-  ThreeMinutes,
-  FourMinutes,
-  FiveMinutes,
-  SixMinutes,
-  SevenMinutes,
-  EightMinutes,
-  NineMinutes,
-  TenMinutes,
-  ElevenMinutes,
-  TwelveMinutes,
-  ThirteenMinutes,
-  FourteenMinutes,
-  FifteenMinutes
 }
 
 enum TriTipModeMutator: ubyte {
@@ -562,9 +557,6 @@ table MutatorSettings {
 
   /// Additional rules about scoring (ball-goal interaction).
   scoring_rule: ScoringRuleMutator;
-
-  /// Max real-time duration of match.
-  max_time_limit: MaxTimeLimitMutator;
 
   /// Tri tip car mode.
   tri_tip_mode: TriTipModeMutator;
