@@ -291,7 +291,7 @@ table PlayerInfo {
   /// Otherwise, this field equals 0.
   time_until_next_item: float;
 
-  /// The initial value of `item_until_next_item`
+  /// The initial value of `time_until_next_item`.
   max_time_until_next_item: float;
 }
 
