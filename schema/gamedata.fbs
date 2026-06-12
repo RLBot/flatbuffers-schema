@@ -153,6 +153,42 @@ enum AirState: ubyte {
   InAir,
 }
 
+/// All the different Rumble items
+enum RumbleItem : ubyte {
+  /// Kicks an opponent’s car backward
+  Boot,
+
+  /// Forces an opponent to boost uncontrollably at supersonic speeds
+  Disruptor,
+
+  /// Halts the ball’s movement temporarily
+  Freezer,
+
+  /// Punches the ball with significant force
+  Haymaker,
+
+  /// Attracts the ball toward your car
+  Magnetizer,
+
+  /// Grabs the ball with a cord and pulls it toward you
+  Plunger,
+
+  /// Attaches the ball to your car upon impact
+  Spike,
+
+  /// Swaps your position and momentum with an opponent
+  Swapper,
+
+  /// Creates a funnel cloud that lifts the ball and nearby cars
+  Tornado,
+
+  /// Pulls your car toward the ball
+  GrapplingHook,
+
+  /// Allows you to demolish opponents on contact and hit the ball harder
+  PowerHitter,
+}
+
 /// A collection of information about a player and their car.
 table PlayerInfo {
   /// The physical state of the player's car.
@@ -247,6 +283,16 @@ table PlayerInfo {
   /// The unit direction of the latest dodge.
   /// The value will be (0,0) if it was a stall.
   dodge_dir: Vector2 (required);
+
+  /// Which item the player has, if any
+  rumble_item: RumbleItem = null;
+
+  /// If `rumble_item` is null, this is a countdown until the next item is recieved.
+  /// Otherwise, this field equals 0.
+  time_until_next_item: float;
+
+  /// The initial value of `time_until_next_item`.
+  max_time_until_next_item: float;
 }
 
 /// Information about a ball.
@@ -256,6 +302,17 @@ table BallInfo {
 
   /// The collision shape of the ball.
   shape: CollisionShape (required);
+
+  /// The charge level, if it is a dropshot ball.
+  /// -1 = Not dropshot
+  /// 0 = No charge
+  /// 1 = Charged
+  /// 2 = Supercharged
+  charge_level: int;
+
+  /// The target homing speed, if it is a heatseeker ball.
+  /// If it is not a heatseeker ball, this is always 0.
+  target_speed: float;
 }
 
 /// The state of a boost pad.
@@ -344,6 +401,20 @@ struct TeamInfo {
   score: uint;
 }
 
+/// The possible damage levels of a dropshot tile.
+enum TileDamageLevel : ubyte {
+  /// The tile has no damage and the ball cannot fall through.
+  Start,
+
+  /// The tile has some damage,
+  /// but the ball still cannot fall through.
+  Damaged,
+
+  /// The tile has been broken,
+  /// and the ball can now fall through.
+  Broken,
+}
+
 /// A packet of data from the game.
 /// Is is sent every tick to bots, scripts, etc.
 /// Static data is found in the FieldInfo.
@@ -364,6 +435,9 @@ table GamePacket {
 
   /// The current state of teams, i.e. the team scores.
   teams: [TeamInfo] (required);
+
+  /// The state of the dropshot tiles. The tiles are sorted by y-coordinate and then x-coordinate.
+  tiles: [TileDamageLevel] (required);
 }
 
 // This section deals with arena information, e.g. where the goals and boost locations are.
@@ -398,17 +472,30 @@ table BoostPad {
   is_full_boost: bool;
 }
 
+table Tile {
+  /// The location of the tile.
+  location: Vector3 (required);
+
+  /// The team that owns/defends this tile.
+  team: uint;
+}
+
 /// Static information about the field.
 /// Sent to bots, scripts, etc. upon connecting.
 /// Dynamic information is found in the GamePacket.
 table FieldInfo {
   /// Static information about boost pads on the field.
-  /// The dynamic information is found in the GamePacket
+  /// The dynamic information is found in the GamePacket.
   /// The boost pads are ordered by y-coordinate and then x-coordinate.
   boost_pads: [BoostPad] (required);
 
   /// Information about the goals on the field.
   goals: [GoalInfo] (required);
+
+  /// Static information about dropshot tiles on the field.
+  /// The dynamic information is found in the GamePacket.
+  /// The tiles are ordered by y-coordinate and then x-coordinate.
+  tiles: [Tile] (required);
 }
 
 /// An entry in the ball prediction describing where a ball will be at some future time.
