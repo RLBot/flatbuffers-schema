@@ -442,7 +442,7 @@ table GamePacket {
   /// The current state of teams, i.e. the team scores.
   teams: [TeamInfo] (required);
 
-  /// The state of the various dropshot tiles.
+  /// The state of the dropshot tiles. The tiles are sorted by y-coordinate and then x-coordinate.
   tiles: [TileDamageLevel] (required);
 }
 
