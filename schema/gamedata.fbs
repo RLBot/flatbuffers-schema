@@ -189,19 +189,6 @@ enum RumbleItem : ubyte {
   PowerHitter,
 }
 
-/// Information about this player's Rumble item
-table RumbleInfo {
-  /// Which item the player has, if any
-  item: RumbleItem = null;
-
-  /// If `item` is null, this is a countdown until the next item is recieved.
-  /// Otherwise, this field equals 0.
-  item_until_next_item: float;
-
-  /// The initial value of `item_until_next_item`
-  max_time_until_next_item: float;
-}
-
 /// A collection of information about a player and their car.
 table PlayerInfo {
   /// The physical state of the player's car.
@@ -297,8 +284,15 @@ table PlayerInfo {
   /// The value will be (0,0) if it was a stall.
   dodge_dir: Vector2 (required);
 
-  /// Information about this player's Rumble item
-  rumble_info: RumbleInfo (required);
+  /// Which item the player has, if any
+  rumble_item: RumbleItem = null;
+
+  /// If `item` is null, this is a countdown until the next item is recieved.
+  /// Otherwise, this field equals 0.
+  time_until_next_item: float;
+
+  /// The initial value of `item_until_next_item`
+  max_time_until_next_item: float;
 }
 
 /// Information about a ball.
