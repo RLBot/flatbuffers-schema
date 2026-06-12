@@ -287,7 +287,7 @@ table PlayerInfo {
   /// Which item the player has, if any
   rumble_item: RumbleItem = null;
 
-  /// If `item` is null, this is a countdown until the next item is recieved.
+  /// If `rumble_item` is null, this is a countdown until the next item is recieved.
   /// Otherwise, this field equals 0.
   time_until_next_item: float;
 
