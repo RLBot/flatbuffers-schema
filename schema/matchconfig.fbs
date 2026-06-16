@@ -5,6 +5,15 @@ namespace rlbot.flat;
 /// A normal human player.
 table Human {}
 
+/// A user-defined environment variable to pass to an agent process.
+table EnvironmentVariable {
+  /// Environment variable name.
+  name: string (key, required);
+
+  /// Environment variable value.
+  value: string (required);
+}
+
 /// A bot controlled by the RLBot framework.
 table CustomBot {
   /// Requested bot name. When match start, RLBot will ensure each bot has a unique name; bots with
@@ -29,6 +38,9 @@ table CustomBot {
   /// Whether this player is part of a hivemind bot where all players/cars are controlled by the same process.
   /// Players in the hivemind must have the same name, team, run command, and agent id.
   hivemind: bool;
+
+  /// User-defined environment variables to pass to the bot process.
+  environment: [EnvironmentVariable];
 }
 
 /// Various skill levels of Psyonix bots.
@@ -633,6 +645,9 @@ table ScriptConfiguration {
   /// Upon connecting the process announces that it is responsible for this agent id and RLBot will pair the two.
   /// The recommended format for agent ids is "developername/botname".
   agent_id: string (required);
+
+  /// User-defined environment variables to pass to the script process.
+  environment: [EnvironmentVariable];
 }
 
 /// Controls when the in-game performance monitor is shown.
