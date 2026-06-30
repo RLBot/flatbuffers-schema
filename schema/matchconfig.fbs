@@ -8,7 +8,7 @@ table Human {}
 /// A user-defined environment variable to pass to an agent process.
 table EnvironmentVariable {
   /// Environment variable name.
-  name: string (key, required);
+  name: string (required);
 
   /// Environment variable value.
   value: string (required);
