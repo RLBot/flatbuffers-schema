@@ -46,10 +46,6 @@ union InterfaceMessage {
   /// game messages without delay. The match will not start until all sessions have sent this
   /// message.
   InitComplete,
-  
-  /// Run an Rocket League or Unreal console command.
-  /// See https://wiki.rlbot.org/framework/console-commands/ for a list of known commands.
-  ConsoleCommand,
 
   /// Requests for a specificed agent to have its ability to render changed.
   /// This changed will then be broadcasted to all current connections.
@@ -64,6 +60,10 @@ union InterfaceMessage {
 
   /// Sent by sessions to control when the in-game performance monitor will display
   UpdatePerformanceMonitor,
+
+  /// Run an Rocket League or Unreal console command.
+  /// See https://wiki.rlbot.org/framework/console-commands/ for a list of known commands.
+  ConsoleCommand,
 }
 
 /// Packet containing a InterfaceMessage
