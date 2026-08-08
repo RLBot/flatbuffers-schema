@@ -60,6 +60,10 @@ union InterfaceMessage {
 
   /// Sent by sessions to control when the in-game performance monitor will display
   UpdatePerformanceMonitor,
+
+  /// Run an Rocket League or Unreal console command.
+  /// See https://wiki.rlbot.org/framework/console-commands/ for a list of known commands.
+  ConsoleCommand,
 }
 
 /// Packet containing a InterfaceMessage
