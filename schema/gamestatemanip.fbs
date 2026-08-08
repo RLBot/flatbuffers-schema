@@ -87,5 +87,5 @@ table DesiredGameState {
   /// DEPRECATED (Send ConsoleCommand directly instead).
   /// A list of console commands to execute.
   /// See https://wiki.rlbot.org/framework/console-commands/ for a list of known commands.
-  console_commands: [ConsoleCommand] (required);
+  console_commands: [ConsoleCommand] (required, deprecated);
 }
