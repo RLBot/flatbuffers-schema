@@ -321,9 +321,10 @@ struct BoostPadState {
   /// True if the boost can be picked up right now.
   is_active: bool;
 
-  /// The number of seconds since the boost has been picked up, or 0 if the boost is active.
-  /// A big boost pad becomes active again after 10 seconds.
-  /// A small boost pad becomes active again after 4 seconds.
+  /// The number of seconds remaining until the boost pad becomes active again.
+  /// The timer counts down to 0 and stays at 0 while the boost pad is active.
+  /// A big boost pad starts at 10 seconds after pickup.
+  /// A small boost pad starts at 4 seconds after pickup.
   timer: float;
 }
 
